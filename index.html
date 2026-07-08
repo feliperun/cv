@@ -664,26 +664,255 @@
       .metric-grid { grid-template-columns: 1fr; }
     }
 
-    @page { margin: 0.45in; }
+    @page {
+      size: A4;
+      margin: 12mm 11mm;
+    }
 
     @media print {
-      body { background: #fff; }
+      * {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      html {
+        font-size: 9.4pt;
+      }
+
+      body {
+        background: #fff;
+        line-height: 1.38;
+      }
+
       .page-actions { display: none; }
+
       .resume {
         width: 100%;
         margin: 0;
         border: 0;
         box-shadow: none;
+        background: #fff;
       }
+
       header,
       main {
-        padding-left: 28px;
-        padding-right: 28px;
+        padding-left: 0;
+        padding-right: 0;
       }
-      header { grid-template-columns: minmax(0, 1fr) 180px; }
-      .portrait { max-width: 180px; }
-      .section,
-      .side-block { break-inside: avoid; }
+
+      header {
+        grid-template-columns: minmax(0, 1fr) 210px;
+        gap: 14px;
+        padding: 0 0 8mm 5mm;
+        border-bottom: 1px solid #cfc8bd;
+        break-after: avoid;
+      }
+
+      header::before {
+        width: 2.5mm;
+      }
+
+      .eyebrow {
+        margin-bottom: 5px;
+        font-size: 7.8pt;
+        letter-spacing: 0.05em;
+      }
+
+      h1 {
+        max-width: none;
+        font-size: 28pt;
+        line-height: 1;
+      }
+
+      .headline {
+        margin-top: 8px;
+        font-size: 10pt;
+      }
+
+      .hero-tags {
+        display: none;
+      }
+
+      .profile-panel {
+        grid-template-columns: 58px minmax(0, 1fr);
+        gap: 8px;
+        align-items: start;
+      }
+
+      .portrait {
+        width: 58px;
+        max-width: 58px;
+      }
+
+      .contact {
+        gap: 4px;
+        font-size: 8.4pt;
+        line-height: 1.25;
+      }
+
+      .contact div {
+        break-inside: avoid;
+      }
+
+      main {
+        display: block;
+        padding-top: 7mm;
+      }
+
+      aside {
+        padding-left: 0;
+        border-left: 0;
+      }
+
+      .section + .section {
+        margin-top: 5mm;
+      }
+
+      .side-block {
+        padding: 5mm 0 0;
+        margin-top: 5mm;
+      }
+
+      h2 {
+        margin-bottom: 2.8mm;
+        font-size: 7.8pt;
+        letter-spacing: 0.08em;
+        break-after: avoid;
+      }
+
+      h3 {
+        break-after: avoid;
+      }
+
+      p,
+      li {
+        orphans: 3;
+        widows: 3;
+      }
+
+      .highlight {
+        padding: 10px 12px;
+        border-left-width: 3px;
+        background: #eef6f1;
+      }
+
+      .markdown p + p,
+      .highlight p + p,
+      .case-study p + p {
+        margin-top: 7px;
+      }
+
+      .case-study {
+        padding: 12px 14px;
+        background: #fbf7ef;
+        break-inside: avoid;
+      }
+
+      .case-study h3 {
+        font-size: 12pt;
+      }
+
+      .case-metrics {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 5px;
+        margin-top: 9px;
+      }
+
+      .case-metrics li {
+        padding: 6px;
+        font-size: 7.4pt;
+      }
+
+      .case-metrics strong {
+        font-size: 9.4pt;
+      }
+
+      .hashtag-list,
+      .project-tech,
+      .tag-list {
+        gap: 5px;
+      }
+
+      .hashtag-list li,
+      .project-tech li,
+      .tag-list li {
+        padding: 3px 6px;
+        font-size: 7.4pt;
+      }
+
+      .timeline::before {
+        left: 4px;
+      }
+
+      .role {
+        gap: 4px;
+        padding: 0 0 4.2mm 16px;
+        break-inside: auto;
+      }
+
+      .role::before {
+        top: 4px;
+        width: 9px;
+        height: 9px;
+        border-width: 1px;
+      }
+
+      .role h3 {
+        font-size: 10.6pt;
+      }
+
+      .meta,
+      .role-summary {
+        font-size: 8.8pt;
+      }
+
+      .role ul {
+        margin-top: 2px;
+        padding-left: 14px;
+      }
+
+      .role li + li,
+      .markdown li + li,
+      .case-study li + li,
+      .highlight li + li {
+        margin-top: 2px;
+      }
+
+      .project {
+        padding: 10px 12px 10px 14px;
+        background: #fbf7ef;
+        break-inside: avoid;
+      }
+
+      .project-list {
+        gap: 8px;
+      }
+
+      .project h3 {
+        font-size: 10.8pt;
+      }
+
+      .project-meta {
+        font-size: 7.4pt;
+      }
+
+      .impact-list {
+        gap: 6px;
+      }
+
+      .impact-list li {
+        padding: 7px 8px 7px 12px;
+        font-size: 8pt;
+        break-inside: avoid;
+      }
+
+      .expertise-group {
+        break-inside: avoid;
+      }
+
+      .expertise-group + .expertise-group {
+        margin-top: 10px;
+      }
     }
   </style>
   <script type="application/ld+json">
