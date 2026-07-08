@@ -1,6 +1,6 @@
 # Felipe R. Broering
 
-Senior Product Engineer (Full-Stack) / Product-minded Engineering Leader
+## Senior Product Engineer (Full-Stack) / Product-minded Engineering Leader
 
 Santa Catarina, Brazil
 
@@ -8,17 +8,23 @@ Santa Catarina, Brazil
 - LinkedIn: https://www.linkedin.com/in/felipebroering/
 - GitHub: https://github.com/feliperun
 
-## Profile
+## Mini Bio
 
 Senior Product Engineer and product-minded engineering leader with 15+ years building complex digital products from discovery to production.
 
 I work best in full-cycle product engineering: understanding ambiguous business or user problems, modeling the domain, designing the architecture, building the software, shipping to production, monitoring real-world behavior, and iterating based on evidence.
 
-My background combines hands-on full-stack engineering, product management, cloud platforms, AI-assisted engineering workflows, healthcare technology, hardware integration, and engineering leadership. I have worked as a software engineer, product manager, CTO/founder, engineering manager, head of engineering, and hands-on product engineer.
+My background combines hands-on full-stack engineering, product management, cloud platforms, AI-enhanced engineering workflows, healthcare technology, hardware integration, and engineering leadership. I have worked as a software engineer, product manager, CTO/founder, engineering manager, head of engineering, and hands-on product engineer.
 
 I am especially strong in environments where product and engineering cannot be separated: complex workflows, operational systems, regulated domains, cloud-native platforms, internal tools, integrations, automation, and systems that need to be reliable in production.
 
 Over the last several years, I have led and built platforms used in critical healthcare operations, including Coreum at Micromed, featured by Google Cloud for its cloud modernization, cost reduction, performance gains, large-scale data migration, and zero-downtime release capabilities.
+
+I also enjoy building useful open-source tools that solve real problems for myself and others, especially around developer experience, local-first systems, automation, AI-enhanced engineering, and practical product workflows.
+
+## Hashtags
+
+#ProductEngineering #FullStackEngineering #EngineeringLeadership #ProductMindedEngineering #SoftwareArchitecture #CloudNative #AIEnhancedEngineering #OpenSource #DeveloperTools #HealthcareTechnology #Rust #TypeScript #React #NodeJS #GoogleCloud #Vercel
 
 ## Selected Impact
 
@@ -29,6 +35,7 @@ Over the last several years, I have led and built platforms used in critical hea
 - Helped enable multiple daily zero-downtime releases for critical diagnostic workflows.
 - Supported platforms processing 10k+ exams per day.
 - Co-founded and led Healfies as CTO, helping raise R$2.2M, deliver 2M health records, connect 23 diagnostic centers, and reach 10k registered users.
+- Created and maintain useful open-source tools around personal finance, developer experience, AI-enhanced workflows, Markdown-based documentation, and local-first/product engineering systems.
 - Built and led multidisciplinary teams across software engineering, UX, cloud, AI, firmware, electronics, and healthcare operations.
 
 ## How I Build
@@ -41,7 +48,7 @@ Problem → Domain model → Product behavior → Architecture → Implementatio
 
 I like to start close to the real problem: users, workflows, business constraints, operational risks, edge cases, and success criteria. From there, I model the domain, design the system, build the product, ship it, monitor how it behaves in production, and improve it continuously.
 
-AI is part of my workflow, but not the point of the work. I use AI coding tools, local harnesses, automation, tests, ADRs, code review, and validation loops to move faster while preserving architecture, maintainability, and accountability.
+AI is part of my workflow, but not the point of the work. I use coding agents, terminal-first tools, structured prompts, reusable skills, local harnesses, automation, tests, ADRs, code review, data analysis, and validation loops to move faster while preserving architecture, maintainability, and accountability.
 
 ## Featured Case Study
 
@@ -61,20 +68,38 @@ Google Cloud case study results:
 
 ## Experience
 
-### Senior Product Engineer / Head of Engineering
+### Senior Product Engineer
 
-Micromed Health - Florianopolis, Brazil - May 2022 to Present
+Micromed Health - Florianopolis, Brazil - Jan 2026 to Present
 
-Led engineering and hands-on product engineering initiatives for Coreum, Micromed's cloud-native platform for cardiology diagnostics, exam workflows, AI-assisted analysis, ERP integration, connected devices, and production operations.
+Moved into a hands-on product engineering focus, working across discovery, domain modeling, architecture, implementation, validation, release, and production operations.
+
+Working mainly with React, Node.js, TypeScript, Python, Rust, Google Cloud, and Vercel across web applications, signal-processing services, native hardware integration, cloud infrastructure, and production workflows.
+
+- Leading end-to-end product engineering initiatives from Figma and product design to implementation, validation, release, observability, and production iteration.
+- Building web product experiences with React, Node.js, and TypeScript, connecting frontend, backend, APIs, authentication, data workflows, and operational tooling.
+- Using Python for ECG signal-processing workflows and Rust as a native integration layer between medical hardware, local PCs, and cloud systems.
+- Building on Google Cloud as the cloud-native infrastructure foundation and using Vercel for frontend deployment, previews, and web application delivery.
+- Designing an AI-enhanced engineering harness with coding agents, structured prompts, reusable skills, ADRs, tests, validation loops, code review, and release discipline.
+- Creating reusable engineering skills for Figma-to-code, UX review, product modeling, technical planning, code review, release validation, production investigation, documentation, and data analysis.
+- Working with a terminal-first AI workflow using pi.dev, Claude CLI, Cursor CLI, local developer tooling, and Superset for data analysis and production feedback loops.
+- Applying a loop-engineering approach: model the problem, build, validate, review, ship, monitor production behavior, and feed learnings back into the product.
+- Acting as a senior hands-on builder while bringing leadership experience into technical decisions, product trade-offs, team alignment, and production readiness.
+
+### Head of Engineering
+
+Micromed Health - Florianopolis, Brazil - May 2022 to Jul 2026
+
+Led engineering for Coreum, Micromed's cloud-native platform for cardiology diagnostics, exam workflows, AI-assisted analysis, ERP integration, connected devices, and production operations.
 
 - Led Coreum from early product development into a Google Cloud customer case study platform.
-- Worked across the full product engineering loop: problem discovery, workflow analysis, domain modeling, architecture, implementation, validation, release, production monitoring, and continuous improvement.
 - Contributed to a modernization program that reduced infrastructure costs by more than 50%, improved exam loading speed from 2 seconds to 200 milliseconds, migrated 20TB of data with only 3 hours of downtime, and enabled multiple daily zero-downtime releases.
+- Structured engineering process and culture to support team growth, new projects, faster product delivery, and more reliable production operations.
 - Built and evolved engineering practices around architecture, delivery, cloud operations, reliability, security, AI-assisted development, review discipline, and production readiness.
-- Bridged product design, software engineering, cloud architecture, clinical workflows, hardware integration, and delivery automation to shorten the path from idea to production.
-- Advanced Micromed's roadmap for AI-powered cardiology, connected medical devices, hybrid cloud, edge computing, and interoperability with standards such as DICOM, HL7, and FHIR.
-- Built practical AI-assisted engineering workflows and harnesses to improve execution speed and quality without weakening engineering accountability.
 - Led and supported multidisciplinary teams across backend, frontend, UX, cloud, firmware, electronics, QA, integrations, and product delivery.
+- Helped consolidate critical systems on Google Cloud, including ERP and Coreum, improving reliability, security, integration speed, and day-to-day operational efficiency.
+- Advanced Micromed's roadmap for AI-powered cardiology, connected medical devices, hybrid cloud, edge computing, and interoperability with standards such as DICOM, HL7, and FHIR.
+- Bridged product strategy, software engineering, clinical workflows, hardware integration, cloud architecture, and delivery execution.
 
 ### Engineering Manager
 
@@ -178,11 +203,11 @@ Tigre S.A. - Tubos e Conexoes - Joinville, Brazil - Jul 2006 to Jan 2007
 
 Worked as an information technology analyst before moving deeper into software engineering, product development, and healthcare technology.
 
-## Selected Projects
+## Selected Open Source Projects
 
 ### phai-run/phai
 
-Founder and maintainer of phai, a local-first personal finance product built in Rust. It combines banking data ingestion, SQLite/BigQuery storage, rule-based classification, auditability, CLI workflows, dashboards, MCP integration, and a local web app embedded into a single binary.
+Founder and maintainer of phai, an open-source, local-first personal finance product built in Rust. It combines banking data ingestion, SQLite/BigQuery storage, rule-based classification, auditability, CLI workflows, dashboards, MCP integration, and a local web app embedded into a single binary.
 
 The project is also an engineering harness for AI-assisted development, with ADRs, TDD, CI, privacy rules, quality gates, release automation, and strict guardrails to keep agent-assisted changes reviewable and production-ready.
 
@@ -192,7 +217,7 @@ Project: https://github.com/phai-run/phai
 
 ### feliperun/eai
 
-Rust CLI that turns natural language into safe shell commands through an inspect-confirm-run workflow. Supports multiple LLM providers, pipe context, command explanation, script generation, bookmarks, completions, and shell integration.
+Open-source Rust CLI that turns natural language into safe shell commands through an inspect-confirm-run workflow. Supports multiple LLM providers, pipe context, command explanation, script generation, bookmarks, completions, and shell integration.
 
 Technologies: Rust, Ollama, Gemini, Groq, OpenAI, shell UX.
 
@@ -200,7 +225,7 @@ Project: https://github.com/feliperun/eai
 
 ### feliperun/dsync
 
-Rust CLI for keeping Markdown as the local source of truth while syncing documents with Google Docs and Linear Docs. Supports document creation, import, frontmatter links, cross-links, and an extensible provider architecture.
+Open-source Rust CLI for keeping Markdown as the local source of truth while syncing documents with Google Docs and Linear Docs. Supports document creation, import, frontmatter links, cross-links, and an extensible provider architecture.
 
 Technologies: Rust, Markdown, Google Docs, Linear Docs, provider architecture.
 
@@ -212,7 +237,9 @@ Project: https://github.com/feliperun/dsync
 
 **Software Engineering:** full-stack development, cloud-native architecture, APIs, integrations, local-first systems, CLI tools, automation, release engineering, zero-downtime deployments.
 
-**AI-assisted Engineering:** coding agents, engineering harnesses, guardrails, ADRs, validation loops, test-driven development, review workflows, internal developer tools.
+**AI-enhanced Engineering:** coding agents, engineering harnesses, reusable skills, guardrails, ADRs, validation loops, test-driven development, review workflows, internal developer tools.
+
+**Open Source:** developer tools, local-first products, CLI design, Markdown workflows, personal finance tooling, AI-assisted development systems.
 
 **Leadership:** engineering strategy, technical leadership, team building, product-minded execution, cross-functional collaboration, roadmap translation, stakeholder alignment.
 

@@ -102,9 +102,33 @@ function sectionize(inputLines) {
   const title = titleLine ? titleLine.slice(2).trim() : "Felipe R. Broering";
   const titleIndex = inputLines.findIndex((line) => line.startsWith("# "));
   const bodyLines = titleIndex >= 0 ? inputLines.slice(titleIndex + 1) : inputLines;
-  const firstSectionIndex = bodyLines.findIndex((line) => line.startsWith("## "));
-  const introLines = firstSectionIndex >= 0 ? bodyLines.slice(0, firstSectionIndex) : bodyLines;
-  const sectionLines = firstSectionIndex >= 0 ? bodyLines.slice(firstSectionIndex) : [];
+  const firstMeaningfulIndex = bodyLines.findIndex((line) => line.trim());
+  let introLines = bodyLines;
+  let sectionLines = [];
+  let handledIntroHeading = false;
+
+  if (firstMeaningfulIndex >= 0 && bodyLines[firstMeaningfulIndex].startsWith("## ")) {
+    const nextSectionOffset = bodyLines
+      .slice(firstMeaningfulIndex + 1)
+      .findIndex((line) => line.startsWith("## "));
+    const nextSectionIndex = nextSectionOffset >= 0 ? firstMeaningfulIndex + 1 + nextSectionOffset : -1;
+    const candidateIntro = nextSectionIndex >= 0
+      ? bodyLines.slice(firstMeaningfulIndex + 1, nextSectionIndex)
+      : bodyLines.slice(firstMeaningfulIndex + 1);
+    const looksLikeHeaderSubtitle = candidateIntro.some((line) => line.includes("Brazil") || line.startsWith("- Email"));
+
+    if (looksLikeHeaderSubtitle) {
+      introLines = [bodyLines[firstMeaningfulIndex].slice(3).trim(), ...candidateIntro];
+      sectionLines = nextSectionIndex >= 0 ? bodyLines.slice(nextSectionIndex) : [];
+      handledIntroHeading = true;
+    }
+  }
+
+  if (!handledIntroHeading) {
+    const firstSectionIndex = bodyLines.findIndex((line) => line.startsWith("## "));
+    introLines = firstSectionIndex >= 0 ? bodyLines.slice(0, firstSectionIndex) : bodyLines;
+    sectionLines = firstSectionIndex >= 0 ? bodyLines.slice(firstSectionIndex) : [];
+  }
   const sections = [];
 
   for (let i = 0; i < sectionLines.length; i += 1) {
@@ -267,11 +291,31 @@ function renderOpenSource(section, id) {
     </section>`;
 }
 
+function renderHashtags(section, id) {
+  const tags = nonEmpty(section.content)
+    .join(" ")
+    .split(/\s+/)
+    .map((item) => item.trim())
+    .filter((item) => item.startsWith("#"))
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("\n");
+
+  return `<section class="section section-hashtags" aria-labelledby="${id}">
+      <h2 id="${id}">${escapeHtml(section.title)}</h2>
+      <ul class="hashtag-list">${tags}</ul>
+    </section>`;
+}
+
 function renderExperience(section, id) {
   const roles = splitByH3(section.content)
     .map((role) => {
       const lines = nonEmpty(role.lines);
-      const meta = lines.find((line) => !line.startsWith("- ")) || "";
+      const prose = lines.filter((line) => !line.startsWith("- "));
+      const meta = prose[0] || "";
+      const summary = prose
+        .slice(1)
+        .map((line) => `<p>${renderInline(line)}</p>`)
+        .join("\n");
       const bullets = lines.filter((line) => line.startsWith("- "));
       const list = bullets.map((line) => `<li>${renderInline(line.slice(2).trim())}</li>`).join("\n");
 
@@ -280,6 +324,7 @@ function renderExperience(section, id) {
               <h3>${renderInline(role.title)}</h3>
               ${meta ? `<div class="meta">${renderInline(meta)}</div>` : ""}
             </div>
+            ${summary ? `<div class="role-summary">${summary}</div>` : ""}
             ${list ? `<ul>${list}</ul>` : ""}
           </div>`;
     })
@@ -296,7 +341,7 @@ function renderSection(section) {
   const body = parseMarkdown(section.content);
   const lower = section.title.toLowerCase();
 
-  if (lower === "profile") {
+  if (lower === "profile" || lower === "mini bio") {
     return `<section class="section section-profile" aria-labelledby="${id}">
       <h2 id="${id}">${escapeHtml(section.title)}</h2>
       <div class="highlight">${body}</div>
@@ -307,7 +352,11 @@ function renderSection(section) {
     return renderCaseStudy(section, id);
   }
 
-  if (lower === "open source" || lower === "selected projects") {
+  if (lower === "hashtags") {
+    return renderHashtags(section, id);
+  }
+
+  if (lower === "open source" || lower === "selected projects" || lower === "selected open source projects") {
     return renderOpenSource(section, id);
   }
 
@@ -746,6 +795,26 @@ const html = `<!doctype html>
       line-height: 1.2;
     }
 
+    .hashtag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .hashtag-list li {
+      margin: 0;
+      padding: 6px 9px;
+      border: 1px solid rgba(15, 118, 110, 0.22);
+      background: rgba(223, 238, 234, 0.58);
+      color: #24514d;
+      font-size: 0.78rem;
+      font-weight: 760;
+      line-height: 1.2;
+    }
+
     .timeline {
       position: relative;
     }
@@ -804,6 +873,18 @@ const html = `<!doctype html>
       color: var(--muted);
       font-size: 0.94rem;
       font-weight: 620;
+    }
+
+    .role-summary {
+      display: grid;
+      gap: 8px;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .role-summary p {
+      margin: 0;
     }
 
     .markdown p {
