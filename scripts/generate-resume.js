@@ -144,6 +144,143 @@ function contactHtml(contactItems) {
     .join("\n");
 }
 
+function nonEmpty(lines) {
+  return lines.map((line) => line.trim()).filter(Boolean);
+}
+
+function splitByH3(content) {
+  const blocks = [];
+  let current = null;
+
+  for (const line of content) {
+    if (line.startsWith("### ")) {
+      if (current) blocks.push(current);
+      current = { title: line.slice(4).trim(), lines: [] };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+  }
+
+  if (current) blocks.push(current);
+  return blocks;
+}
+
+function extractMetric(line) {
+  const text = line.replace(/^\-\s*/, "").replace(/\.$/, "").trim();
+
+  if (text.startsWith("More than 10,000")) {
+    return ["10k+", text.replace(/^More than 10,000\s*/, "")];
+  }
+
+  if (text.startsWith("Multiple daily")) {
+    return ["0", "downtime for multiple daily releases"];
+  }
+
+  const match = text.match(/^(\S+)\s+(.+)$/);
+  return match ? [match[1], match[2]] : ["", text];
+}
+
+function renderCaseStudy(section, id) {
+  const block = splitByH3(section.content)[0];
+  const title = block?.title || "Featured case study";
+  const content = block ? block.lines : section.content;
+  const lines = nonEmpty(content);
+  const published = lines.find((line) => line.startsWith("Published by"));
+  const caseUrl = published?.match(/https?:\/\/\S+/)?.[0];
+  const resultIndex = lines.findIndex((line) => line.endsWith("results:"));
+  const bodyLines = lines.filter((line) => {
+    if (line.startsWith("Published by")) return false;
+    if (line.endsWith("results:")) return false;
+    if (line.startsWith("- ")) return false;
+    return true;
+  });
+  const metricLines = lines.filter((line) => line.startsWith("- "));
+  const metrics = metricLines
+    .map(extractMetric)
+    .map(([value, label]) => `<li><strong>${renderInline(value)}</strong>${renderInline(label)}</li>`)
+    .join("\n");
+  const body = bodyLines.map((line) => `<p>${renderInline(line)}</p>`).join("\n");
+  const linkedTitle = caseUrl ? `<a href="${caseUrl}">${renderInline(title)}</a>` : renderInline(title);
+
+  return `<section class="section section-case" aria-labelledby="${id}">
+      <h2 id="${id}">${escapeHtml(section.title)}</h2>
+      <article class="case-study">
+        ${published ? `<p class="case-label">${renderInline(published.replace(/:\s*https?:\/\/\S+/, ""))}</p>` : ""}
+        <h3>${linkedTitle}</h3>
+        ${body}
+        ${resultIndex >= 0 ? `<ul class="case-metrics" aria-label="Google Cloud case study results">${metrics}</ul>` : ""}
+      </article>
+    </section>`;
+}
+
+function renderOpenSource(section, id) {
+  const meta = {
+    "phai-run/phai": "Founder / maintainer",
+    "feliperun/eai": "Rust CLI",
+    "feliperun/dsync": "Document sync",
+  };
+  const classes = ["", "secondary", "tertiary"];
+  const projects = splitByH3(section.content)
+    .map((project, index) => {
+      const lines = nonEmpty(project.lines);
+      const techLine = lines.find((line) => line.startsWith("Technologies:"));
+      const projectLine = lines.find((line) => line.startsWith("Project:"));
+      const projectUrl = projectLine?.match(/https?:\/\/\S+/)?.[0];
+      const bodyLines = lines.filter((line) => !line.startsWith("Technologies:") && !line.startsWith("Project:"));
+      const tech = techLine
+        ? techLine
+            .replace(/^Technologies:\s*/, "")
+            .replace(/\.$/, "")
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean)
+        : [];
+      const techHtml = tech.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n");
+      const title = projectUrl ? `<a href="${projectUrl}">${escapeHtml(project.title)}</a>` : escapeHtml(project.title);
+      const className = classes[index] ? ` ${classes[index]}` : "";
+
+      return `<article class="project${className}">
+              <div class="project-head">
+                <h3>${title}</h3>
+                <span class="project-meta">${escapeHtml(meta[project.title] || "Open Source")}</span>
+              </div>
+              ${bodyLines.map((line) => `<p>${renderInline(line)}</p>`).join("\n")}
+              ${techHtml ? `<ul class="project-tech">${techHtml}</ul>` : ""}
+            </article>`;
+    })
+    .join("\n");
+
+  return `<section class="section section-open-source" aria-labelledby="${id}">
+      <h2 id="${id}">${escapeHtml(section.title)}</h2>
+      <div class="project-list">${projects}</div>
+    </section>`;
+}
+
+function renderExperience(section, id) {
+  const roles = splitByH3(section.content)
+    .map((role) => {
+      const lines = nonEmpty(role.lines);
+      const meta = lines.find((line) => !line.startsWith("- ")) || "";
+      const bullets = lines.filter((line) => line.startsWith("- "));
+      const list = bullets.map((line) => `<li>${renderInline(line.slice(2).trim())}</li>`).join("\n");
+
+      return `<div class="role">
+            <div>
+              <h3>${renderInline(role.title)}</h3>
+              ${meta ? `<div class="meta">${renderInline(meta)}</div>` : ""}
+            </div>
+            ${list ? `<ul>${list}</ul>` : ""}
+          </div>`;
+    })
+    .join("\n");
+
+  return `<section class="section section-experience" aria-labelledby="${id}">
+      <h2 id="${id}">${escapeHtml(section.title)}</h2>
+      <div class="timeline">${roles}</div>
+    </section>`;
+}
+
 function renderSection(section) {
   const id = slugify(section.title);
   const body = parseMarkdown(section.content);
@@ -157,10 +294,15 @@ function renderSection(section) {
   }
 
   if (lower === "featured case study") {
-    return `<section class="section section-case" aria-labelledby="${id}">
-      <h2 id="${id}">${escapeHtml(section.title)}</h2>
-      <div class="case-study">${body}</div>
-    </section>`;
+    return renderCaseStudy(section, id);
+  }
+
+  if (lower === "open source") {
+    return renderOpenSource(section, id);
+  }
+
+  if (lower === "experience") {
+    return renderExperience(section, id);
   }
 
   return `<section class="section" aria-labelledby="${id}">
@@ -185,9 +327,33 @@ const sideSections = sections.filter((section) => sideSectionTitles.has(section.
 const mainHtml = mainSections.map(renderSection).join("\n");
 const sideHtml = sideSections.map((section) => {
   const id = slugify(section.title);
+  const lower = section.title.toLowerCase();
+  let body = parseMarkdown(section.content);
+
+  if (lower === "selected impact") {
+    const metrics = nonEmpty(section.content)
+      .filter((line) => line.startsWith("- "))
+      .map(extractMetric)
+      .map(([value, label]) => `<div class="metric"><strong>${renderInline(value)}</strong><span>${renderInline(label)}</span></div>`)
+      .join("\n");
+    body = `<div class="metric-grid">${metrics}</div>`;
+  }
+
+  if (lower === "expertise") {
+    const tags = nonEmpty(section.content)
+      .join(" ")
+      .replace(/\.$/, "")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("\n");
+    body = `<ul class="tag-list">${tags}</ul>`;
+  }
+
   return `<section class="side-block" aria-labelledby="${id}">
     <h2 id="${id}">${escapeHtml(section.title)}</h2>
-    <div class="markdown">${parseMarkdown(section.content)}</div>
+    <div class="markdown">${body}</div>
   </section>`;
 }).join("\n");
 
@@ -278,7 +444,7 @@ const html = `<!doctype html>
     header {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 260px;
+      grid-template-columns: minmax(0, 1fr) 380px;
       gap: 40px;
       padding: 56px 60px 42px;
       overflow: hidden;
@@ -340,7 +506,13 @@ const html = `<!doctype html>
       line-height: 1.2;
     }
 
-    .profile-panel { align-self: start; }
+    .profile-panel {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      gap: 22px;
+      align-self: start;
+      align-items: start;
+    }
 
     .portrait {
       width: 100%;
@@ -353,7 +525,7 @@ const html = `<!doctype html>
     .contact {
       display: grid;
       gap: 10px;
-      margin-top: 18px;
+      margin-top: 0;
       font-size: 0.92rem;
       color: var(--muted);
       font-style: normal;
@@ -362,6 +534,10 @@ const html = `<!doctype html>
     .contact strong {
       color: var(--ink);
       font-weight: 780;
+    }
+
+    .contact a {
+      overflow-wrap: anywhere;
     }
 
     main {
@@ -423,6 +599,191 @@ const html = `<!doctype html>
       inset: 0 auto 0 0;
       width: 7px;
       background: linear-gradient(180deg, var(--accent), var(--accent-3));
+    }
+
+    .case-label {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 0.76rem;
+      font-weight: 850;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .case-study h3 {
+      max-width: 780px;
+      margin: 0;
+      font-size: 1.45rem;
+    }
+
+    .case-study p {
+      margin: 12px 0 0;
+      color: var(--muted);
+    }
+
+    .case-metrics {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 9px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .case-metrics li {
+      margin: 0;
+      padding: 10px;
+      background: rgba(255, 253, 248, 0.72);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.25;
+    }
+
+    .case-metrics strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--accent);
+      font-size: 1.12rem;
+      line-height: 1.05;
+    }
+
+    .project-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .project {
+      position: relative;
+      padding: 20px 22px 20px 24px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffefb, #f8f3ec);
+    }
+
+    .project::before {
+      content: "";
+      position: absolute;
+      inset: -1px auto -1px -1px;
+      width: 5px;
+      background: var(--accent);
+    }
+
+    .project.secondary::before { background: var(--accent-2); }
+    .project.tertiary::before { background: var(--accent-3); }
+
+    .project-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .project h3 {
+      margin: 0;
+      font-size: 1.16rem;
+    }
+
+    .project-head a {
+      font-weight: 820;
+      text-decoration-thickness: 1px;
+    }
+
+    .project-meta {
+      flex: 0 0 auto;
+      color: #85827a;
+      font-size: 0.85rem;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .project p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .project p + p {
+      margin-top: 12px;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .project-tech li {
+      margin: 0;
+      padding: 5px 8px;
+      background: #eee8de;
+      color: #46433d;
+      font-size: 0.8rem;
+      font-weight: 720;
+      line-height: 1.2;
+    }
+
+    .timeline {
+      position: relative;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      bottom: 0;
+      left: 6px;
+      width: 1px;
+      background: var(--line);
+    }
+
+    .role {
+      position: relative;
+      display: grid;
+      gap: 8px;
+      padding: 0 0 28px 30px;
+    }
+
+    .role::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 0;
+      width: 13px;
+      height: 13px;
+      border: 2px solid var(--paper);
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .role:nth-child(3n)::before {
+      background: var(--accent-2);
+      box-shadow: 0 0 0 1px var(--accent-2);
+    }
+
+    .role:nth-child(3n + 1)::before {
+      background: var(--accent-3);
+      box-shadow: 0 0 0 1px var(--accent-3);
+    }
+
+    .role:last-child {
+      padding-bottom: 0;
+    }
+
+    .role h3 {
+      margin: 0;
+      font-size: 1.16rem;
+      line-height: 1.25;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.94rem;
+      font-weight: 620;
     }
 
     .markdown p {
@@ -491,6 +852,57 @@ const html = `<!doctype html>
       color: var(--muted);
     }
 
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .metric {
+      padding: 13px;
+      background: #f4eee4;
+      border: 1px solid var(--line);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--accent);
+      font-size: 1.28rem;
+      line-height: 1.1;
+    }
+
+    .metric:nth-child(3n) strong {
+      color: var(--accent-2);
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 0.83rem;
+      line-height: 1.35;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tag-list li {
+      margin: 0;
+      padding: 7px 10px;
+      background: var(--tag);
+      color: #393631;
+      font-size: 0.86rem;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+
     @media (max-width: 900px) {
       .resume {
         width: 100%;
@@ -512,10 +924,8 @@ const html = `<!doctype html>
       }
 
       .profile-panel {
-        display: grid;
         grid-template-columns: 142px minmax(0, 1fr);
         gap: 18px;
-        align-items: start;
       }
 
       main { gap: 34px; }
@@ -534,6 +944,10 @@ const html = `<!doctype html>
 
       .copy-status { width: 100%; }
       .profile-panel { grid-template-columns: 112px minmax(0, 1fr); }
+      .project-head { display: block; }
+      .project-meta { display: block; margin-top: 4px; }
+      .case-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metric-grid { grid-template-columns: 1fr; }
     }
 
     @page { margin: 0.45in; }
