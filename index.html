@@ -525,6 +525,36 @@
       line-height: 1.35;
     }
 
+    .impact-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .impact-list li {
+      position: relative;
+      margin: 0;
+      padding: 11px 12px 11px 18px;
+      background: #f4eee4;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+
+    .impact-list li::before {
+      content: "";
+      position: absolute;
+      inset: -1px auto -1px -1px;
+      width: 4px;
+      background: var(--accent);
+    }
+
+    .impact-list li:nth-child(3n)::before { background: var(--accent-2); }
+    .impact-list li:nth-child(3n + 1)::before { background: var(--accent-3); }
+
     .tag-list {
       display: flex;
       flex-wrap: wrap;
@@ -542,6 +572,17 @@
       font-size: 0.86rem;
       font-weight: 650;
       line-height: 1.2;
+    }
+
+    .expertise-group + .expertise-group {
+      margin-top: 17px;
+    }
+
+    .expertise-group h3 {
+      margin: 0 0 8px;
+      color: #343632;
+      font-size: 0.88rem;
+      line-height: 1.25;
     }
 
     @media (max-width: 900px) {
@@ -647,7 +688,7 @@
   <article class="resume">
     <header>
       <div>
-        <p class="eyebrow">Product Engineer / Builder / Head of Engineering / Engineering Manager</p>
+        <p class="eyebrow">Senior Product Engineer (Full-Stack) / Product-minded Engineering Leader</p>
         <h1>Felipe R. Broering</h1>
         <p class="headline">Santa Catarina, Brazil</p>
         <ul class="hero-tags" aria-label="Primary focus areas">
@@ -661,9 +702,9 @@
       <div class="profile-panel">
         <img class="portrait" src="felipe-avatar.jpg" alt="Black-and-white portrait of Felipe R. Broering">
         <address class="contact">
-          <div><strong>Email</strong><br>hi@felipe.run</div>
-<div><strong>LinkedIn</strong><br><a href="https://www.linkedin.com/in/felipebroering/">https://www.linkedin.com/in/felipebroering/</a></div>
-<div><strong>GitHub</strong><br><a href="https://github.com/feliperun">https://github.com/feliperun</a></div>
+          <div><strong>Email</strong><br><a href="mailto:hi@felipe.run">hi@felipe.run</a></div>
+<div><strong>LinkedIn</strong><br><a href="https://www.linkedin.com/in/felipebroering/">felipebroering</a></div>
+<div><strong>GitHub</strong><br><a href="https://github.com/feliperun">feliperun</a></div>
         </address>
       </div>
     </header>
@@ -671,9 +712,20 @@
     <main>
       <div><section class="section section-profile" aria-labelledby="profile">
       <h2 id="profile">Profile</h2>
-      <div class="highlight"><p>Product and engineering leader with 15+ years building digital products, mainly in healthcare. I connect product discovery, software architecture, AI, cloud infrastructure, hardware integration, and team execution to ship clinically relevant technology from concept to production.</p>
-<p>I work best at the intersection of product, engineering, and healthcare operations: turning ambiguous clinical or business problems into reliable product systems, aligning teams around pragmatic execution, and using AI where it improves speed, quality, auditability, and clinical confidence. Over the last several years I have built and led engineering teams, acted as a system designer, and founded a health-tech startup as CTO.</p></div>
+      <div class="highlight"><p>Senior Product Engineer and product-minded engineering leader with 15+ years building complex digital products from discovery to production.</p>
+<p>I work best in full-cycle product engineering: understanding ambiguous business or user problems, modeling the domain, designing the architecture, building the software, shipping to production, monitoring real-world behavior, and iterating based on evidence.</p>
+<p>My background combines hands-on full-stack engineering, product management, cloud platforms, AI-assisted engineering workflows, healthcare technology, hardware integration, and engineering leadership. I have worked as a software engineer, product manager, CTO/founder, engineering manager, head of engineering, and hands-on product engineer.</p>
+<p>I am especially strong in environments where product and engineering cannot be separated: complex workflows, operational systems, regulated domains, cloud-native platforms, internal tools, integrations, automation, and systems that need to be reliable in production.</p>
+<p>Over the last several years, I have led and built platforms used in critical healthcare operations, including Coreum at Micromed, featured by Google Cloud for its cloud modernization, cost reduction, performance gains, large-scale data migration, and zero-downtime release capabilities.</p></div>
     </section>
+<section class="section" aria-labelledby="how-i-build">
+    <h2 id="how-i-build">How I Build</h2>
+    <div class="markdown"><p>I approach product engineering as a full-cycle discipline.</p>
+<p>My preferred loop is:</p>
+<p>Problem → Domain model → Product behavior → Architecture → Implementation → Production → Observability → Iteration.</p>
+<p>I like to start close to the real problem: users, workflows, business constraints, operational risks, edge cases, and success criteria. From there, I model the domain, design the system, build the product, ship it, monitor how it behaves in production, and improve it continuously.</p>
+<p>AI is part of my workflow, but not the point of the work. I use AI coding tools, local harnesses, automation, tests, ADRs, code review, and validation loops to move faster while preserving architecture, maintainability, and accountability.</p></div>
+  </section>
 <section class="section section-case" aria-labelledby="featured-case-study">
       <h2 id="featured-case-study">Featured Case Study</h2>
       <article class="case-study">
@@ -687,15 +739,127 @@
 <li><strong>10k+</strong>exams processed per day by Micromed's platforms</li></ul>
       </article>
     </section>
-<section class="section section-open-source" aria-labelledby="open-source">
-      <h2 id="open-source">Open Source</h2>
+<section class="section section-experience" aria-labelledby="experience">
+      <h2 id="experience">Experience</h2>
+      <div class="timeline"><div class="role">
+            <div>
+              <h3>Senior Product Engineer / Head of Engineering</h3>
+              <div class="meta">Micromed Health - Florianopolis, Brazil - May 2022 to Present</div>
+            </div>
+            <ul><li>Led Coreum from early product development into a Google Cloud customer case study platform.</li>
+<li>Worked across the full product engineering loop: problem discovery, workflow analysis, domain modeling, architecture, implementation, validation, release, production monitoring, and continuous improvement.</li>
+<li>Contributed to a modernization program that reduced infrastructure costs by more than 50%, improved exam loading speed from 2 seconds to 200 milliseconds, migrated 20TB of data with only 3 hours of downtime, and enabled multiple daily zero-downtime releases.</li>
+<li>Built and evolved engineering practices around architecture, delivery, cloud operations, reliability, security, AI-assisted development, review discipline, and production readiness.</li>
+<li>Bridged product design, software engineering, cloud architecture, clinical workflows, hardware integration, and delivery automation to shorten the path from idea to production.</li>
+<li>Advanced Micromed's roadmap for AI-powered cardiology, connected medical devices, hybrid cloud, edge computing, and interoperability with standards such as DICOM, HL7, and FHIR.</li>
+<li>Built practical AI-assisted engineering workflows and harnesses to improve execution speed and quality without weakening engineering accountability.</li>
+<li>Led and supported multidisciplinary teams across backend, frontend, UX, cloud, firmware, electronics, QA, integrations, and product delivery.</li></ul>
+          </div>
+<div class="role">
+            <div>
+              <h3>Engineering Manager</h3>
+              <div class="meta">Micromed Health - Florianopolis, Brazil - Nov 2020 to Jun 2022</div>
+            </div>
+            <ul><li>Built and led an internal team of seven people: six engineers and one UX designer responsible for platform core, back ends, front ends, design system, and cloud infrastructure.</li>
+<li>Coordinated ten third-party engineers across AI microservices, firmware, and electronics, connecting data science, embedded software, hardware, and product delivery.</li>
+<li>Owned system design and led end-to-end project development across software, cloud, machine learning integration, hardware integration, and product execution.</li>
+<li>Connected product requirements, clinical workflows, architecture decisions, and delivery planning into a coherent execution model.</li>
+<li>Helped establish the foundation for Micromed's later cloud-native platform initiatives.</li></ul>
+          </div>
+<div class="role">
+            <div>
+              <h3>Engineering Manager</h3>
+              <div class="meta">Animati - Computacao Aplicada a Saude - Florianopolis, Brazil - Jun 2019 to Oct 2020</div>
+            </div>
+            <ul><li>Managed the full product development cycle from problem discovery and software architecture to customer delivery.</li>
+<li>Built a team from scratch with UX and full-stack engineers working with React, TypeScript, Python, Django REST, Node.js, Firebase, and serverless architecture.</li>
+<li>Introduced design-system thinking, detailed UX modeling, micro-frontends, and cost-efficient cloud patterns that could scale down during off-hours.</li>
+<li>Worked closely with users and stakeholders to translate diagnostic medicine workflows into practical product and engineering decisions.</li>
+<li>Balanced hands-on architecture, team leadership, delivery execution, and product direction.</li></ul>
+          </div>
+<div class="role">
+            <div>
+              <h3>Product Manager for Healthcare Solutions</h3>
+              <div class="meta">Softplan Planejamento e Sistemas - Florianopolis, Brazil - Dec 2018 to May 2019</div>
+            </div>
+            <ul><li>Evaluated healthcare product opportunities and presented strategic options to the CEO.</li>
+<li>Worked with machine learning engineers to improve user experience and identify new features for a healthcare insurance business intelligence product.</li>
+<li>Connected product strategy, technical feasibility, business constraints, and market validation.</li>
+<li>Helped structure early discovery for healthcare products inside an established enterprise software company.</li></ul>
+          </div>
+<div class="role">
+            <div>
+              <h3>Product Manager for Construction Business</h3>
+              <div class="meta">Softplan Planejamento e Sistemas - Florianopolis, Brazil - Mar 2018 to Nov 2018</div>
+            </div>
+            <ul><li>Owned roadmap, sales-channel alignment, special projects, large-customer needs, and agile planning.</li>
+<li>Collaborated with full-stack engineers, UX designers, and architecture teams on new platform features and product direction.</li>
+<li>Translated customer, commercial, and operational needs into roadmap decisions and engineering priorities.</li>
+<li>Worked across discovery, prioritization, stakeholder alignment, and delivery execution.</li></ul>
+          </div>
+<div class="role">
+            <div>
+              <h3>Chief Technology Officer and Founder</h3>
+              <div class="meta">Healfies - Florianopolis, Brazil - Jan 2015 to Mar 2018</div>
+            </div>
+            <ul><li>Owned platform system design, product roadmap, technical strategy, and team building from scratch.</li>
+<li>Led seven people across full-stack engineering, UX, and quality assurance.</li>
+<li>Worked hands-on across strategy, design, planning, testing, deployment, and coding with Node.js, MongoDB, and AngularJS.</li>
+<li>Designed and operated cloud infrastructure using AWS and Google Cloud, including microservices, data storage, functions, Kubernetes, cost management, and production operations.</li>
+<li>Led integration work for ETLs and interoperability with clinical systems including CIS, LIS, RIS, HIS, and PACS through REST APIs.</li>
+<li>Helped raise R$2.2M, deliver health records from 23 diagnostic centers, reach 2M delivered health records, and register 10K users.</li>
+<li>Experienced the full startup cycle: product discovery, fundraising, hiring, architecture, development, delivery, operations, partnerships, and customer validation.</li></ul>
+          </div>
+<div class="role">
+            <div>
+              <h3>Tech Lead</h3>
+              <div class="meta">Chaordic - Florianopolis, Brazil - Jan 2014 to May 2015</div>
+            </div>
+            <ul><li>Acted as project manager and technical lead for eight engineers across JavaScript, UX/frontend, and QA.</li>
+<li>Implemented OKRs for the team, aligning company strategy with daily execution and reducing integration time by 50%.</li>
+<li>Helped reduce churn and increase loyalty among large Brazilian e-commerce customers by implementing a technical account management function.</li>
+<li>Worked directly with major customers including Walmart, Maquina de Vendas, Saraiva, Centauro, and Nova.com.</li>
+<li>Operated at the intersection of technical delivery, customer success, product customization, and engineering execution.</li></ul>
+          </div>
+<div class="role">
+            <div>
+              <h3>Product Manager</h3>
+              <div class="meta">Pixeon Medical Systems - Florianopolis / Sao Paulo, Brazil - Oct 2010 to Jan 2014</div>
+            </div>
+            <ul><li>Owned LIS, RIS, and PACS product portfolio direction, translating market, customer, and sales needs into engineering roadmaps.</li>
+<li>Led the full cycle for six new products, from problem definition and solution design to development, branding, pricing, ANVISA registration, launch, sales training, and performance monitoring.</li>
+<li>Participated in the merger of Medical Systems and Pixeon, helping unify processes and product portfolios.</li>
+<li>Worked across healthcare workflows, product strategy, sales enablement, engineering alignment, and regulatory requirements.</li>
+<li>Built a strong foundation in product discovery, market analysis, product launch, and healthcare software operations.</li></ul>
+          </div>
+<div class="role">
+            <div>
+              <h3>Full-stack Engineer</h3>
+              <div class="meta">Pixeon Medical Systems - Brazil - Jan 2007 to Oct 2010</div>
+            </div>
+            <ul><li>Developed a desktop DICOM viewer for CT, MRI, ultrasound, CR, and other medical imaging modalities using C++, Qt, Java Swing, and Java J2EE.</li>
+<li>Worked across discovery, requirements mapping, backend development, frontend implementation, and stakeholder approval.</li>
+<li>Applied Scrum, Maven configuration management, and Bamboo continuous integration.</li>
+<li>Added project management responsibilities supporting engineering, sales, and customer delivery.</li>
+<li>Built early expertise in medical imaging, DICOM workflows, full-stack development, and healthcare product delivery.</li></ul>
+          </div>
+<div class="role">
+            <div>
+              <h3>Information Technology Analyst</h3>
+              <div class="meta">Tigre S.A. - Tubos e Conexoes - Joinville, Brazil - Jul 2006 to Jan 2007</div>
+            </div>
+            
+          </div></div>
+    </section>
+<section class="section section-open-source" aria-labelledby="selected-projects">
+      <h2 id="selected-projects">Selected Projects</h2>
       <div class="project-list"><article class="project">
               <div class="project-head">
                 <h3><a href="https://github.com/phai-run/phai">phai-run/phai</a></h3>
                 <span class="project-meta">Founder / maintainer</span>
               </div>
-              <p>Founder and maintainer of phai, an MIT-licensed, rules-first personal finance agent: a terminal-first Rust system that puts LLMs on rails. It connects to Pluggy, normalizes banking data into SQLite locally or BigQuery in production, and exposes queryable reports for humans, scripts, dashboards, and agents. The architecture uses a single-binary CLI, a shared FinanceStore trait, embedded migrations, rust_decimal end-to-end, append-only audit events, self-update releases, an MCP surface, and a LiveStore + React local web app embedded into the binary.</p>
-<p>The project also carries a full engineering harness: AGENTS.md guardrails, ADRs, privacy rules, TDD, CI, cargo audit, cargo deny, Release Please, and Sentrux quality gates to keep agent-assisted changes reviewable and production-ready.</p>
+              <p>Founder and maintainer of phai, a local-first personal finance product built in Rust. It combines banking data ingestion, SQLite/BigQuery storage, rule-based classification, auditability, CLI workflows, dashboards, MCP integration, and a local web app embedded into a single binary.</p>
+<p>The project is also an engineering harness for AI-assisted development, with ADRs, TDD, CI, privacy rules, quality gates, release automation, and strict guardrails to keep agent-assisted changes reviewable and production-ready.</p>
               <ul class="project-tech"><li>Rust</li>
 <li>SQLite</li>
 <li>BigQuery</li>
@@ -704,14 +868,14 @@
 <li>LiveStore</li>
 <li>MCP</li>
 <li>ADRs</li>
-<li>agent harness</li></ul>
+<li>AI-assisted engineering harness</li></ul>
             </article>
 <article class="project secondary">
               <div class="project-head">
                 <h3><a href="https://github.com/feliperun/eai">feliperun/eai</a></h3>
                 <span class="project-meta">Rust CLI</span>
               </div>
-              <p>Rust CLI for natural-language-to-shell command generation: describe the operation, inspect the generated command, confirm, and run. Supports local and low-cost LLM providers, pipe context, command explanation, script and recipe generation, tool discovery, bookmarks, completions, and shell integration.</p>
+              <p>Rust CLI that turns natural language into safe shell commands through an inspect-confirm-run workflow. Supports multiple LLM providers, pipe context, command explanation, script generation, bookmarks, completions, and shell integration.</p>
               <ul class="project-tech"><li>Rust</li>
 <li>Ollama</li>
 <li>Gemini</li>
@@ -724,152 +888,95 @@
                 <h3><a href="https://github.com/feliperun/dsync">feliperun/dsync</a></h3>
                 <span class="project-meta">Document sync</span>
               </div>
-              <p>Rust CLI for keeping Markdown as the local source of truth while syncing documents with Google Docs and Linear Docs. It creates or imports documents, maintains frontmatter links, updates Google Docs, Linear, and Git cross-links, and is structured around an extensible provider interface.</p>
+              <p>Rust CLI for keeping Markdown as the local source of truth while syncing documents with Google Docs and Linear Docs. Supports document creation, import, frontmatter links, cross-links, and an extensible provider architecture.</p>
               <ul class="project-tech"><li>Rust</li>
 <li>Markdown</li>
 <li>Google Docs</li>
 <li>Linear Docs</li>
 <li>provider architecture</li></ul>
             </article></div>
-    </section>
-<section class="section section-experience" aria-labelledby="experience">
-      <h2 id="experience">Experience</h2>
-      <div class="timeline"><div class="role">
-            <div>
-              <h3>Product Engineer</h3>
-              <div class="meta">Micromed Health - Florianopolis, Brazil - Current focus</div>
-            </div>
-            <ul><li>Leading a large end-to-end product engineering initiative using harness-driven AI workflows from Figma through implementation, validation, release, and production operations.</li>
-<li>Bridging product design, software engineering, cloud architecture, clinical workflows, and delivery automation so teams can move from idea to production with tighter feedback loops.</li>
-<li>Building practical AI-assisted engineering systems that improve execution quality without weakening engineering accountability, review discipline, or operational reliability.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Head of Engineering</h3>
-              <div class="meta">Micromed Health - Florianopolis, Brazil - May 2022 to Present</div>
-            </div>
-            <ul><li>Structured engineering process and culture to support team growth, new projects, and faster product delivery.</li>
-<li>Led engineering for Coreum, Micromed's cloud-native digital health platform for cardiology diagnostics, AI-enabled workflows, exam processing, and connected healthcare operations.</li>
-<li>Helped consolidate critical systems on Google Cloud, including ERP and Coreum, improving reliability, security, integration speed, and day-to-day operational efficiency.</li>
-<li>Contributed to a modernization program that reduced infrastructure costs by more than 50%, cut exam loading times from 2 seconds to 200 milliseconds, migrated 20TB of data with only 3 hours of downtime, and enabled multiple daily zero-downtime releases.</li>
-<li>Advanced Micromed's roadmap for AI-powered cardiology, including specialized, auditable AI for diagnostic support, connected medical devices, hybrid cloud, edge computing, and interoperability with standards such as DICOM, HL7, and FHIR.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Engineering Manager</h3>
-              <div class="meta">Micromed Health - Florianopolis, Brazil - Nov 2020 to Jun 2022</div>
-            </div>
-            <ul><li>Joined Micromed to lead engineering from scratch for an inpatient monitoring solution that automatically collected ECG recordings from hospitalized patients, sent them to the cloud, and processed them with machine learning algorithms for cardiac risk prediction.</li>
-<li>Built and led an internal team of seven people: six engineers and one UX designer responsible for platform core, back ends, front ends, design system, and cloud infrastructure.</li>
-<li>Coordinated ten third-party engineers across AI microservices, firmware, and electronics, connecting data science, embedded software, hardware, and product delivery.</li>
-<li>Owned system design and led end-to-end project development.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Engineering Manager</h3>
-              <div class="meta">Animati - Computacao Aplicada a Saude - Florianopolis, Brazil - Jun 2019 to Oct 2020</div>
-            </div>
-            <ul><li>Led development of S.I.M., an integrated diagnostic medicine system and cloud-native SaaS designed to fill RIS/PACS gaps.</li>
-<li>Managed the full product development cycle from problem discovery and software architecture to delivery for customers.</li>
-<li>Built a team from scratch with UX and full-stack engineers working with React, TypeScript, Python, Django REST, Node.js, Firebase, and serverless architecture.</li>
-<li>Introduced design-system thinking, detailed UX modeling, micro-frontends, and cost-efficient cloud patterns that could scale down during off-hours.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Product Manager for Healthcare Solutions</h3>
-              <div class="meta">Softplan Planejamento e Sistemas - Florianopolis, Brazil - Dec 2018 to May 2019</div>
-            </div>
-            <ul><li>Ran product discovery for a new healthcare business unit, evaluating build, buy, and partner paths and presenting strategic options to the CEO.</li>
-<li>Worked with machine learning engineers to improve experience and identify new features for a healthcare insurance business intelligence product.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Product Manager for Construction Business</h3>
-              <div class="meta">Softplan Planejamento e Sistemas - Florianopolis, Brazil - Mar 2018 to Nov 2018</div>
-            </div>
-            <ul><li>Managed CRM and commercial modules for Sienge, a construction business ERP, across roadmap, sales channels, special projects, large customers, and agile planning.</li>
-<li>Collaborated with full-stack engineers, UX, and architecture teams on new platform features and product direction.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Chief Technology Officer and Founder</h3>
-              <div class="meta">Healfies - Florianopolis, Brazil - Jan 2015 to Mar 2018</div>
-            </div>
-            <ul><li>Founded and led technology for a healthcare network where patients, professionals, and organizations could securely organize and share health information.</li>
-<li>Owned platform system design, product roadmap, and team building from scratch, leading seven people across full-stack engineering, UX, and quality assurance.</li>
-<li>Worked hands-on across strategy, design, planning, testing, deployment, and coding with Node.js, MongoDB, and AngularJS.</li>
-<li>Designed and operated cloud infrastructure using AWS and Google Cloud, including microservices, data storage, functions, Kubernetes, cost management, and production operations.</li>
-<li>Led integration work for ETLs and interoperability with clinical systems including CIS, LIS, RIS, HIS, and PACS through REST APIs.</li>
-<li>Helped raise R$2.2M, deliver health records from 23 diagnostic centers, reach 2M delivered health records, and register 10K users.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Tech Lead</h3>
-              <div class="meta">Chaordic - Florianopolis, Brazil - Jan 2014 to May 2015</div>
-            </div>
-            <ul><li>Led customization, delivery, and integration projects for customers, acting as project manager and technical lead for eight engineers across JavaScript, UX/frontend, and QA.</li>
-<li>Implemented OKRs for the team, aligning company strategy with daily execution and reducing integration time by 50%.</li>
-<li>Helped reduce churn and increase loyalty among large Brazilian e-commerce customers by implementing a technical account management function.</li>
-<li>Worked directly with major customers including Walmart, Maquina de Vendas, Saraiva, Centauro, and Nova.com.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Product Manager</h3>
-              <div class="meta">Pixeon Medical Systems - Florianopolis / Sao Paulo, Brazil - Oct 2010 to Jan 2014</div>
-            </div>
-            <ul><li>Created and implemented product management and product intelligence inside the marketing department.</li>
-<li>Owned LIS, RIS, and PACS product portfolio direction, translating market, customer, and sales needs into engineering roadmaps.</li>
-<li>Led the full cycle for six new products, from problem definition and solution design to development, branding, pricing, ANVISA registration, launch, sales training, and performance monitoring.</li>
-<li>Participated in the merger of Medical Systems and Pixeon, helping unify processes and product portfolios.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Full-stack Engineer</h3>
-              <div class="meta">Pixeon Medical Systems - Brazil - Jan 2007 to Oct 2010</div>
-            </div>
-            <ul><li>Developed a desktop DICOM viewer for CT, MRI, ultrasound, CR, and other medical imaging modalities using C++, Qt, Java Swing, and Java J2EE.</li>
-<li>Worked across discovery, requirements mapping, backend development, frontend implementation, and stakeholder approval.</li>
-<li>Applied Scrum, Maven configuration management, and Bamboo continuous integration, later adding project management responsibilities supporting engineering and sales.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Information Technology Analyst</h3>
-              <div class="meta">Tigre S.A. - Tubos e Conexoes - Joinville, Brazil - Jul 2006 to Jan 2007</div>
-            </div>
-            <ul><li>Worked as an information technology analyst before moving deeper into healthcare product and software engineering.</li></ul>
-          </div></div>
     </section></div>
       <aside><section class="side-block" aria-labelledby="selected-impact">
     <h2 id="selected-impact">Selected Impact</h2>
-    <div class="markdown"><div class="metric-grid"><div class="metric"><strong>50%+</strong><span>infrastructure cost reduction in Micromed's Google Cloud modernization</span></div>
-<div class="metric"><strong>10x</strong><span>exam loading improvement, from 2 seconds to 200 milliseconds</span></div>
-<div class="metric"><strong>20TB</strong><span>data migration completed with only 3 hours of downtime</span></div>
-<div class="metric"><strong>10k+</strong><span>daily exams processed by Micromed's healthcare platforms</span></div>
-<div class="metric"><strong>R$2.2M</strong><span>funding raised while co-founding and leading Healfies technology</span></div>
-<div class="metric"><strong>2M</strong><span>health records delivered to patients through Healfies</span></div></div></div>
+    <div class="markdown"><ul class="impact-list"><li>Led Coreum from zero into Micromed's cloud-native platform for cardiology diagnostics, later featured as a Google Cloud customer case study.</li>
+<li>Contributed to 50%+ infrastructure cost reduction during Micromed's Google Cloud modernization.</li>
+<li>Improved exam loading performance by 10x, from 2 seconds to 200 milliseconds.</li>
+<li>Participated in a 20TB healthcare data migration completed with only 3 hours of downtime.</li>
+<li>Helped enable multiple daily zero-downtime releases for critical diagnostic workflows.</li>
+<li>Supported platforms processing 10k+ exams per day.</li>
+<li>Co-founded and led Healfies as CTO, helping raise R$2.2M, deliver 2M health records, connect 23 diagnostic centers, and reach 10k registered users.</li>
+<li>Built and led multidisciplinary teams across software engineering, UX, cloud, AI, firmware, electronics, and healthcare operations.</li></ul></div>
   </section>
 <section class="side-block" aria-labelledby="expertise">
     <h2 id="expertise">Expertise</h2>
-    <div class="markdown"><ul class="tag-list"><li>Product Engineering</li>
-<li>Healthcare Technology</li>
-<li>Healthcare Information Technology</li>
-<li>Product Management</li>
-<li>Software Development</li>
-<li>AI-assisted Delivery</li>
-<li>Engineering Leadership</li>
-<li>Cloud Platforms</li>
-<li>Google Cloud</li>
-<li>Coreum Platform</li>
-<li>Clinical Workflows</li>
-<li>Connected Devices</li>
-<li>Edge Computing</li>
-<li>Interoperability</li>
-<li>DICOM / HL7 / FHIR</li>
-<li>LGPD-aware Systems</li>
-<li>Product Discovery</li>
-<li>System Design</li>
-<li>DICOM Viewer Development</li>
-<li>Zero-downtime Releases</li></ul></div>
+    <div class="markdown"><div class="expertise-group">
+          <h3>Product Engineering</h3>
+          <ul class="tag-list"><li>product discovery</li>
+<li>domain modeling</li>
+<li>workflow design</li>
+<li>system design</li>
+<li>full-cycle product development</li>
+<li>production operations</li>
+<li>observability</li>
+<li>iteration</li></ul>
+        </div>
+<div class="expertise-group">
+          <h3>Software Engineering</h3>
+          <ul class="tag-list"><li>full-stack development</li>
+<li>cloud-native architecture</li>
+<li>APIs</li>
+<li>integrations</li>
+<li>local-first systems</li>
+<li>CLI tools</li>
+<li>automation</li>
+<li>release engineering</li>
+<li>zero-downtime deployments</li></ul>
+        </div>
+<div class="expertise-group">
+          <h3>AI-assisted Engineering</h3>
+          <ul class="tag-list"><li>coding agents</li>
+<li>engineering harnesses</li>
+<li>guardrails</li>
+<li>ADRs</li>
+<li>validation loops</li>
+<li>test-driven development</li>
+<li>review workflows</li>
+<li>internal developer tools</li></ul>
+        </div>
+<div class="expertise-group">
+          <h3>Leadership</h3>
+          <ul class="tag-list"><li>engineering strategy</li>
+<li>technical leadership</li>
+<li>team building</li>
+<li>product-minded execution</li>
+<li>cross-functional collaboration</li>
+<li>roadmap translation</li>
+<li>stakeholder alignment</li></ul>
+        </div>
+<div class="expertise-group">
+          <h3>Healthcare and Regulated Systems</h3>
+          <ul class="tag-list"><li>clinical workflows</li>
+<li>diagnostic platforms</li>
+<li>connected devices</li>
+<li>interoperability</li>
+<li>DICOM</li>
+<li>HL7</li>
+<li>FHIR</li>
+<li>LGPD-aware systems</li>
+<li>healthcare operations</li></ul>
+        </div>
+<div class="expertise-group">
+          <h3>Cloud and Operations</h3>
+          <ul class="tag-list"><li>Google Cloud</li>
+<li>AWS</li>
+<li>cloud modernization</li>
+<li>infrastructure cost optimization</li>
+<li>production reliability</li>
+<li>monitoring</li>
+<li>operational efficiency</li>
+<li>data migration</li>
+<li>scalable platforms</li></ul>
+        </div></div>
   </section>
 <section class="side-block" aria-labelledby="education">
     <h2 id="education">Education</h2>
@@ -879,7 +986,6 @@
     <h2 id="certifications">Certifications</h2>
     <div class="markdown"><ul>
 <li>Practical Product Management - Pragmatic Marketing, Inc - 2010</li>
-<li>Front-end Foundations - Code School - 2015</li>
 <li>EMPRETEC - 2009</li>
 </ul></div>
   </section>
@@ -887,7 +993,7 @@
     <h2 id="languages">Languages</h2>
     <div class="markdown"><ul>
 <li>Portuguese - Native or bilingual proficiency</li>
-<li>English - Native or bilingual proficiency</li>
+<li>English - Professional working proficiency</li>
 <li>Spanish - Basic to intermediate proficiency</li>
 </ul></div>
   </section></aside>
@@ -896,7 +1002,7 @@
 
   <script type="text/plain" id="resume-markdown"># Felipe R. Broering
 
-Product Engineer / Builder / Head of Engineering / Engineering Manager
+Senior Product Engineer (Full-Stack) / Product-minded Engineering Leader
 
 Santa Catarina, Brazil
 
@@ -906,9 +1012,38 @@ Santa Catarina, Brazil
 
 ## Profile
 
-Product and engineering leader with 15+ years building digital products, mainly in healthcare. I connect product discovery, software architecture, AI, cloud infrastructure, hardware integration, and team execution to ship clinically relevant technology from concept to production.
+Senior Product Engineer and product-minded engineering leader with 15+ years building complex digital products from discovery to production.
 
-I work best at the intersection of product, engineering, and healthcare operations: turning ambiguous clinical or business problems into reliable product systems, aligning teams around pragmatic execution, and using AI where it improves speed, quality, auditability, and clinical confidence. Over the last several years I have built and led engineering teams, acted as a system designer, and founded a health-tech startup as CTO.
+I work best in full-cycle product engineering: understanding ambiguous business or user problems, modeling the domain, designing the architecture, building the software, shipping to production, monitoring real-world behavior, and iterating based on evidence.
+
+My background combines hands-on full-stack engineering, product management, cloud platforms, AI-assisted engineering workflows, healthcare technology, hardware integration, and engineering leadership. I have worked as a software engineer, product manager, CTO/founder, engineering manager, head of engineering, and hands-on product engineer.
+
+I am especially strong in environments where product and engineering cannot be separated: complex workflows, operational systems, regulated domains, cloud-native platforms, internal tools, integrations, automation, and systems that need to be reliable in production.
+
+Over the last several years, I have led and built platforms used in critical healthcare operations, including Coreum at Micromed, featured by Google Cloud for its cloud modernization, cost reduction, performance gains, large-scale data migration, and zero-downtime release capabilities.
+
+## Selected Impact
+
+- Led Coreum from zero into Micromed's cloud-native platform for cardiology diagnostics, later featured as a Google Cloud customer case study.
+- Contributed to 50%+ infrastructure cost reduction during Micromed's Google Cloud modernization.
+- Improved exam loading performance by 10x, from 2 seconds to 200 milliseconds.
+- Participated in a 20TB healthcare data migration completed with only 3 hours of downtime.
+- Helped enable multiple daily zero-downtime releases for critical diagnostic workflows.
+- Supported platforms processing 10k+ exams per day.
+- Co-founded and led Healfies as CTO, helping raise R$2.2M, deliver 2M health records, connect 23 diagnostic centers, and reach 10k registered users.
+- Built and led multidisciplinary teams across software engineering, UX, cloud, AI, firmware, electronics, and healthcare operations.
+
+## How I Build
+
+I approach product engineering as a full-cycle discipline.
+
+My preferred loop is:
+
+Problem → Domain model → Product behavior → Architecture → Implementation → Production → Observability → Iteration.
+
+I like to start close to the real problem: users, workflows, business constraints, operational risks, edge cases, and success criteria. From there, I model the domain, design the system, build the product, ship it, monitor how it behaves in production, and improve it continuously.
+
+AI is part of my workflow, but not the point of the work. I use AI coding tools, local harnesses, automation, tests, ADRs, code review, and validation loops to move faster while preserving architecture, maintainability, and accountability.
 
 ## Featured Case Study
 
@@ -926,21 +1061,140 @@ Google Cloud case study results:
 - Multiple daily releases with zero downtime
 - More than 10,000 exams processed per day by Micromed's platforms
 
-## Open Source
+## Experience
+
+### Senior Product Engineer / Head of Engineering
+
+Micromed Health - Florianopolis, Brazil - May 2022 to Present
+
+Led engineering and hands-on product engineering initiatives for Coreum, Micromed's cloud-native platform for cardiology diagnostics, exam workflows, AI-assisted analysis, ERP integration, connected devices, and production operations.
+
+- Led Coreum from early product development into a Google Cloud customer case study platform.
+- Worked across the full product engineering loop: problem discovery, workflow analysis, domain modeling, architecture, implementation, validation, release, production monitoring, and continuous improvement.
+- Contributed to a modernization program that reduced infrastructure costs by more than 50%, improved exam loading speed from 2 seconds to 200 milliseconds, migrated 20TB of data with only 3 hours of downtime, and enabled multiple daily zero-downtime releases.
+- Built and evolved engineering practices around architecture, delivery, cloud operations, reliability, security, AI-assisted development, review discipline, and production readiness.
+- Bridged product design, software engineering, cloud architecture, clinical workflows, hardware integration, and delivery automation to shorten the path from idea to production.
+- Advanced Micromed's roadmap for AI-powered cardiology, connected medical devices, hybrid cloud, edge computing, and interoperability with standards such as DICOM, HL7, and FHIR.
+- Built practical AI-assisted engineering workflows and harnesses to improve execution speed and quality without weakening engineering accountability.
+- Led and supported multidisciplinary teams across backend, frontend, UX, cloud, firmware, electronics, QA, integrations, and product delivery.
+
+### Engineering Manager
+
+Micromed Health - Florianopolis, Brazil - Nov 2020 to Jun 2022
+
+Joined Micromed to lead engineering from scratch for an inpatient monitoring solution combining ECG acquisition, cloud processing, machine learning algorithms, and cardiac risk prediction.
+
+- Built and led an internal team of seven people: six engineers and one UX designer responsible for platform core, back ends, front ends, design system, and cloud infrastructure.
+- Coordinated ten third-party engineers across AI microservices, firmware, and electronics, connecting data science, embedded software, hardware, and product delivery.
+- Owned system design and led end-to-end project development across software, cloud, machine learning integration, hardware integration, and product execution.
+- Connected product requirements, clinical workflows, architecture decisions, and delivery planning into a coherent execution model.
+- Helped establish the foundation for Micromed's later cloud-native platform initiatives.
+
+### Engineering Manager
+
+Animati - Computacao Aplicada a Saude - Florianopolis, Brazil - Jun 2019 to Oct 2020
+
+Led development of S.I.M., an integrated diagnostic medicine system and cloud-native SaaS designed to fill RIS/PACS workflow gaps.
+
+- Managed the full product development cycle from problem discovery and software architecture to customer delivery.
+- Built a team from scratch with UX and full-stack engineers working with React, TypeScript, Python, Django REST, Node.js, Firebase, and serverless architecture.
+- Introduced design-system thinking, detailed UX modeling, micro-frontends, and cost-efficient cloud patterns that could scale down during off-hours.
+- Worked closely with users and stakeholders to translate diagnostic medicine workflows into practical product and engineering decisions.
+- Balanced hands-on architecture, team leadership, delivery execution, and product direction.
+
+### Product Manager for Healthcare Solutions
+
+Softplan Planejamento e Sistemas - Florianopolis, Brazil - Dec 2018 to May 2019
+
+Led product discovery for a new healthcare business unit, evaluating market opportunities, build-buy-partner paths, and strategic product directions.
+
+- Evaluated healthcare product opportunities and presented strategic options to the CEO.
+- Worked with machine learning engineers to improve user experience and identify new features for a healthcare insurance business intelligence product.
+- Connected product strategy, technical feasibility, business constraints, and market validation.
+- Helped structure early discovery for healthcare products inside an established enterprise software company.
+
+### Product Manager for Construction Business
+
+Softplan Planejamento e Sistemas - Florianopolis, Brazil - Mar 2018 to Nov 2018
+
+Managed CRM and commercial modules for Sienge, a construction business ERP used by companies across Brazil.
+
+- Owned roadmap, sales-channel alignment, special projects, large-customer needs, and agile planning.
+- Collaborated with full-stack engineers, UX designers, and architecture teams on new platform features and product direction.
+- Translated customer, commercial, and operational needs into roadmap decisions and engineering priorities.
+- Worked across discovery, prioritization, stakeholder alignment, and delivery execution.
+
+### Chief Technology Officer and Founder
+
+Healfies - Florianopolis, Brazil - Jan 2015 to Mar 2018
+
+Founded and led technology for a healthcare network where patients, professionals, and organizations could securely organize and share health information.
+
+- Owned platform system design, product roadmap, technical strategy, and team building from scratch.
+- Led seven people across full-stack engineering, UX, and quality assurance.
+- Worked hands-on across strategy, design, planning, testing, deployment, and coding with Node.js, MongoDB, and AngularJS.
+- Designed and operated cloud infrastructure using AWS and Google Cloud, including microservices, data storage, functions, Kubernetes, cost management, and production operations.
+- Led integration work for ETLs and interoperability with clinical systems including CIS, LIS, RIS, HIS, and PACS through REST APIs.
+- Helped raise R$2.2M, deliver health records from 23 diagnostic centers, reach 2M delivered health records, and register 10K users.
+- Experienced the full startup cycle: product discovery, fundraising, hiring, architecture, development, delivery, operations, partnerships, and customer validation.
+
+### Tech Lead
+
+Chaordic - Florianopolis, Brazil - Jan 2014 to May 2015
+
+Led customization, delivery, and integration projects for major Brazilian e-commerce customers.
+
+- Acted as project manager and technical lead for eight engineers across JavaScript, UX/frontend, and QA.
+- Implemented OKRs for the team, aligning company strategy with daily execution and reducing integration time by 50%.
+- Helped reduce churn and increase loyalty among large Brazilian e-commerce customers by implementing a technical account management function.
+- Worked directly with major customers including Walmart, Maquina de Vendas, Saraiva, Centauro, and Nova.com.
+- Operated at the intersection of technical delivery, customer success, product customization, and engineering execution.
+
+### Product Manager
+
+Pixeon Medical Systems - Florianopolis / Sao Paulo, Brazil - Oct 2010 to Jan 2014
+
+Created and implemented product management and product intelligence inside the marketing department for healthcare software products.
+
+- Owned LIS, RIS, and PACS product portfolio direction, translating market, customer, and sales needs into engineering roadmaps.
+- Led the full cycle for six new products, from problem definition and solution design to development, branding, pricing, ANVISA registration, launch, sales training, and performance monitoring.
+- Participated in the merger of Medical Systems and Pixeon, helping unify processes and product portfolios.
+- Worked across healthcare workflows, product strategy, sales enablement, engineering alignment, and regulatory requirements.
+- Built a strong foundation in product discovery, market analysis, product launch, and healthcare software operations.
+
+### Full-stack Engineer
+
+Pixeon Medical Systems - Brazil - Jan 2007 to Oct 2010
+
+Started as a hands-on software engineer building healthcare imaging software and later expanded into product and project responsibilities.
+
+- Developed a desktop DICOM viewer for CT, MRI, ultrasound, CR, and other medical imaging modalities using C++, Qt, Java Swing, and Java J2EE.
+- Worked across discovery, requirements mapping, backend development, frontend implementation, and stakeholder approval.
+- Applied Scrum, Maven configuration management, and Bamboo continuous integration.
+- Added project management responsibilities supporting engineering, sales, and customer delivery.
+- Built early expertise in medical imaging, DICOM workflows, full-stack development, and healthcare product delivery.
+
+### Information Technology Analyst
+
+Tigre S.A. - Tubos e Conexoes - Joinville, Brazil - Jul 2006 to Jan 2007
+
+Worked as an information technology analyst before moving deeper into software engineering, product development, and healthcare technology.
+
+## Selected Projects
 
 ### phai-run/phai
 
-Founder and maintainer of phai, an MIT-licensed, rules-first personal finance agent: a terminal-first Rust system that puts LLMs on rails. It connects to Pluggy, normalizes banking data into SQLite locally or BigQuery in production, and exposes queryable reports for humans, scripts, dashboards, and agents. The architecture uses a single-binary CLI, a shared FinanceStore trait, embedded migrations, rust_decimal end-to-end, append-only audit events, self-update releases, an MCP surface, and a LiveStore + React local web app embedded into the binary.
+Founder and maintainer of phai, a local-first personal finance product built in Rust. It combines banking data ingestion, SQLite/BigQuery storage, rule-based classification, auditability, CLI workflows, dashboards, MCP integration, and a local web app embedded into a single binary.
 
-The project also carries a full engineering harness: AGENTS.md guardrails, ADRs, privacy rules, TDD, CI, cargo audit, cargo deny, Release Please, and Sentrux quality gates to keep agent-assisted changes reviewable and production-ready.
+The project is also an engineering harness for AI-assisted development, with ADRs, TDD, CI, privacy rules, quality gates, release automation, and strict guardrails to keep agent-assisted changes reviewable and production-ready.
 
-Technologies: Rust, SQLite, BigQuery, Pluggy, React, LiveStore, MCP, ADRs, agent harness.
+Technologies: Rust, SQLite, BigQuery, Pluggy, React, LiveStore, MCP, ADRs, AI-assisted engineering harness.
 
 Project: https://github.com/phai-run/phai
 
 ### feliperun/eai
 
-Rust CLI for natural-language-to-shell command generation: describe the operation, inspect the generated command, confirm, and run. Supports local and low-cost LLM providers, pipe context, command explanation, script and recipe generation, tool discovery, bookmarks, completions, and shell integration.
+Rust CLI that turns natural language into safe shell commands through an inspect-confirm-run workflow. Supports multiple LLM providers, pipe context, command explanation, script generation, bookmarks, completions, and shell integration.
 
 Technologies: Rust, Ollama, Gemini, Groq, OpenAI, shell UX.
 
@@ -948,119 +1202,25 @@ Project: https://github.com/feliperun/eai
 
 ### feliperun/dsync
 
-Rust CLI for keeping Markdown as the local source of truth while syncing documents with Google Docs and Linear Docs. It creates or imports documents, maintains frontmatter links, updates Google Docs, Linear, and Git cross-links, and is structured around an extensible provider interface.
+Rust CLI for keeping Markdown as the local source of truth while syncing documents with Google Docs and Linear Docs. Supports document creation, import, frontmatter links, cross-links, and an extensible provider architecture.
 
 Technologies: Rust, Markdown, Google Docs, Linear Docs, provider architecture.
 
 Project: https://github.com/feliperun/dsync
 
-## Experience
-
-### Product Engineer
-
-Micromed Health - Florianopolis, Brazil - Current focus
-
-- Leading a large end-to-end product engineering initiative using harness-driven AI workflows from Figma through implementation, validation, release, and production operations.
-- Bridging product design, software engineering, cloud architecture, clinical workflows, and delivery automation so teams can move from idea to production with tighter feedback loops.
-- Building practical AI-assisted engineering systems that improve execution quality without weakening engineering accountability, review discipline, or operational reliability.
-
-### Head of Engineering
-
-Micromed Health - Florianopolis, Brazil - May 2022 to Present
-
-- Structured engineering process and culture to support team growth, new projects, and faster product delivery.
-- Led engineering for Coreum, Micromed's cloud-native digital health platform for cardiology diagnostics, AI-enabled workflows, exam processing, and connected healthcare operations.
-- Helped consolidate critical systems on Google Cloud, including ERP and Coreum, improving reliability, security, integration speed, and day-to-day operational efficiency.
-- Contributed to a modernization program that reduced infrastructure costs by more than 50%, cut exam loading times from 2 seconds to 200 milliseconds, migrated 20TB of data with only 3 hours of downtime, and enabled multiple daily zero-downtime releases.
-- Advanced Micromed's roadmap for AI-powered cardiology, including specialized, auditable AI for diagnostic support, connected medical devices, hybrid cloud, edge computing, and interoperability with standards such as DICOM, HL7, and FHIR.
-
-### Engineering Manager
-
-Micromed Health - Florianopolis, Brazil - Nov 2020 to Jun 2022
-
-- Joined Micromed to lead engineering from scratch for an inpatient monitoring solution that automatically collected ECG recordings from hospitalized patients, sent them to the cloud, and processed them with machine learning algorithms for cardiac risk prediction.
-- Built and led an internal team of seven people: six engineers and one UX designer responsible for platform core, back ends, front ends, design system, and cloud infrastructure.
-- Coordinated ten third-party engineers across AI microservices, firmware, and electronics, connecting data science, embedded software, hardware, and product delivery.
-- Owned system design and led end-to-end project development.
-
-### Engineering Manager
-
-Animati - Computacao Aplicada a Saude - Florianopolis, Brazil - Jun 2019 to Oct 2020
-
-- Led development of S.I.M., an integrated diagnostic medicine system and cloud-native SaaS designed to fill RIS/PACS gaps.
-- Managed the full product development cycle from problem discovery and software architecture to delivery for customers.
-- Built a team from scratch with UX and full-stack engineers working with React, TypeScript, Python, Django REST, Node.js, Firebase, and serverless architecture.
-- Introduced design-system thinking, detailed UX modeling, micro-frontends, and cost-efficient cloud patterns that could scale down during off-hours.
-
-### Product Manager for Healthcare Solutions
-
-Softplan Planejamento e Sistemas - Florianopolis, Brazil - Dec 2018 to May 2019
-
-- Ran product discovery for a new healthcare business unit, evaluating build, buy, and partner paths and presenting strategic options to the CEO.
-- Worked with machine learning engineers to improve experience and identify new features for a healthcare insurance business intelligence product.
-
-### Product Manager for Construction Business
-
-Softplan Planejamento e Sistemas - Florianopolis, Brazil - Mar 2018 to Nov 2018
-
-- Managed CRM and commercial modules for Sienge, a construction business ERP, across roadmap, sales channels, special projects, large customers, and agile planning.
-- Collaborated with full-stack engineers, UX, and architecture teams on new platform features and product direction.
-
-### Chief Technology Officer and Founder
-
-Healfies - Florianopolis, Brazil - Jan 2015 to Mar 2018
-
-- Founded and led technology for a healthcare network where patients, professionals, and organizations could securely organize and share health information.
-- Owned platform system design, product roadmap, and team building from scratch, leading seven people across full-stack engineering, UX, and quality assurance.
-- Worked hands-on across strategy, design, planning, testing, deployment, and coding with Node.js, MongoDB, and AngularJS.
-- Designed and operated cloud infrastructure using AWS and Google Cloud, including microservices, data storage, functions, Kubernetes, cost management, and production operations.
-- Led integration work for ETLs and interoperability with clinical systems including CIS, LIS, RIS, HIS, and PACS through REST APIs.
-- Helped raise R$2.2M, deliver health records from 23 diagnostic centers, reach 2M delivered health records, and register 10K users.
-
-### Tech Lead
-
-Chaordic - Florianopolis, Brazil - Jan 2014 to May 2015
-
-- Led customization, delivery, and integration projects for customers, acting as project manager and technical lead for eight engineers across JavaScript, UX/frontend, and QA.
-- Implemented OKRs for the team, aligning company strategy with daily execution and reducing integration time by 50%.
-- Helped reduce churn and increase loyalty among large Brazilian e-commerce customers by implementing a technical account management function.
-- Worked directly with major customers including Walmart, Maquina de Vendas, Saraiva, Centauro, and Nova.com.
-
-### Product Manager
-
-Pixeon Medical Systems - Florianopolis / Sao Paulo, Brazil - Oct 2010 to Jan 2014
-
-- Created and implemented product management and product intelligence inside the marketing department.
-- Owned LIS, RIS, and PACS product portfolio direction, translating market, customer, and sales needs into engineering roadmaps.
-- Led the full cycle for six new products, from problem definition and solution design to development, branding, pricing, ANVISA registration, launch, sales training, and performance monitoring.
-- Participated in the merger of Medical Systems and Pixeon, helping unify processes and product portfolios.
-
-### Full-stack Engineer
-
-Pixeon Medical Systems - Brazil - Jan 2007 to Oct 2010
-
-- Developed a desktop DICOM viewer for CT, MRI, ultrasound, CR, and other medical imaging modalities using C++, Qt, Java Swing, and Java J2EE.
-- Worked across discovery, requirements mapping, backend development, frontend implementation, and stakeholder approval.
-- Applied Scrum, Maven configuration management, and Bamboo continuous integration, later adding project management responsibilities supporting engineering and sales.
-
-### Information Technology Analyst
-
-Tigre S.A. - Tubos e Conexoes - Joinville, Brazil - Jul 2006 to Jan 2007
-
-- Worked as an information technology analyst before moving deeper into healthcare product and software engineering.
-
-## Selected Impact
-
-- 50%+ infrastructure cost reduction in Micromed's Google Cloud modernization.
-- 10x exam loading improvement, from 2 seconds to 200 milliseconds.
-- 20TB data migration completed with only 3 hours of downtime.
-- 10k+ daily exams processed by Micromed's healthcare platforms.
-- R$2.2M funding raised while co-founding and leading Healfies technology.
-- 2M health records delivered to patients through Healfies.
-
 ## Expertise
 
-Product Engineering, Healthcare Technology, Healthcare Information Technology, Product Management, Software Development, AI-assisted Delivery, Engineering Leadership, Cloud Platforms, Google Cloud, Coreum Platform, Clinical Workflows, Connected Devices, Edge Computing, Interoperability, DICOM / HL7 / FHIR, LGPD-aware Systems, Product Discovery, System Design, DICOM Viewer Development, Zero-downtime Releases.
+**Product Engineering:** product discovery, domain modeling, workflow design, system design, full-cycle product development, production operations, observability, iteration.
+
+**Software Engineering:** full-stack development, cloud-native architecture, APIs, integrations, local-first systems, CLI tools, automation, release engineering, zero-downtime deployments.
+
+**AI-assisted Engineering:** coding agents, engineering harnesses, guardrails, ADRs, validation loops, test-driven development, review workflows, internal developer tools.
+
+**Leadership:** engineering strategy, technical leadership, team building, product-minded execution, cross-functional collaboration, roadmap translation, stakeholder alignment.
+
+**Healthcare and Regulated Systems:** clinical workflows, diagnostic platforms, connected devices, interoperability, DICOM, HL7, FHIR, LGPD-aware systems, healthcare operations.
+
+**Cloud and Operations:** Google Cloud, AWS, cloud modernization, infrastructure cost optimization, production reliability, monitoring, operational efficiency, data migration, scalable platforms.
 
 ## Education
 
@@ -1069,13 +1229,12 @@ Universidade do Vale do Itajai - BS in Computer Engineering, Software Engineerin
 ## Certifications
 
 - Practical Product Management - Pragmatic Marketing, Inc - 2010
-- Front-end Foundations - Code School - 2015
 - EMPRETEC - 2009
 
 ## Languages
 
 - Portuguese - Native or bilingual proficiency
-- English - Native or bilingual proficiency
+- English - Professional working proficiency
 - Spanish - Basic to intermediate proficiency</script>
   <script>
     (() => {

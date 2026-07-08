@@ -20,6 +20,7 @@ function escapeHtml(value) {
 
 function renderInline(value) {
   let html = escapeHtml(value);
+  html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2">$1</a>');
   html = html.replace(/(?<!["'=])(https?:\/\/[^\s<]+)/g, (url) => {
     const clean = url.replace(/[.,;:!?]+$/, "");
@@ -138,7 +139,15 @@ function contactHtml(contactItems) {
     .map((item) => {
       const [label, ...rest] = item.split(":");
       const value = rest.join(":").trim();
-      const rendered = renderInline(value);
+      const url = value.match(/^https?:\/\/(.+)$/);
+      const linkedinHandle = value.match(/linkedin\.com\/in\/([^/?#]+)/)?.[1];
+      const githubHandle = value.match(/github\.com\/([^/?#]+)/)?.[1];
+      const linkText = linkedinHandle || githubHandle || url?.[1].replace(/\/$/, "");
+      const rendered = url
+        ? `<a href="${escapeHtml(value)}">${escapeHtml(linkText)}</a>`
+        : label.trim().toLowerCase() === "email"
+          ? `<a href="mailto:${escapeHtml(value)}">${escapeHtml(value)}</a>`
+          : renderInline(value);
       return `<div><strong>${escapeHtml(label.trim())}</strong><br>${rendered}</div>`;
     })
     .join("\n");
@@ -220,6 +229,7 @@ function renderOpenSource(section, id) {
     "feliperun/eai": "Rust CLI",
     "feliperun/dsync": "Document sync",
   };
+  const defaultMeta = section.title === "Selected Projects" ? "Project" : "Open Source";
   const classes = ["", "secondary", "tertiary"];
   const projects = splitByH3(section.content)
     .map((project, index) => {
@@ -243,7 +253,7 @@ function renderOpenSource(section, id) {
       return `<article class="project${className}">
               <div class="project-head">
                 <h3>${title}</h3>
-                <span class="project-meta">${escapeHtml(meta[project.title] || "Open Source")}</span>
+                <span class="project-meta">${escapeHtml(meta[project.title] || defaultMeta)}</span>
               </div>
               ${bodyLines.map((line) => `<p>${renderInline(line)}</p>`).join("\n")}
               ${techHtml ? `<ul class="project-tech">${techHtml}</ul>` : ""}
@@ -297,7 +307,7 @@ function renderSection(section) {
     return renderCaseStudy(section, id);
   }
 
-  if (lower === "open source") {
+  if (lower === "open source" || lower === "selected projects") {
     return renderOpenSource(section, id);
   }
 
@@ -331,24 +341,34 @@ const sideHtml = sideSections.map((section) => {
   let body = parseMarkdown(section.content);
 
   if (lower === "selected impact") {
-    const metrics = nonEmpty(section.content)
+    const impactItems = nonEmpty(section.content)
       .filter((line) => line.startsWith("- "))
-      .map(extractMetric)
-      .map(([value, label]) => `<div class="metric"><strong>${renderInline(value)}</strong><span>${renderInline(label)}</span></div>`)
+      .map((line) => `<li>${renderInline(line.slice(2).trim())}</li>`)
       .join("\n");
-    body = `<div class="metric-grid">${metrics}</div>`;
+    body = `<ul class="impact-list">${impactItems}</ul>`;
   }
 
   if (lower === "expertise") {
-    const tags = nonEmpty(section.content)
-      .join(" ")
-      .replace(/\.$/, "")
-      .split(",")
-      .map((item) => item.trim())
+    const groups = nonEmpty(section.content)
+      .map((line) => {
+        const match = line.match(/^\*\*([^*]+):\*\*\s*(.+)$/);
+        if (!match) return "";
+        const tags = match[2]
+          .replace(/\.$/, "")
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean)
+          .map((item) => `<li>${escapeHtml(item)}</li>`)
+          .join("\n");
+
+        return `<div class="expertise-group">
+          <h3>${escapeHtml(match[1])}</h3>
+          <ul class="tag-list">${tags}</ul>
+        </div>`;
+      })
       .filter(Boolean)
-      .map((item) => `<li>${escapeHtml(item)}</li>`)
       .join("\n");
-    body = `<ul class="tag-list">${tags}</ul>`;
+    body = groups || body;
   }
 
   return `<section class="side-block" aria-labelledby="${id}">
@@ -884,6 +904,36 @@ const html = `<!doctype html>
       line-height: 1.35;
     }
 
+    .impact-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .impact-list li {
+      position: relative;
+      margin: 0;
+      padding: 11px 12px 11px 18px;
+      background: #f4eee4;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+
+    .impact-list li::before {
+      content: "";
+      position: absolute;
+      inset: -1px auto -1px -1px;
+      width: 4px;
+      background: var(--accent);
+    }
+
+    .impact-list li:nth-child(3n)::before { background: var(--accent-2); }
+    .impact-list li:nth-child(3n + 1)::before { background: var(--accent-3); }
+
     .tag-list {
       display: flex;
       flex-wrap: wrap;
@@ -901,6 +951,17 @@ const html = `<!doctype html>
       font-size: 0.86rem;
       font-weight: 650;
       line-height: 1.2;
+    }
+
+    .expertise-group + .expertise-group {
+      margin-top: 17px;
+    }
+
+    .expertise-group h3 {
+      margin: 0 0 8px;
+      color: #343632;
+      font-size: 0.88rem;
+      line-height: 1.25;
     }
 
     @media (max-width: 900px) {
