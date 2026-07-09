@@ -9,7 +9,22 @@ Portuguese on the secondary-language profile.
 > restriction/ban is a real risk. Everything defaults to **dry-run**; only
 > `--apply` writes. Use at your own risk.
 
-## Pieces
+## Where things live (two repos)
+
+The runner + secrets + workflow live in a **separate private repo**
+(`feliperun/cv-linkedin-sync`), never in this public repo — a self-hosted runner
+on a public repo lets fork PRs run code on your machine (RCE). A private repo
+can't be forked by outsiders, so that vector is gone.
+
+- **This public repo (`feliperun/cv`)** — the resume content + the sync *scripts*.
+  No secrets, no workflow, no runner. Source of truth.
+- **Private repo (`feliperun/cv-linkedin-sync`)** — a scheduled workflow that
+  checks out this repo, runs its scripts, and holds the LinkedIn secrets, the
+  self-hosted runner, and the idempotency snapshot. A cheap `--detect` job gates
+  the protected `linkedin` environment, so the reviewer prompt only fires on a
+  real change.
+
+## Pieces (this repo)
 
 | File | Role |
 | --- | --- |
@@ -17,71 +32,60 @@ Portuguese on the secondary-language profile.
 | `scripts/linkedin-content.js` | Maps the resume to LinkedIn fields `{headline, about, positions}` (EN/PT), enforcing length limits. No secrets, no network. |
 | `scripts/linkedin-login.mjs` | One-time local session capture (`li_at` + `JSESSIONID`). |
 | `scripts/lib/linkedin-selectors.mjs` | LinkedIn edit-UI selectors (isolated — **needs live validation**). |
-| `scripts/linkedin-sync.mjs` | Orchestrator: diff vs snapshot → edit changed fields. Dry-run by default. |
-| `.github/workflows/linkedin-sync.yml` | Self-hosted runner, `linkedin` environment (required reviewer). |
-| `.linkedin/last-synced.{en,pt}.json` | Idempotency snapshot (committed; only changed fields are re-pushed). |
+| `scripts/linkedin-sync.mjs` | Orchestrator: `--detect` / dry-run / `--apply`; diff vs snapshot → edit changed fields. |
+
+Snapshot (`last-synced.{en,pt}.json`) and the workflow live in the private repo.
 
 ## Setup (once)
 
-1. **Capture a session** on the Mac (headed):
+1. **Capture a session** on the Mac (headed), from this repo:
    ```bash
    npm install
    npm run linkedin:login   # log in + 2FA in the window; prints li_at / JSESSIONID
    ```
 
-2. **Create the `linkedin` Environment** with a required reviewer:
-   repo → Settings → Environments → New environment `linkedin` → add yourself as a
-   required reviewer, and restrict deployment branches to `main`.
+2. **Create the private repo** `feliperun/cv-linkedin-sync` with the workflow +
+   a `linkedin` Environment (required reviewer, restricted to `main`), the two
+   secrets (`LINKEDIN_LI_AT`, `LINKEDIN_JSESSIONID`), and `LINKEDIN_VANITY` var.
+   (This is scaffolded for you — see that repo's README.)
 
-3. **Add the secrets** (Environment `linkedin`):
-   ```bash
-   gh secret set LINKEDIN_LI_AT --env linkedin --repo feliperun/cv --body '<value>'
-   gh secret set LINKEDIN_JSESSIONID --env linkedin --repo feliperun/cv --body '<value>'
-   # optional Pro binary:
-   gh secret set CLOAKBROWSER_LICENSE_KEY --env linkedin --repo feliperun/cv --body '<key>'
-   # profile vanity (defaults to felipebroering):
-   gh variable set LINKEDIN_VANITY --repo feliperun/cv --body 'felipebroering'
-   ```
-
-4. **Register the self-hosted runner** on the Mac server with labels
-   `self-hosted, macOS`. Run it inside an **interactive GUI login session** (not a
-   background daemon) so headed Chromium can open. (repo → Settings → Actions → Runners.)
-
-5. **Harden fork PRs**: repo → Settings → Actions → General →
-   "Require approval for all outside collaborators".
+3. **Register the self-hosted runner on the PRIVATE repo** (`cv-linkedin-sync` →
+   Settings → Actions → Runners), labels `self-hosted, macOS`. Run it in an
+   **interactive GUI login session** (not a background daemon) so headed Chromium
+   can open.
 
 ## Validate selectors (important)
 
 The LinkedIn edit DOM is private and changes; the selectors in
-`scripts/lib/linkedin-selectors.mjs` must be confirmed once, live, on the Mac:
+`scripts/lib/linkedin-selectors.mjs` must be confirmed once, live, on the Mac —
+run this from a checkout of THIS repo with the captured session:
 
 ```bash
 npm run linkedin:sync            # dry-run: opens modals, screenshots to .linkedin/preview/, no writes
 ```
 
 Inspect `.linkedin/preview/*.png`. If a modal didn't open or a field wasn't found
-(logged as `selector-miss`), fix the locators in `linkedin-selectors.mjs` and
-re-run. When headline + About look right:
+(logged as `selector-miss`), fix the locators in `linkedin-selectors.mjs`, commit,
+and re-run. When headline + About look right:
 
 ```bash
 npm run linkedin:sync -- --apply --only headline --lang en   # smallest real edit
 ```
 
-Confirm on your profile, then allow the full sync.
+Confirm on your profile, then let the scheduled workflow take over.
 
 ## Ongoing
 
-- Push a change to `README.md` / `README.pt-BR.md` → the workflow runs and
-  **pauses for your approval** (environment reviewer) before applying.
-- Manual run: Actions → "Sync LinkedIn profile" → Run workflow → `dry-run`/`apply`.
+- The private repo polls this repo (~every 15 min). On a real content change it
+  runs and **pauses for your approval** (environment reviewer) before applying.
+- Manual run: private repo → Actions → run the workflow.
 - **Session expired?** The sync fails with a "session stale / checkpoint" message —
-  re-run `npm run linkedin:login` and update the two secrets.
+  re-run `npm run linkedin:login` and update the two secrets in the private repo.
 
 ## Not done yet / limits
 
 - **Experience (positions)** editing is not automated (planned): only `headline`
-  and `about` are synced today. Position matching (title+company) is the fragile
-  part.
+  and `about` are synced today. Position matching (title+company) is the fragile part.
 - **Secondary-language (PT)** editing needs live validation of LinkedIn's locale
   switch (screenshots only until confirmed).
 - CloakBrowser reduces bot detection but does not eliminate ToS/account risk.

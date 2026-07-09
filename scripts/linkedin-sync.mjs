@@ -30,8 +30,12 @@ const { profileUrl, selectors, setFieldValue } = await import("./lib/linkedin-se
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const SNAP_DIR = path.join(ROOT, ".linkedin");
-const PREVIEW_DIR = path.join(SNAP_DIR, "preview");
+// Snapshot dir is configurable so the private sync repo can persist it outside
+// this checkout (LINKEDIN_SNAPSHOT_DIR). Preview screenshots stay ephemeral.
+const SNAP_DIR = process.env.LINKEDIN_SNAPSHOT_DIR
+  ? path.resolve(process.env.LINKEDIN_SNAPSHOT_DIR)
+  : path.join(ROOT, ".linkedin");
+const PREVIEW_DIR = path.join(ROOT, ".linkedin", "preview");
 const SESSION_FILE = path.join(os.homedir(), ".config", "cv-linkedin", "session.json");
 
 const VANITY = process.env.LINKEDIN_VANITY || "felipebroering";
@@ -51,6 +55,7 @@ function parseArgs(argv) {
   const langs = (val("--lang") || "both").toLowerCase();
   return {
     apply: has("--apply"),
+    detect: has("--detect"),
     langs: langs === "both" ? ["en", "pt"] : [langs],
     only: (val("--only") || "").split(",").map((s) => s.trim()).filter(Boolean),
   };
@@ -195,6 +200,15 @@ async function main() {
     if (content[lang].warnings?.length) {
       log(`[${lang}] content warnings: ${content[lang].warnings.join("; ")}`);
     }
+  }
+
+  // Detect mode: report whether anything changed (for the cron gate), no browser.
+  if (opts.detect) {
+    log(`changed=${anyChange}`);
+    if (process.env.GITHUB_OUTPUT) {
+      fs.appendFileSync(process.env.GITHUB_OUTPUT, `changed=${anyChange}\n`);
+    }
+    return;
   }
 
   if (!anyChange) {
