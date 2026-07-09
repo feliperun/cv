@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - README.md
+      - README.pt-BR.md
       - scripts/generate-resume.js
       - .github/workflows/render-resume.yml
       - felipe-avatar.jpg

@@ -1,1035 +1,782 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Felipe R. Broering - Resume</title>
-  <meta name="description" content="Resume of Felipe R. Broering, Product Engineer and engineering leader focused on healthcare technology, AI, cloud platforms, and end-to-end product delivery.">
+  <title>Felipe R. Broering — Resume</title>
+  <meta name="description" content="Resume of Felipe R. Broering — Product Engineer, engineering leader, and founder building AI-native platforms, cloud systems, and developer tools across e-commerce, fintech, healthcare, and more.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230a0e0d%22%2F%3E%3Cpath%20d%3D%22M9%2011%20L15%2016%20L9%2021%22%20fill%3D%22none%22%20stroke%3D%22%232fe6b0%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M17%2021%20H23%22%20fill%3D%22none%22%20stroke%3D%22%232fe6b0%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("cv-theme");
+        if (!t) t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", t);
+        var l = localStorage.getItem("cv-lang");
+        if (l !== "en" && l !== "pt") l = "en";
+        document.documentElement.setAttribute("data-lang", l);
+      } catch (e) {}
+    })();
+  </script>
   <style>
-    :root {
-      color-scheme: light;
-      --bg: #ece7df;
-      --paper: #fffdf8;
-      --panel: #f7f2ea;
-      --ink: #1f211f;
-      --muted: #62635e;
-      --line: #d9d0c4;
-      --accent: #0f766e;
-      --accent-2: #9a5b44;
-      --accent-3: #536b45;
-      --tag: #ede7dd;
-      --shadow: 0 24px 80px rgba(30, 28, 23, 0.13);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background:
-        linear-gradient(90deg, rgba(83, 107, 69, 0.11) 0 1px, transparent 1px 100%),
-        linear-gradient(180deg, rgba(15, 118, 110, 0.1), transparent 320px),
-        var(--bg);
-      background-size: 48px 48px, auto, auto;
-      color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.55;
-    }
-
-    a {
-      color: inherit;
-      text-decoration-color: rgba(15, 118, 110, 0.48);
-      text-underline-offset: 0.18em;
-    }
-
-    .page-actions {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: rgba(236, 231, 223, 0.82);
-      border-bottom: 1px solid rgba(217, 208, 196, 0.75);
-      backdrop-filter: blur(14px);
-    }
-
-    .action-button {
-      min-height: 38px;
-      padding: 0 14px;
-      border: 1px solid rgba(31, 33, 31, 0.18);
-      border-radius: 999px;
-      background: var(--paper);
-      color: var(--ink);
-      font: inherit;
-      font-size: 0.92rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .copy-status {
-      align-self: center;
-      min-width: 84px;
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-
-    .resume {
-      width: min(1180px, calc(100% - 32px));
-      margin: 34px auto 56px;
-      background: var(--paper);
-      border: 1px solid rgba(217, 208, 196, 0.95);
-      box-shadow: var(--shadow);
-    }
-
-    header {
-      position: relative;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 380px;
-      gap: 40px;
-      padding: 56px 60px 42px;
-      overflow: hidden;
-      border-bottom: 1px solid var(--line);
-    }
-
-    header::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 9px;
-      background: linear-gradient(180deg, var(--accent), var(--accent-2) 54%, var(--accent-3));
-    }
-
-    header > * { position: relative; }
-
-    .eyebrow {
-      margin: 0 0 14px;
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 850;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      max-width: 760px;
-      margin: 0;
-      font-size: clamp(2.8rem, 5.4vw, 5.5rem);
-      line-height: 0.92;
-      letter-spacing: 0;
-    }
-
-    .headline {
-      max-width: 760px;
-      margin: 24px 0 0;
-      color: var(--muted);
-      font-size: clamp(1.05rem, 1.8vw, 1.32rem);
-    }
-
-    .hero-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 26px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .hero-tags li {
-      margin: 0;
-      padding: 7px 10px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(247, 242, 234, 0.78);
-      color: #3f403b;
-      font-size: 0.86rem;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .profile-panel {
-      display: grid;
-      grid-template-columns: 160px minmax(0, 1fr);
-      gap: 22px;
-      align-self: start;
-      align-items: start;
-    }
-
-    .portrait {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border: 1px solid rgba(31, 33, 31, 0.18);
-      filter: grayscale(1) contrast(1.05);
-    }
-
-    .contact {
-      display: grid;
-      gap: 10px;
-      margin-top: 0;
-      font-size: 0.92rem;
-      color: var(--muted);
-      font-style: normal;
-    }
-
-    .contact strong {
-      color: var(--ink);
-      font-weight: 780;
-    }
-
-    .contact a {
-      overflow-wrap: anywhere;
-    }
-
-    main {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 330px;
-      gap: 52px;
-      padding: 42px 60px 60px;
-    }
-
-    .section + .section { margin-top: 42px; }
-
-    h2 {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 0 0 18px;
-      color: var(--accent);
-      font-size: 0.8rem;
-      letter-spacing: 0.11em;
-      text-transform: uppercase;
-    }
-
-    h2::after {
-      content: "";
-      height: 1px;
-      flex: 1;
-      background: var(--line);
-    }
-
-    h3 {
-      margin: 24px 0 8px;
-      font-size: 1.18rem;
-      line-height: 1.25;
-    }
-
-    h3:first-child { margin-top: 0; }
-
-    .highlight {
-      padding: 20px 22px;
-      background:
-        linear-gradient(90deg, rgba(223, 238, 234, 0.95), rgba(223, 238, 234, 0.36)),
-        var(--panel);
-      border-left: 4px solid var(--accent);
-      color: #303531;
-    }
-
-    .case-study {
-      position: relative;
-      padding: 24px;
-      border: 1px solid rgba(15, 118, 110, 0.22);
-      background:
-        linear-gradient(135deg, rgba(15, 118, 110, 0.13), transparent 48%),
-        linear-gradient(180deg, #fffefb, #f4eee5);
-    }
-
-    .case-study::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 7px;
-      background: linear-gradient(180deg, var(--accent), var(--accent-3));
-    }
-
-    .case-label {
-      margin: 0 0 8px;
-      color: var(--accent);
-      font-size: 0.76rem;
-      font-weight: 850;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .case-study h3 {
-      max-width: 780px;
-      margin: 0;
-      font-size: 1.45rem;
-    }
-
-    .case-study p {
-      margin: 12px 0 0;
-      color: var(--muted);
-    }
-
-    .case-metrics {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 9px;
-      margin: 18px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .case-metrics li {
-      margin: 0;
-      padding: 10px;
-      background: rgba(255, 253, 248, 0.72);
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.78rem;
-      line-height: 1.25;
-    }
-
-    .case-metrics strong {
-      display: block;
-      margin-bottom: 4px;
-      color: var(--accent);
-      font-size: 1.12rem;
-      line-height: 1.05;
-    }
-
-    .project-list {
-      display: grid;
-      gap: 16px;
-    }
-
-    .project {
-      position: relative;
-      padding: 20px 22px 20px 24px;
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, #fffefb, #f8f3ec);
-    }
-
-    .project::before {
-      content: "";
-      position: absolute;
-      inset: -1px auto -1px -1px;
-      width: 5px;
-      background: var(--accent);
-    }
-
-    .project.secondary::before { background: var(--accent-2); }
-    .project.tertiary::before { background: var(--accent-3); }
-
-    .project-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: baseline;
-      margin-bottom: 8px;
-    }
-
-    .project h3 {
-      margin: 0;
-      font-size: 1.16rem;
-    }
-
-    .project-head a {
-      font-weight: 820;
-      text-decoration-thickness: 1px;
-    }
-
-    .project-meta {
-      flex: 0 0 auto;
-      color: #85827a;
-      font-size: 0.85rem;
-      font-weight: 750;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .project p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .project p + p {
-      margin-top: 12px;
-    }
-
-    .project-tech {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin: 12px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .project-tech li {
-      margin: 0;
-      padding: 5px 8px;
-      background: #eee8de;
-      color: #46433d;
-      font-size: 0.8rem;
-      font-weight: 720;
-      line-height: 1.2;
-    }
-
-    .hashtag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .hashtag-list li {
-      margin: 0;
-      padding: 6px 9px;
-      border: 1px solid rgba(15, 118, 110, 0.22);
-      background: rgba(223, 238, 234, 0.58);
-      color: #24514d;
-      font-size: 0.78rem;
-      font-weight: 760;
-      line-height: 1.2;
-    }
-
-    .timeline {
-      position: relative;
-    }
-
-    .timeline::before {
-      content: "";
-      position: absolute;
-      top: 4px;
-      bottom: 0;
-      left: 6px;
-      width: 1px;
-      background: var(--line);
-    }
-
-    .role {
-      position: relative;
-      display: grid;
-      gap: 8px;
-      padding: 0 0 28px 30px;
-    }
-
-    .role::before {
-      content: "";
-      position: absolute;
-      top: 6px;
-      left: 0;
-      width: 13px;
-      height: 13px;
-      border: 2px solid var(--paper);
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent);
-    }
-
-    .role:nth-child(3n)::before {
-      background: var(--accent-2);
-      box-shadow: 0 0 0 1px var(--accent-2);
-    }
-
-    .role:nth-child(3n + 1)::before {
-      background: var(--accent-3);
-      box-shadow: 0 0 0 1px var(--accent-3);
-    }
-
-    .role:last-child {
-      padding-bottom: 0;
-    }
-
-    .role h3 {
-      margin: 0;
-      font-size: 1.16rem;
-      line-height: 1.25;
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 0.94rem;
-      font-weight: 620;
-    }
-
-    .role-summary {
-      display: grid;
-      gap: 8px;
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 0.94rem;
-    }
-
-    .role-summary p {
-      margin: 0;
-    }
-
-    .markdown p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .markdown p + p,
-    .highlight p + p,
-    .case-study p + p {
-      margin-top: 12px;
-    }
-
-    .markdown ul,
-    .case-study ul,
-    .highlight ul {
-      margin: 10px 0 0;
-      padding-left: 1.15rem;
-    }
-
-    .markdown li + li,
-    .case-study li + li,
-    .highlight li + li {
-      margin-top: 7px;
-    }
-
-    .section .markdown h3 {
-      padding-top: 22px;
-      border-top: 1px solid var(--line);
-    }
-
-    .section .markdown h3:first-child {
-      padding-top: 0;
-      border-top: 0;
-    }
-
-    .section:nth-of-type(3) .markdown h3,
-    .section:nth-of-type(4) .markdown h3 {
-      color: var(--accent-2);
-    }
-
-    aside {
-      padding-left: 24px;
-      border-left: 1px solid var(--line);
-    }
-
-    .side-block {
-      padding: 24px 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .side-block:first-child {
-      padding-top: 0;
-      border-top: 0;
-    }
-
-    .side-block p {
-      color: var(--muted);
-    }
-
-    .side-block ul {
-      margin-top: 0;
-    }
-
-    .side-block li {
-      color: var(--muted);
-    }
-
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .metric {
-      padding: 13px;
-      background: #f4eee4;
-      border: 1px solid var(--line);
-    }
-
-    .metric strong {
-      display: block;
-      color: var(--accent);
-      font-size: 1.28rem;
-      line-height: 1.1;
-    }
-
-    .metric:nth-child(3n) strong {
-      color: var(--accent-2);
-    }
-
-    .metric span {
-      display: block;
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 0.83rem;
-      line-height: 1.35;
-    }
-
-    .impact-list {
-      display: grid;
-      gap: 10px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .impact-list li {
-      position: relative;
-      margin: 0;
-      padding: 11px 12px 11px 18px;
-      background: #f4eee4;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.86rem;
-      line-height: 1.35;
-    }
-
-    .impact-list li::before {
-      content: "";
-      position: absolute;
-      inset: -1px auto -1px -1px;
-      width: 4px;
-      background: var(--accent);
-    }
-
-    .impact-list li:nth-child(3n)::before { background: var(--accent-2); }
-    .impact-list li:nth-child(3n + 1)::before { background: var(--accent-3); }
-
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .tag-list li {
-      margin: 0;
-      padding: 7px 10px;
-      background: var(--tag);
-      color: #393631;
-      font-size: 0.86rem;
-      font-weight: 650;
-      line-height: 1.2;
-    }
-
-    .expertise-group + .expertise-group {
-      margin-top: 17px;
-    }
-
-    .expertise-group h3 {
-      margin: 0 0 8px;
-      color: #343632;
-      font-size: 0.88rem;
-      line-height: 1.25;
-    }
-
-    @media (max-width: 900px) {
-      .resume {
-        width: 100%;
-        margin: 0;
-        border-left: 0;
-        border-right: 0;
-      }
-
-      header,
-      main {
-        grid-template-columns: 1fr;
-        padding-left: 24px;
-        padding-right: 24px;
-      }
-
-      header {
-        gap: 28px;
-        padding-top: 36px;
-      }
-
-      .profile-panel {
-        grid-template-columns: 142px minmax(0, 1fr);
-        gap: 18px;
-      }
-
-      main { gap: 34px; }
-
-      aside {
-        padding-left: 0;
-        border-left: 0;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .page-actions {
-        flex-wrap: wrap;
-        justify-content: flex-start;
-      }
-
-      .copy-status { width: 100%; }
-      .profile-panel { grid-template-columns: 112px minmax(0, 1fr); }
-      .project-head { display: block; }
-      .project-meta { display: block; margin-top: 4px; }
-      .case-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .metric-grid { grid-template-columns: 1fr; }
-    }
-
-    @page {
-      size: A4;
-      margin: 12mm 11mm;
-    }
-
-    @media print {
-      * {
-        print-color-adjust: exact;
-        -webkit-print-color-adjust: exact;
-      }
-
-      html {
-        font-size: 9.4pt;
-      }
-
-      body {
-        background: #fff;
-        line-height: 1.38;
-      }
-
-      .page-actions { display: none; }
-
-      .resume {
-        width: 100%;
-        margin: 0;
-        border: 0;
-        box-shadow: none;
-        background: #fff;
-      }
-
-      header,
-      main {
-        padding-left: 0;
-        padding-right: 0;
-      }
-
-      header {
-        grid-template-columns: minmax(0, 1fr) 210px;
-        gap: 14px;
-        padding: 0 0 8mm 5mm;
-        border-bottom: 1px solid #cfc8bd;
-        break-after: avoid;
-      }
-
-      header::before {
-        width: 2.5mm;
-      }
-
-      .eyebrow {
-        margin-bottom: 5px;
-        font-size: 7.8pt;
-        letter-spacing: 0.05em;
-      }
-
-      h1 {
-        max-width: none;
-        font-size: 28pt;
-        line-height: 1;
-      }
-
-      .headline {
-        margin-top: 8px;
-        font-size: 10pt;
-      }
-
-      .hero-tags {
-        display: none;
-      }
-
-      .profile-panel {
-        grid-template-columns: 58px minmax(0, 1fr);
-        gap: 8px;
-        align-items: start;
-      }
-
-      .portrait {
-        width: 58px;
-        max-width: 58px;
-      }
-
-      .contact {
-        gap: 4px;
-        font-size: 8.4pt;
-        line-height: 1.25;
-      }
-
-      .contact div {
-        break-inside: avoid;
-      }
-
-      main {
-        display: block;
-        padding-top: 7mm;
-      }
-
-      aside {
-        padding-left: 0;
-        border-left: 0;
-      }
-
-      .section + .section {
-        margin-top: 5mm;
-      }
-
-      .side-block {
-        padding: 5mm 0 0;
-        margin-top: 5mm;
-      }
-
-      h2 {
-        margin-bottom: 2.8mm;
-        font-size: 7.8pt;
-        letter-spacing: 0.08em;
-        break-after: avoid;
-      }
-
-      h3 {
-        break-after: avoid;
-      }
-
-      p,
-      li {
-        orphans: 3;
-        widows: 3;
-      }
-
-      .highlight {
-        padding: 10px 12px;
-        border-left-width: 3px;
-        background: #eef6f1;
-      }
-
-      .markdown p + p,
-      .highlight p + p,
-      .case-study p + p {
-        margin-top: 7px;
-      }
-
-      .case-study {
-        padding: 12px 14px;
-        background: #fbf7ef;
-        break-inside: avoid;
-      }
-
-      .case-study h3 {
-        font-size: 12pt;
-      }
-
-      .case-metrics {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 5px;
-        margin-top: 9px;
-      }
-
-      .case-metrics li {
-        padding: 6px;
-        font-size: 7.4pt;
-      }
-
-      .case-metrics strong {
-        font-size: 9.4pt;
-      }
-
-      .hashtag-list,
-      .project-tech,
-      .tag-list {
-        gap: 5px;
-      }
-
-      .hashtag-list li,
-      .project-tech li,
-      .tag-list li {
-        padding: 3px 6px;
-        font-size: 7.4pt;
-      }
-
-      .timeline::before {
-        left: 4px;
-      }
-
-      .role {
-        gap: 4px;
-        padding: 0 0 4.2mm 16px;
-        break-inside: auto;
-      }
-
-      .role::before {
-        top: 4px;
-        width: 9px;
-        height: 9px;
-        border-width: 1px;
-      }
-
-      .role h3 {
-        font-size: 10.6pt;
-      }
-
-      .meta,
-      .role-summary {
-        font-size: 8.8pt;
-      }
-
-      .role ul {
-        margin-top: 2px;
-        padding-left: 14px;
-      }
-
-      .role li + li,
-      .markdown li + li,
-      .case-study li + li,
-      .highlight li + li {
-        margin-top: 2px;
-      }
-
-      .project {
-        padding: 10px 12px 10px 14px;
-        background: #fbf7ef;
-        break-inside: avoid;
-      }
-
-      .project-list {
-        gap: 8px;
-      }
-
-      .project h3 {
-        font-size: 10.8pt;
-      }
-
-      .project-meta {
-        font-size: 7.4pt;
-      }
-
-      .impact-list {
-        gap: 6px;
-      }
-
-      .impact-list li {
-        padding: 7px 8px 7px 12px;
-        font-size: 8pt;
-        break-inside: avoid;
-      }
-
-      .expertise-group {
-        break-inside: avoid;
-      }
-
-      .expertise-group + .expertise-group {
-        margin-top: 10px;
-      }
-    }
-  </style>
+:root {
+  --bg: #0a0e0d;
+  --bg-2: #0d1211;
+  --panel: #0f1615;
+  --raise: #121a18;
+  --ink: #e9f2ec;
+  --muted: #8ba39a;
+  --faint: #56685f;
+  --line: rgba(120, 210, 180, 0.16);
+  --line-2: rgba(120, 210, 180, 0.08);
+  --grid: rgba(60, 220, 170, 0.045);
+  --grid-strong: rgba(60, 220, 170, 0.07);
+  --signal: #2fe6b0;
+  --signal-ink: #2fe6b0;
+  --signal-soft: rgba(47, 230, 176, 0.13);
+  --amber: #ffb44d;
+  --glow: 0 0 22px rgba(47, 230, 176, 0.28);
+  --shadow: 0 40px 120px rgba(0, 0, 0, 0.55);
+  --grid-size: 26px;
+  --serif: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+html[data-theme="light"] {
+  --bg: #f5efe9;
+  --bg-2: #fdfaf6;
+  --panel: #fffbf6;
+  --raise: #fffaf4;
+  --ink: #16211d;
+  --muted: #5c675f;
+  --faint: #9aa39a;
+  --line: rgba(20, 40, 32, 0.14);
+  --line-2: rgba(20, 40, 32, 0.08);
+  --grid: rgba(214, 116, 84, 0.09);
+  --grid-strong: rgba(214, 116, 84, 0.16);
+  --signal: #0e7c66;
+  --signal-ink: #0b5c4c;
+  --signal-soft: rgba(14, 124, 102, 0.1);
+  --amber: #b5651a;
+  --glow: none;
+  --shadow: 0 30px 90px rgba(70, 50, 30, 0.14);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(var(--grid-strong) 1px, transparent 1px) 0 0 / calc(var(--grid-size) * 5) calc(var(--grid-size) * 5),
+    linear-gradient(90deg, var(--grid-strong) 1px, transparent 1px) 0 0 / calc(var(--grid-size) * 5) calc(var(--grid-size) * 5),
+    var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--signal-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  transition: border-color 0.15s, color 0.15s;
+  word-break: break-word;
+}
+a:hover { border-color: var(--signal); }
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* language switching */
+.lang { display: none; }
+html[data-lang="en"] .lang.en,
+html[data-lang="pt"] .lang.pt { display: contents; }
+
+/* ---- toolbar ---- */
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 18px;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+.device {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.device .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--signal);
+  box-shadow: var(--glow);
+  animation: blink 2.4s steps(1) infinite;
+}
+.device b { color: var(--ink); font-weight: 600; }
+.toolbar .spacer { flex: 1; }
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.seg button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.seg button[aria-pressed="true"] {
+  background: var(--signal-soft);
+  color: var(--signal-ink);
+}
+.tbtn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--raise);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  padding: 6px 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tbtn:hover { border-color: var(--signal); }
+.tbtn.icon { padding: 6px 10px; }
+.copy-status { color: var(--signal-ink); min-width: 58px; }
+
+/* ---- shell ---- */
+.resume {
+  width: min(1120px, 100% - 36px);
+  margin: 30px auto 60px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+/* ---- hero ---- */
+header {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  gap: 46px;
+  padding: 54px 56px 34px;
+  border-bottom: 1px solid var(--line);
+}
+.eyebrow {
+  margin: 0 0 20px;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--signal-ink);
+  text-transform: uppercase;
+}
+h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(2.9rem, 6.4vw, 5.4rem);
+  line-height: 0.94;
+  letter-spacing: -0.02em;
+}
+.loc {
+  margin: 18px 0 0;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.focus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.focus li {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  font-weight: 500;
+  padding: 6px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--panel);
+}
+
+.profile-panel { align-self: start; }
+.portrait {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  filter: grayscale(1) contrast(1.04);
+}
+html[data-theme="dark"] .portrait {
+  filter: grayscale(1) contrast(1.05) brightness(0.92);
+}
+.operator-tag {
+  margin: 12px 0 10px;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.contact { display: grid; gap: 9px; font-style: normal; }
+.contact-row { display: grid; gap: 1px; }
+.contact-k {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.contact-v { font-size: 0.86rem; color: var(--ink); }
+.contact-v a { border-bottom-color: var(--line-2); }
+
+/* ---- console signature ---- */
+.term-band {
+  padding: 20px 56px 22px;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, var(--signal-soft), transparent 70%),
+    var(--panel);
+}
+.term {
+  font-family: var(--mono);
+  font-size: clamp(0.9rem, 2vw, 1.08rem);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.t-prompt { color: var(--signal-ink); font-weight: 600; }
+.t-sep { color: var(--faint); }
+.t-cmd { color: var(--ink); font-weight: 600; }
+.t-flag { color: var(--amber); }
+.t-val { color: var(--muted); }
+.t-cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 0.18em;
+  vertical-align: -0.18em;
+  background: var(--signal);
+  box-shadow: var(--glow);
+  animation: cursor 1.1s steps(1) infinite;
+}
+.term-out {
+  margin: 8px 0 0;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--faint);
+}
+
+/* ---- vitals monitor ---- */
+.vitals-wrap {
+  padding: 26px 56px 30px;
+  border-bottom: 1px solid var(--line);
+}
+.vitals-cap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.vitals-cap .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--amber);
+}
+.vitals {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--panel);
+}
+.vital {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 16px 40px;
+  border-right: 1px solid var(--line);
+  min-width: 0;
+}
+.vital:last-child { border-right: 0; }
+.vital-label {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.vital-value {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.9rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.vital-sub {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--signal-ink);
+}
+.vital .spark {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 12px;
+  width: auto;
+  height: 20px;
+  opacity: 0.85;
+}
+.vital .spark path {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- main grid ---- */
+main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 50px;
+  padding: 42px 56px 20px;
+}
+.content { min-width: 0; }
+
+.sec + .sec { margin-top: 38px; }
+.sec-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sec-glyph {
+  color: var(--signal);
+  font-size: 0.85em;
+  line-height: 1;
+}
+.sec-rule { flex: 1; height: 1px; background: var(--line); }
+
+h3 {
+  margin: 22px 0 3px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1.12rem;
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+}
+h3:first-child { margin-top: 0; }
+
+.prose p, .lede p, .case p { margin: 0; color: var(--muted); }
+.prose p + p, .lede p + p, .case p + p,
+.prose h3 + p, .prose h4 + p { margin-top: 10px; }
+.prose ul, .lede ul, .case ul { margin: 9px 0 0; padding-left: 1.1rem; }
+.prose li, .case li, .lede li { color: var(--muted); }
+.prose li + li, .case li + li, .lede li + li { margin-top: 6px; }
+.prose li::marker { color: var(--signal); }
+
+/* profile lede */
+.lede p {
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+.lede p + p { color: var(--muted); font-size: 1rem; }
+
+/* the featured case card */
+.sec-case .case {
+  position: relative;
+  padding: 24px 26px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, var(--signal-soft), transparent 60%),
+    var(--panel);
+  border-radius: 4px;
+}
+.sec-case .case::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--signal);
+}
+.sec-case h3 { color: var(--ink); }
+
+/* experience — role date line + lead wire */
+.sec-exp .prose { position: relative; padding-left: 22px; }
+.sec-exp .prose::before {
+  content: "";
+  position: absolute;
+  left: 3px; top: 8px; bottom: 8px;
+  width: 1px;
+  background: var(--line);
+}
+.sec-exp .prose h3 { position: relative; }
+.sec-exp .prose h3::before {
+  content: "";
+  position: absolute;
+  left: -22px; top: 0.5em;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 4px var(--bg-2);
+}
+.sec-exp .prose h3 + p {
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+/* aside */
+aside { display: grid; gap: 26px; align-content: start; }
+.side { border-top: 1px solid var(--line); padding-top: 20px; }
+.side:first-child { border-top: 0; padding-top: 0; }
+.side-h {
+  margin: 0 0 12px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.side .prose p { font-size: 0.9rem; }
+.side .prose ul { list-style: none; padding-left: 0; margin: 0; }
+.side .prose li { margin-top: 8px; font-size: 0.9rem; color: var(--ink); }
+.side .prose li:first-child { margin-top: 0; }
+.tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 0; padding: 0; list-style: none; }
+.tags li {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--panel);
+}
+
+/* footer */
+.foot {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 56px 40px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--faint);
+}
+.foot .flat { flex: 1; height: 1px; background: repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px); }
+
+/* ---- responsive ---- */
+@media (max-width: 900px) {
+  .resume { width: 100%; margin: 0; border-left: 0; border-right: 0; }
+  header, .term-band, .vitals-wrap, main, .foot {
+    padding-left: 22px; padding-right: 22px;
+  }
+  header { grid-template-columns: 1fr; gap: 26px; padding-top: 34px; }
+  .profile-panel {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+  .operator-tag { margin-top: 0; }
+  main { grid-template-columns: 1fr; gap: 34px; padding-top: 34px; }
+  .vitals { grid-template-columns: repeat(3, 1fr); }
+  .vital:nth-child(3) { border-right: 0; }
+  .vital:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
+}
+
+@media (max-width: 560px) {
+  .toolbar { flex-wrap: wrap; gap: 10px; }
+  .toolbar .device { width: 100%; }
+  header, .term-band, .vitals-wrap, main, .foot {
+    padding-left: 16px; padding-right: 16px;
+  }
+  .profile-panel { grid-template-columns: 104px minmax(0, 1fr); }
+  .vitals { grid-template-columns: repeat(2, 1fr); }
+  .vital { border-right: 1px solid var(--line); }
+  .vital:nth-child(2n) { border-right: 0; }
+  .vital:nth-child(-n+4) { border-bottom: 1px solid var(--line); }
+  h1 { font-size: clamp(2.6rem, 13vw, 3.4rem); }
+}
+
+/* ---- motion / a11y ---- */
+@keyframes cursor { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+@keyframes blink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0.28; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .t-cursor { animation: none; }
+  .device .dot { animation: none; }
+}
+
+/* ---- print: clean light printout ---- */
+@page { margin: 0.5in; }
+@media print {
+  :root, html[data-theme="dark"], html[data-theme="light"] {
+    --bg: #fff; --bg-2: #fff; --panel: #fff; --raise: #fff;
+    --ink: #14201c; --muted: #333; --faint: #666;
+    --line: #d7d0c6; --line-2: #e2ddd4;
+    --grid: transparent; --grid-strong: transparent;
+    --signal: #0b5c4c; --signal-ink: #0b5c4c; --signal-soft: rgba(11,92,76,0.06);
+    --amber: #a05a13; --glow: none; --shadow: none;
+  }
+  body { background: #fff; }
+  .toolbar, .foot .flat { display: none; }
+  .resume { width: 100%; margin: 0; border: 0; box-shadow: none; }
+  header, .term-band, .vitals-wrap, main, .foot { padding-left: 0; padding-right: 0; }
+  header { grid-template-columns: minmax(0,1fr) 180px; padding-top: 8px; }
+  .portrait { max-width: 180px; }
+  .term-band { background: none; border-bottom-color: var(--line); }
+  .t-cursor { display: none; }
+  .vital .spark path { filter: none; }
+  a { color: var(--ink); border: 0; }
+  .sec, .side, .vital, .sec-case .case { break-inside: avoid; }
+  h1 { font-size: 3.1rem; }
+}
+</style>
   <script type="application/ld+json">
-    {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Felipe R. Broering",
-    "url": "https://cv.felipe.run",
-    "sameAs": [
-        "https://www.linkedin.com/in/felipebroering/",
-        "https://github.com/feliperun"
-    ],
-    "jobTitle": "Product Engineer",
-    "worksFor": {
-        "@type": "Organization",
-        "name": "Micromed"
-    },
-    "address": {
-        "@type": "PostalAddress",
-        "addressRegion": "Santa Catarina",
-        "addressCountry": "Brazil"
-    }
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Felipe R. Broering",
+  "url": "https://cv.felipe.run",
+  "sameAs": [
+    "https://www.linkedin.com/in/felipebroering/",
+    "https://github.com/feliperun"
+  ],
+  "jobTitle": "Senior Product Engineer",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Micromed"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "Santa Catarina",
+    "addressCountry": "Brazil"
+  }
 }
   </script>
 </head>
 <body>
-  <!-- Generated from README.md. Do not edit index.html directly. -->
-  <div class="page-actions" aria-label="Resume actions">
-    <button class="action-button" type="button" data-action="download-pdf">Download PDF</button>
-    <button class="action-button" type="button" data-action="copy-markdown">Copy Markdown</button>
+  <!-- Generated from README.md + README.pt-BR.md. Do not edit index.html directly. -->
+  <nav class="toolbar" aria-label="Resume controls">
+    <span class="device"><span class="dot"></span><b>FRB</b> · cv.felipe.run</span>
+    <span class="spacer"></span>
+    <span class="seg" role="group" aria-label="Language">
+      <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang-btn="pt" aria-pressed="false">PT</button>
+    </span>
+    <button class="tbtn icon" type="button" data-action="theme" aria-label="Toggle theme" title="Toggle theme">
+      <span data-theme-icon>◐</span>
+    </button>
+    <button class="tbtn" type="button" data-action="download"><span class="lang en">Download PDF</span><span class="lang pt">Baixar PDF</span></button>
+    <button class="tbtn" type="button" data-action="copy"><span class="lang en">Copy Markdown</span><span class="lang pt">Copiar Markdown</span></button>
     <span class="copy-status" aria-live="polite"></span>
-  </div>
+  </nav>
 
   <article class="resume">
     <header>
-      <div>
-        <p class="eyebrow">Senior Product Engineer (Full-Stack) / Product-minded Engineering Leader</p>
-        <h1>Felipe R. Broering</h1>
-        <p class="headline">Santa Catarina, Brazil</p>
-        <ul class="hero-tags" aria-label="Primary focus areas">
-          <li>Healthcare platforms</li>
-          <li>AI engineering harnesses</li>
-          <li>Rust CLIs</li>
-          <li>Cloud-native systems</li>
-          <li>Open Source</li>
-        </ul>
-      </div>
+      <div class="lang en" data-lang-block="en"><div class="hero-copy">
+    <p class="eyebrow">Senior Product Engineer · Product-minded Engineering Leader</p>
+    <h1>Felipe R.<br>Broering</h1>
+    <p class="loc">Santa Catarina, Brazil</p>
+    <ul class="focus" aria-label="Focus areas"><li>AI engineering harnesses</li><li>Cloud-native platforms</li><li>0→1 products &amp; teams</li><li>Rust &amp; developer tools</li><li>Scale &amp; reliability</li></ul>
+  </div></div>
+<div class="lang pt" data-lang-block="pt"><div class="hero-copy">
+    <p class="eyebrow">Senior Product Engineer · Líder de Engenharia com foco em Produto</p>
+    <h1>Felipe R.<br>Broering</h1>
+    <p class="loc">Santa Catarina, Brasil</p>
+    <ul class="focus" aria-label="Focus areas"><li>Harnesses de IA</li><li>Plataformas cloud-native</li><li>Produtos &amp; times 0→1</li><li>Rust &amp; ferramentas de dev</li><li>Escala &amp; confiabilidade</li></ul>
+  </div></div>
       <div class="profile-panel">
-        <img class="portrait" src="felipe-avatar.jpg" alt="Black-and-white portrait of Felipe R. Broering">
-        <address class="contact">
-          <div><strong>Email</strong><br><a href="mailto:hi@felipe.run">hi@felipe.run</a></div>
-<div><strong>LinkedIn</strong><br><a href="https://www.linkedin.com/in/felipebroering/">felipebroering</a></div>
-<div><strong>GitHub</strong><br><a href="https://github.com/feliperun">feliperun</a></div>
-        </address>
+        <img class="portrait" src="felipe-avatar.jpg" alt="Portrait of Felipe R. Broering">
+        <div class="contact-area"><div class="lang en" data-lang-block="en"><div class="operator-tag">Contact</div>
+    <address class="contact"><div class="contact-row"><span class="contact-k">Email</span><span class="contact-v">hi@felipe.run</span></div>
+<div class="contact-row"><span class="contact-k">LinkedIn</span><span class="contact-v"><a href="https://www.linkedin.com/in/felipebroering/">www.linkedin.com/in/felipebroering</a></span></div>
+<div class="contact-row"><span class="contact-k">GitHub</span><span class="contact-v"><a href="https://github.com/feliperun">github.com/feliperun</a></span></div></address></div>
+<div class="lang pt" data-lang-block="pt"><div class="operator-tag">Contato</div>
+    <address class="contact"><div class="contact-row"><span class="contact-k">Email</span><span class="contact-v">hi@felipe.run</span></div>
+<div class="contact-row"><span class="contact-k">LinkedIn</span><span class="contact-v"><a href="https://www.linkedin.com/in/felipebroering/">www.linkedin.com/in/felipebroering</a></span></div>
+<div class="contact-row"><span class="contact-k">GitHub</span><span class="contact-v"><a href="https://github.com/feliperun">github.com/feliperun</a></span></div></address></div></div>
       </div>
     </header>
 
+    <div class="term-band">
+    <div class="term" role="img" aria-label="felipe@run:~$ ship --from idea --to production"><span class="t-prompt">felipe@run</span><span class="t-sep">:~$</span> <span class="t-cmd">ship</span> <span class="t-flag">--from</span> <span class="t-val">idea</span> <span class="t-flag">--to</span> <span class="t-val">production</span><span class="t-cursor" aria-hidden="true"></span></div>
+    <div class="lang en"><p class="term-out"># 15+ years shipping across e-commerce, fintech, ERP, developer tools &amp; healthcare</p></div>
+<div class="lang pt"><p class="term-out"># 15+ anos entregando em e-commerce, fintech, ERP, ferramentas de dev &amp; saúde</p></div>
+  </div>
+
+    <div class="lang en" data-lang-block="en"><section class="vitals-wrap" aria-label="Selected impact">
+    <div class="vitals-cap"><span class="dot"></span><span>Selected impact</span></div>
+    <div class="vitals"><div class="vital">
+      <span class="vital-label">Latency cut</span>
+      <span class="vital-value">10×</span>
+      <span class="vital-sub">2s → 200ms</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div>
+<div class="vital">
+      <span class="vital-label">Infra cost cut</span>
+      <span class="vital-value">50%+</span>
+      <span class="vital-sub">cloud modernization</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div>
+<div class="vital">
+      <span class="vital-label">Throughput</span>
+      <span class="vital-value">10k+</span>
+      <span class="vital-sub">processed / day</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div>
+<div class="vital">
+      <span class="vital-label">Data migrated</span>
+      <span class="vital-value">20TB</span>
+      <span class="vital-sub">3h downtime</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div>
+<div class="vital">
+      <span class="vital-label">Records delivered</span>
+      <span class="vital-value">2M</span>
+      <span class="vital-sub">as founder</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div>
+<div class="vital">
+      <span class="vital-label">Funding raised</span>
+      <span class="vital-value">R$2.2M</span>
+      <span class="vital-sub">seed round</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div></div>
+  </section></div>
+<div class="lang pt" data-lang-block="pt"><section class="vitals-wrap" aria-label="Impacto">
+    <div class="vitals-cap"><span class="dot"></span><span>Impacto</span></div>
+    <div class="vitals"><div class="vital">
+      <span class="vital-label">Latência</span>
+      <span class="vital-value">10×</span>
+      <span class="vital-sub">2s → 200ms</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div>
+<div class="vital">
+      <span class="vital-label">Custo de infra</span>
+      <span class="vital-value">50%+</span>
+      <span class="vital-sub">modernização cloud</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div>
+<div class="vital">
+      <span class="vital-label">Throughput</span>
+      <span class="vital-value">10k+</span>
+      <span class="vital-sub">processadas / dia</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div>
+<div class="vital">
+      <span class="vital-label">Dados migrados</span>
+      <span class="vital-value">20TB</span>
+      <span class="vital-sub">3h de downtime</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div>
+<div class="vital">
+      <span class="vital-label">Registros entregues</span>
+      <span class="vital-value">2M</span>
+      <span class="vital-sub">como fundador</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div>
+<div class="vital">
+      <span class="vital-label">Captação</span>
+      <span class="vital-value">R$2.2M</span>
+      <span class="vital-sub">rodada seed</span>
+      <svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0.0 18.6 L6.4 16.1 L12.9 17.4 L19.3 13.7 L25.8 14.9 L32.2 10.6 L38.7 12.0 L45.1 6.8 L51.6 8.5 L58.0 3.4"></path></svg>
+    </div></div>
+  </section></div>
+
     <main>
-      <div><section class="section section-profile" aria-labelledby="mini-bio">
-      <h2 id="mini-bio">Mini Bio</h2>
-      <div class="highlight"><p>Senior Product Engineer and product-minded engineering leader with 15+ years building complex digital products from discovery to production.</p>
-<p>I work best in full-cycle product engineering: understanding ambiguous business or user problems, modeling the domain, designing the architecture, building the software, shipping to production, monitoring real-world behavior, and iterating based on evidence.</p>
-<p>My background combines hands-on full-stack engineering, product management, cloud platforms, AI-enhanced engineering workflows, healthcare technology, hardware integration, and engineering leadership. I have worked as a software engineer, product manager, CTO/founder, engineering manager, head of engineering, and hands-on product engineer.</p>
-<p>I am especially strong in environments where product and engineering cannot be separated: complex workflows, operational systems, regulated domains, cloud-native platforms, internal tools, integrations, automation, and systems that need to be reliable in production.</p>
-<p>Over the last several years, I have led and built platforms used in critical healthcare operations, including Coreum at Micromed, featured by Google Cloud for its cloud modernization, cost reduction, performance gains, large-scale data migration, and zero-downtime release capabilities.</p>
-<p>I also enjoy building useful open-source tools that solve real problems for myself and others, especially around developer experience, local-first systems, automation, AI-enhanced engineering, and practical product workflows.</p></div>
-    </section>
-<section class="section section-hashtags" aria-labelledby="hashtags">
-      <h2 id="hashtags">Hashtags</h2>
-      <ul class="hashtag-list"><li>#ProductEngineering</li>
-<li>#FullStackEngineering</li>
-<li>#EngineeringLeadership</li>
-<li>#ProductMindedEngineering</li>
-<li>#SoftwareArchitecture</li>
-<li>#CloudNative</li>
-<li>#AIEnhancedEngineering</li>
-<li>#OpenSource</li>
-<li>#DeveloperTools</li>
-<li>#HealthcareTechnology</li>
-<li>#Rust</li>
-<li>#TypeScript</li>
-<li>#React</li>
-<li>#NodeJS</li>
-<li>#GoogleCloud</li>
-<li>#Vercel</li></ul>
-    </section>
-<section class="section" aria-labelledby="how-i-build">
-    <h2 id="how-i-build">How I Build</h2>
-    <div class="markdown"><p>I approach product engineering as a full-cycle discipline.</p>
-<p>My preferred loop is:</p>
-<p>Problem → Domain model → Product behavior → Architecture → Implementation → Production → Observability → Iteration.</p>
-<p>I like to start close to the real problem: users, workflows, business constraints, operational risks, edge cases, and success criteria. From there, I model the domain, design the system, build the product, ship it, monitor how it behaves in production, and improve it continuously.</p>
-<p>AI is part of my workflow, but not the point of the work. I use coding agents, terminal-first tools, structured prompts, reusable skills, local harnesses, automation, tests, ADRs, code review, data analysis, and validation loops to move faster while preserving architecture, maintainability, and accountability.</p></div>
-  </section>
-<section class="section section-case" aria-labelledby="featured-case-study">
-      <h2 id="featured-case-study">Featured Case Study</h2>
-      <article class="case-study">
-        <p class="case-label">Published by Google Cloud</p>
-        <h3><a href="https://cloud.google.com/customers/micromed">Micromed's Coreum Platform is unlocking AI-powered cardiology at scale with Google Cloud</a></h3>
-        <p>Led the development of Coreum from zero into Micromed's cloud-native health platform for cardiology diagnostics, enabling scalable exam workflows, AI-powered cardiology, ERP integration, and a production foundation for faster releases and safer operations.</p>
-        <ul class="case-metrics" aria-label="Google Cloud case study results"><li><strong>50%+</strong>infrastructure cost reduction</li>
-<li><strong>10x</strong>exam loading speed improvement, from 2 seconds to 200 milliseconds</li>
-<li><strong>20TB</strong>migrated with only 3 hours of downtime</li>
-<li><strong>0</strong>downtime for multiple daily releases</li>
-<li><strong>10k+</strong>exams processed per day by Micromed's platforms</li></ul>
-      </article>
-    </section>
-<section class="section section-experience" aria-labelledby="experience">
-      <h2 id="experience">Experience</h2>
-      <div class="timeline"><div class="role">
-            <div>
-              <h3>Senior Product Engineer</h3>
-              <div class="meta">Micromed Health - Florianopolis, Brazil - Jan 2026 to Present</div>
-            </div>
-            <div class="role-summary"><p>Moved into a hands-on product engineering focus, working across discovery, domain modeling, architecture, implementation, validation, release, and production operations.</p>
-<p>Working mainly with React, Node.js, TypeScript, Python, Rust, Google Cloud, and Vercel across web applications, signal-processing services, native hardware integration, cloud infrastructure, and production workflows.</p></div>
-            <ul><li>Leading end-to-end product engineering initiatives from Figma and product design to implementation, validation, release, observability, and production iteration.</li>
+      <div class="lang en" data-lang-block="en"><div class="content"><section class="sec sec-profile" aria-labelledby="en-profile"><h2 class="sec-h" id="en-profile"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Profile</span><span class="sec-rule"></span></h2><div class="lede"><p>Senior Product Engineer and product-minded engineering leader with 15+ years building complex digital products end to end — discovery, domain modeling, architecture, implementation, and production.</p>
+<p>I work best where product and engineering can't be separated: complex workflows, operational systems, regulated domains, cloud-native platforms, internal tools, integrations, and automation that has to stay reliable in production. My background spans full-stack engineering, product management, cloud, AI-enhanced workflows, and hardware integration — as software engineer, product manager, CTO/founder, engineering manager, head of engineering, and hands-on product engineer.</p>
+<p>I've led platforms used in critical operations — including Coreum at Micromed, featured by Google Cloud — and I build open-source developer tools around local-first systems, automation, and AI-enhanced engineering.</p></div></section>
+<section class="sec sec-case" aria-labelledby="en-featured-case-study"><h2 class="sec-h" id="en-featured-case-study"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Featured Case Study</span><span class="sec-rule"></span></h2><div class="case"><h3>Coreum on Google Cloud: scaling a cloud-native platform</h3>
+<p>Published by Google Cloud: <a href="https://cloud.google.com/customers/micromed">https://cloud.google.com/customers/micromed</a></p>
+<p>Led Coreum from zero into Micromed's cloud-native platform — scalable workflows, AI features, ERP integration, and a production foundation built for fast, safe releases (it powers cardiology diagnostics). The Google Cloud case study reports:</p>
+<ul>
+<li>50%+ infrastructure cost reduction</li>
+<li>10x faster load times, from 2 seconds to 200 milliseconds</li>
+<li>20TB migrated with only 3 hours of downtime</li>
+<li>Multiple daily releases with zero downtime</li>
+<li>10,000+ workloads processed per day</li>
+</ul></div></section>
+<section class="sec" aria-labelledby="en-how-i-build"><h2 class="sec-h" id="en-how-i-build"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>How I Build</span><span class="sec-rule"></span></h2><div class="prose"><p>I approach product engineering as a full-cycle discipline. My preferred loop:</p>
+<p><strong>Problem → Domain model → Product behavior → Architecture → Implementation → Production → Observability → Iteration.</strong></p>
+<p>I start close to the real problem — users, workflows, business constraints, operational risks, edge cases, success criteria — then model the domain, design the system, build the product, ship it, watch how it behaves in production, and improve it continuously.</p>
+<p>AI is part of my workflow, but not the point of the work. I use coding agents, terminal-first tools, structured prompts, reusable skills, local harnesses, automation, tests, ADRs, code review, and validation loops to move faster while preserving architecture, maintainability, and accountability.</p></div></section>
+<section class="sec" aria-labelledby="en-open-source"><h2 class="sec-h" id="en-open-source"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Open Source</span><span class="sec-rule"></span></h2><div class="prose"><p>I build in the open — terminal-first Rust tools that put AI on rails.</p>
+<h3>phai-run/phai</h3>
+<p>Founder and maintainer of phai, an open-source, local-first personal finance product built in Rust. It combines banking data ingestion, SQLite/BigQuery storage, rule-based classification, auditability, CLI workflows, dashboards, MCP integration, and a local web app embedded into a single binary.</p>
+<p>The project doubles as an engineering harness for AI-assisted development, with ADRs, TDD, CI, privacy rules, quality gates, release automation, and strict guardrails to keep agent-assisted changes reviewable and production-ready.</p>
+<p>Technologies: Rust, SQLite, BigQuery, Pluggy, React, LiveStore, MCP, AI-assisted engineering harness.</p>
+<p>Project: <a href="https://github.com/phai-run/phai">https://github.com/phai-run/phai</a></p>
+<h3>feliperun/eai</h3>
+<p>Open-source Rust CLI that turns natural language into safe shell commands through an inspect-confirm-run workflow. Supports multiple LLM providers, pipe context, command explanation, script generation, bookmarks, completions, and shell integration.</p>
+<p>Technologies: Rust, Ollama, Gemini, Groq, OpenAI, shell UX.</p>
+<p>Project: <a href="https://github.com/feliperun/eai">https://github.com/feliperun/eai</a></p>
+<h3>feliperun/dsync</h3>
+<p>Open-source Rust CLI for keeping Markdown as the local source of truth while syncing documents with Google Docs and Linear Docs. Supports document creation, import, frontmatter links, cross-links, and an extensible provider architecture.</p>
+<p>Technologies: Rust, Markdown, Google Docs, Linear Docs, provider architecture.</p>
+<p>Project: <a href="https://github.com/feliperun/dsync">https://github.com/feliperun/dsync</a></p></div></section>
+<section class="sec sec-exp" aria-labelledby="en-experience"><h2 class="sec-h" id="en-experience"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Experience</span><span class="sec-rule"></span></h2><div class="prose"><h3>Senior Product Engineer</h3>
+<p>Micromed Health - Florianopolis, Brazil - Jan 2026 to Present</p>
+<p>Moved into a hands-on product engineering focus, working across discovery, domain modeling, architecture, implementation, validation, release, and production operations.</p>
+<p>Working mainly with React, Node.js, TypeScript, Python, Rust, Google Cloud, and Vercel across web applications, signal-processing services, native hardware integration, cloud infrastructure, and production workflows.</p>
+<ul>
+<li>Leading end-to-end product engineering initiatives from Figma and product design to implementation, validation, release, observability, and production iteration.</li>
 <li>Building web product experiences with React, Node.js, and TypeScript, connecting frontend, backend, APIs, authentication, data workflows, and operational tooling.</li>
 <li>Using Python for ECG signal-processing workflows and Rust as a native integration layer between medical hardware, local PCs, and cloud systems.</li>
 <li>Building on Google Cloud as the cloud-native infrastructure foundation and using Vercel for frontend deployment, previews, and web application delivery.</li>
@@ -1037,291 +784,274 @@
 <li>Creating reusable engineering skills for Figma-to-code, UX review, product modeling, technical planning, code review, release validation, production investigation, documentation, and data analysis.</li>
 <li>Working with a terminal-first AI workflow using pi.dev, Claude CLI, Cursor CLI, local developer tooling, and Superset for data analysis and production feedback loops.</li>
 <li>Applying a loop-engineering approach: model the problem, build, validate, review, ship, monitor production behavior, and feed learnings back into the product.</li>
-<li>Acting as a senior hands-on builder while bringing leadership experience into technical decisions, product trade-offs, team alignment, and production readiness.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Head of Engineering</h3>
-              <div class="meta">Micromed Health - Florianopolis, Brazil - May 2022 to Jul 2026</div>
-            </div>
-            <div class="role-summary"><p>Led engineering for Coreum, Micromed's cloud-native platform for cardiology diagnostics, exam workflows, AI-assisted analysis, ERP integration, connected devices, and production operations.</p></div>
-            <ul><li>Led Coreum from early product development into a Google Cloud customer case study platform.</li>
+<li>Acting as a senior hands-on builder while bringing leadership experience into technical decisions, product trade-offs, team alignment, and production readiness.</li>
+</ul>
+<h3>Head of Engineering</h3>
+<p>Micromed Health - Florianopolis, Brazil - May 2022 to Jul 2026</p>
+<p>Led engineering for Coreum, Micromed's cloud-native platform for cardiology diagnostics, exam workflows, AI-assisted analysis, ERP integration, connected devices, and production operations.</p>
+<ul>
+<li>Led Coreum from early product development into a Google Cloud customer case study platform.</li>
 <li>Contributed to a modernization program that reduced infrastructure costs by more than 50%, improved exam loading speed from 2 seconds to 200 milliseconds, migrated 20TB of data with only 3 hours of downtime, and enabled multiple daily zero-downtime releases.</li>
 <li>Structured engineering process and culture to support team growth, new projects, faster product delivery, and more reliable production operations.</li>
 <li>Built and evolved engineering practices around architecture, delivery, cloud operations, reliability, security, AI-assisted development, review discipline, and production readiness.</li>
 <li>Led and supported multidisciplinary teams across backend, frontend, UX, cloud, firmware, electronics, QA, integrations, and product delivery.</li>
 <li>Helped consolidate critical systems on Google Cloud, including ERP and Coreum, improving reliability, security, integration speed, and day-to-day operational efficiency.</li>
 <li>Advanced Micromed's roadmap for AI-powered cardiology, connected medical devices, hybrid cloud, edge computing, and interoperability with standards such as DICOM, HL7, and FHIR.</li>
-<li>Bridged product strategy, software engineering, clinical workflows, hardware integration, cloud architecture, and delivery execution.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Engineering Manager</h3>
-              <div class="meta">Micromed Health - Florianopolis, Brazil - Nov 2020 to Jun 2022</div>
-            </div>
-            <div class="role-summary"><p>Joined Micromed to lead engineering from scratch for an inpatient monitoring solution combining ECG acquisition, cloud processing, machine learning algorithms, and cardiac risk prediction.</p></div>
-            <ul><li>Built and led an internal team of seven people: six engineers and one UX designer responsible for platform core, back ends, front ends, design system, and cloud infrastructure.</li>
+<li>Bridged product strategy, software engineering, clinical workflows, hardware integration, cloud architecture, and delivery execution.</li>
+</ul>
+<h3>Engineering Manager</h3>
+<p>Micromed Health - Florianopolis, Brazil - Nov 2020 to Jun 2022</p>
+<p>Joined Micromed to lead engineering from scratch for an inpatient monitoring solution combining ECG acquisition, cloud processing, machine learning algorithms, and cardiac risk prediction.</p>
+<ul>
+<li>Built and led an internal team of seven people: six engineers and one UX designer responsible for platform core, back ends, front ends, design system, and cloud infrastructure.</li>
 <li>Coordinated ten third-party engineers across AI microservices, firmware, and electronics, connecting data science, embedded software, hardware, and product delivery.</li>
 <li>Owned system design and led end-to-end project development across software, cloud, machine learning integration, hardware integration, and product execution.</li>
 <li>Connected product requirements, clinical workflows, architecture decisions, and delivery planning into a coherent execution model.</li>
-<li>Helped establish the foundation for Micromed's later cloud-native platform initiatives.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Engineering Manager</h3>
-              <div class="meta">Animati - Computacao Aplicada a Saude - Florianopolis, Brazil - Jun 2019 to Oct 2020</div>
-            </div>
-            <div class="role-summary"><p>Led development of S.I.M., an integrated diagnostic medicine system and cloud-native SaaS designed to fill RIS/PACS workflow gaps.</p></div>
-            <ul><li>Managed the full product development cycle from problem discovery and software architecture to customer delivery.</li>
+</ul>
+<h3>Engineering Manager</h3>
+<p>Animati - Florianopolis, Brazil - Jun 2019 to Oct 2020</p>
+<p>Led development of S.I.M., an integrated diagnostic medicine system and cloud-native SaaS designed to fill RIS/PACS workflow gaps.</p>
+<ul>
+<li>Managed the full product development cycle from problem discovery and software architecture to customer delivery.</li>
 <li>Built a team from scratch with UX and full-stack engineers working with React, TypeScript, Python, Django REST, Node.js, Firebase, and serverless architecture.</li>
 <li>Introduced design-system thinking, detailed UX modeling, micro-frontends, and cost-efficient cloud patterns that could scale down during off-hours.</li>
-<li>Worked closely with users and stakeholders to translate diagnostic medicine workflows into practical product and engineering decisions.</li>
-<li>Balanced hands-on architecture, team leadership, delivery execution, and product direction.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Product Manager for Healthcare Solutions</h3>
-              <div class="meta">Softplan Planejamento e Sistemas - Florianopolis, Brazil - Dec 2018 to May 2019</div>
-            </div>
-            <div class="role-summary"><p>Led product discovery for a new healthcare business unit, evaluating market opportunities, build-buy-partner paths, and strategic product directions.</p></div>
-            <ul><li>Evaluated healthcare product opportunities and presented strategic options to the CEO.</li>
-<li>Worked with machine learning engineers to improve user experience and identify new features for a healthcare insurance business intelligence product.</li>
-<li>Connected product strategy, technical feasibility, business constraints, and market validation.</li>
-<li>Helped structure early discovery for healthcare products inside an established enterprise software company.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Product Manager for Construction Business</h3>
-              <div class="meta">Softplan Planejamento e Sistemas - Florianopolis, Brazil - Mar 2018 to Nov 2018</div>
-            </div>
-            <div class="role-summary"><p>Managed CRM and commercial modules for Sienge, a construction business ERP used by companies across Brazil.</p></div>
-            <ul><li>Owned roadmap, sales-channel alignment, special projects, large-customer needs, and agile planning.</li>
-<li>Collaborated with full-stack engineers, UX designers, and architecture teams on new platform features and product direction.</li>
-<li>Translated customer, commercial, and operational needs into roadmap decisions and engineering priorities.</li>
-<li>Worked across discovery, prioritization, stakeholder alignment, and delivery execution.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Chief Technology Officer and Founder</h3>
-              <div class="meta">Healfies - Florianopolis, Brazil - Jan 2015 to Mar 2018</div>
-            </div>
-            <div class="role-summary"><p>Founded and led technology for a healthcare network where patients, professionals, and organizations could securely organize and share health information.</p></div>
-            <ul><li>Owned platform system design, product roadmap, technical strategy, and team building from scratch.</li>
-<li>Led seven people across full-stack engineering, UX, and quality assurance.</li>
-<li>Worked hands-on across strategy, design, planning, testing, deployment, and coding with Node.js, MongoDB, and AngularJS.</li>
-<li>Designed and operated cloud infrastructure using AWS and Google Cloud, including microservices, data storage, functions, Kubernetes, cost management, and production operations.</li>
-<li>Led integration work for ETLs and interoperability with clinical systems including CIS, LIS, RIS, HIS, and PACS through REST APIs.</li>
-<li>Helped raise R$2.2M, deliver health records from 23 diagnostic centers, reach 2M delivered health records, and register 10K users.</li>
-<li>Experienced the full startup cycle: product discovery, fundraising, hiring, architecture, development, delivery, operations, partnerships, and customer validation.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Tech Lead</h3>
-              <div class="meta">Chaordic - Florianopolis, Brazil - Jan 2014 to May 2015</div>
-            </div>
-            <div class="role-summary"><p>Led customization, delivery, and integration projects for major Brazilian e-commerce customers.</p></div>
-            <ul><li>Acted as project manager and technical lead for eight engineers across JavaScript, UX/frontend, and QA.</li>
-<li>Implemented OKRs for the team, aligning company strategy with daily execution and reducing integration time by 50%.</li>
-<li>Helped reduce churn and increase loyalty among large Brazilian e-commerce customers by implementing a technical account management function.</li>
-<li>Worked directly with major customers including Walmart, Maquina de Vendas, Saraiva, Centauro, and Nova.com.</li>
-<li>Operated at the intersection of technical delivery, customer success, product customization, and engineering execution.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Product Manager</h3>
-              <div class="meta">Pixeon Medical Systems - Florianopolis / Sao Paulo, Brazil - Oct 2010 to Jan 2014</div>
-            </div>
-            <div class="role-summary"><p>Created and implemented product management and product intelligence inside the marketing department for healthcare software products.</p></div>
-            <ul><li>Owned LIS, RIS, and PACS product portfolio direction, translating market, customer, and sales needs into engineering roadmaps.</li>
-<li>Led the full cycle for six new products, from problem definition and solution design to development, branding, pricing, ANVISA registration, launch, sales training, and performance monitoring.</li>
-<li>Participated in the merger of Medical Systems and Pixeon, helping unify processes and product portfolios.</li>
-<li>Worked across healthcare workflows, product strategy, sales enablement, engineering alignment, and regulatory requirements.</li>
-<li>Built a strong foundation in product discovery, market analysis, product launch, and healthcare software operations.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Full-stack Engineer</h3>
-              <div class="meta">Pixeon Medical Systems - Brazil - Jan 2007 to Oct 2010</div>
-            </div>
-            <div class="role-summary"><p>Started as a hands-on software engineer building healthcare imaging software and later expanded into product and project responsibilities.</p></div>
-            <ul><li>Developed a desktop DICOM viewer for CT, MRI, ultrasound, CR, and other medical imaging modalities using C++, Qt, Java Swing, and Java J2EE.</li>
-<li>Worked across discovery, requirements mapping, backend development, frontend implementation, and stakeholder approval.</li>
-<li>Applied Scrum, Maven configuration management, and Bamboo continuous integration.</li>
-<li>Added project management responsibilities supporting engineering, sales, and customer delivery.</li>
-<li>Built early expertise in medical imaging, DICOM workflows, full-stack development, and healthcare product delivery.</li></ul>
-          </div>
-<div class="role">
-            <div>
-              <h3>Information Technology Analyst</h3>
-              <div class="meta">Tigre S.A. - Tubos e Conexoes - Joinville, Brazil - Jul 2006 to Jan 2007</div>
-            </div>
-            <div class="role-summary"><p>Worked as an information technology analyst before moving deeper into software engineering, product development, and healthcare technology.</p></div>
-            
-          </div></div>
-    </section>
-<section class="section section-open-source" aria-labelledby="selected-open-source-projects">
-      <h2 id="selected-open-source-projects">Selected Open Source Projects</h2>
-      <div class="project-list"><article class="project">
-              <div class="project-head">
-                <h3><a href="https://github.com/phai-run/phai">phai-run/phai</a></h3>
-                <span class="project-meta">Founder / maintainer</span>
-              </div>
-              <p>Founder and maintainer of phai, an open-source, local-first personal finance product built in Rust. It combines banking data ingestion, SQLite/BigQuery storage, rule-based classification, auditability, CLI workflows, dashboards, MCP integration, and a local web app embedded into a single binary.</p>
-<p>The project is also an engineering harness for AI-assisted development, with ADRs, TDD, CI, privacy rules, quality gates, release automation, and strict guardrails to keep agent-assisted changes reviewable and production-ready.</p>
-              <ul class="project-tech"><li>Rust</li>
-<li>SQLite</li>
-<li>BigQuery</li>
-<li>Pluggy</li>
-<li>React</li>
-<li>LiveStore</li>
-<li>MCP</li>
-<li>ADRs</li>
-<li>AI-assisted engineering harness</li></ul>
-            </article>
-<article class="project secondary">
-              <div class="project-head">
-                <h3><a href="https://github.com/feliperun/eai">feliperun/eai</a></h3>
-                <span class="project-meta">Rust CLI</span>
-              </div>
-              <p>Open-source Rust CLI that turns natural language into safe shell commands through an inspect-confirm-run workflow. Supports multiple LLM providers, pipe context, command explanation, script generation, bookmarks, completions, and shell integration.</p>
-              <ul class="project-tech"><li>Rust</li>
-<li>Ollama</li>
-<li>Gemini</li>
-<li>Groq</li>
-<li>OpenAI</li>
-<li>shell UX</li></ul>
-            </article>
-<article class="project tertiary">
-              <div class="project-head">
-                <h3><a href="https://github.com/feliperun/dsync">feliperun/dsync</a></h3>
-                <span class="project-meta">Document sync</span>
-              </div>
-              <p>Open-source Rust CLI for keeping Markdown as the local source of truth while syncing documents with Google Docs and Linear Docs. Supports document creation, import, frontmatter links, cross-links, and an extensible provider architecture.</p>
-              <ul class="project-tech"><li>Rust</li>
-<li>Markdown</li>
-<li>Google Docs</li>
-<li>Linear Docs</li>
-<li>provider architecture</li></ul>
-            </article></div>
-    </section></div>
-      <aside><section class="side-block" aria-labelledby="selected-impact">
-    <h2 id="selected-impact">Selected Impact</h2>
-    <div class="markdown"><ul class="impact-list"><li>Led Coreum from zero into Micromed's cloud-native platform for cardiology diagnostics, later featured as a Google Cloud customer case study.</li>
-<li>Contributed to 50%+ infrastructure cost reduction during Micromed's Google Cloud modernization.</li>
-<li>Improved exam loading performance by 10x, from 2 seconds to 200 milliseconds.</li>
-<li>Participated in a 20TB healthcare data migration completed with only 3 hours of downtime.</li>
-<li>Helped enable multiple daily zero-downtime releases for critical diagnostic workflows.</li>
-<li>Supported platforms processing 10k+ exams per day.</li>
-<li>Co-founded and led Healfies as CTO, helping raise R$2.2M, deliver 2M health records, connect 23 diagnostic centers, and reach 10k registered users.</li>
-<li>Created and maintain useful open-source tools around personal finance, developer experience, AI-enhanced workflows, Markdown-based documentation, and local-first/product engineering systems.</li>
-<li>Built and led multidisciplinary teams across software engineering, UX, cloud, AI, firmware, electronics, and healthcare operations.</li></ul></div>
-  </section>
-<section class="side-block" aria-labelledby="expertise">
-    <h2 id="expertise">Expertise</h2>
-    <div class="markdown"><div class="expertise-group">
-          <h3>Product Engineering</h3>
-          <ul class="tag-list"><li>product discovery</li>
-<li>domain modeling</li>
-<li>workflow design</li>
-<li>system design</li>
-<li>full-cycle product development</li>
-<li>production operations</li>
-<li>observability</li>
-<li>iteration</li></ul>
-        </div>
-<div class="expertise-group">
-          <h3>Software Engineering</h3>
-          <ul class="tag-list"><li>full-stack development</li>
-<li>cloud-native architecture</li>
-<li>APIs</li>
-<li>integrations</li>
-<li>local-first systems</li>
-<li>CLI tools</li>
-<li>automation</li>
-<li>release engineering</li>
-<li>zero-downtime deployments</li></ul>
-        </div>
-<div class="expertise-group">
-          <h3>AI-enhanced Engineering</h3>
-          <ul class="tag-list"><li>coding agents</li>
-<li>engineering harnesses</li>
-<li>reusable skills</li>
-<li>guardrails</li>
-<li>ADRs</li>
-<li>validation loops</li>
-<li>test-driven development</li>
-<li>review workflows</li>
-<li>internal developer tools</li></ul>
-        </div>
-<div class="expertise-group">
-          <h3>Open Source</h3>
-          <ul class="tag-list"><li>developer tools</li>
-<li>local-first products</li>
-<li>CLI design</li>
-<li>Markdown workflows</li>
-<li>personal finance tooling</li>
-<li>AI-assisted development systems</li></ul>
-        </div>
-<div class="expertise-group">
-          <h3>Leadership</h3>
-          <ul class="tag-list"><li>engineering strategy</li>
-<li>technical leadership</li>
-<li>team building</li>
-<li>product-minded execution</li>
-<li>cross-functional collaboration</li>
-<li>roadmap translation</li>
-<li>stakeholder alignment</li></ul>
-        </div>
-<div class="expertise-group">
-          <h3>Healthcare and Regulated Systems</h3>
-          <ul class="tag-list"><li>clinical workflows</li>
-<li>diagnostic platforms</li>
-<li>connected devices</li>
-<li>interoperability</li>
-<li>DICOM</li>
-<li>HL7</li>
-<li>FHIR</li>
-<li>LGPD-aware systems</li>
-<li>healthcare operations</li></ul>
-        </div>
-<div class="expertise-group">
-          <h3>Cloud and Operations</h3>
-          <ul class="tag-list"><li>Google Cloud</li>
-<li>AWS</li>
-<li>cloud modernization</li>
-<li>infrastructure cost optimization</li>
-<li>production reliability</li>
-<li>monitoring</li>
-<li>operational efficiency</li>
-<li>data migration</li>
-<li>scalable platforms</li></ul>
-        </div></div>
-  </section>
-<section class="side-block" aria-labelledby="education">
-    <h2 id="education">Education</h2>
-    <div class="markdown"><p>Universidade do Vale do Itajai - BS in Computer Engineering, Software Engineering, Hardware Integration - 2001 to 2005.</p></div>
-  </section>
-<section class="side-block" aria-labelledby="certifications">
-    <h2 id="certifications">Certifications</h2>
-    <div class="markdown"><ul>
-<li>Practical Product Management - Pragmatic Marketing, Inc - 2010</li>
-<li>EMPRETEC - 2009</li>
+<li>Balanced hands-on architecture, team leadership, delivery execution, and product direction.</li>
+</ul>
+<h3>Product Manager — Healthcare, then Construction</h3>
+<p>Softplan - Florianopolis, Brazil - Mar 2018 to May 2019</p>
+<ul>
+<li>Led product discovery for a new healthcare business unit, evaluating build/buy/partner paths and presenting strategic options to the CEO; worked with ML engineers on a health-insurance BI product.</li>
+<li>Earlier, managed CRM and commercial modules for Sienge, a construction ERP used across Brazil — roadmap, sales channels, large customers, and agile planning.</li>
+</ul>
+<h3>Chief Technology Officer &amp; Founder</h3>
+<p>Healfies - Florianopolis, Brazil - Jan 2015 to Mar 2018</p>
+<p>Founded and led technology for a healthcare network where people and organizations could securely organize and share information.</p>
+<ul>
+<li>Owned platform system design, product roadmap, technical strategy, and team building from scratch — leading seven people across full-stack engineering, UX, and QA.</li>
+<li>Worked hands-on across strategy, design, testing, deployment, and coding with Node.js, MongoDB, and AngularJS.</li>
+<li>Designed and operated AWS and Google Cloud infrastructure: microservices, storage, functions, Kubernetes, cost management, and production operations.</li>
+<li>Led ETL and clinical interoperability across CIS, LIS, RIS, HIS, and PACS via REST APIs.</li>
+<li>Lived the full startup cycle — discovery, fundraising, hiring, delivery, operations, partnerships — helping raise R$2.2M, connect 23 diagnostic centers, deliver 2M records, and register 10K users.</li>
+</ul>
+<h3>Tech Lead</h3>
+<p>Chaordic - Florianopolis, Brazil - Jan 2014 to May 2015</p>
+<p>Led delivery and integration of a personalization platform for major Brazilian e-commerce brands.</p>
+<ul>
+<li>Acted as PM and technical lead for eight engineers across JavaScript, UX/frontend, and QA.</li>
+<li>Introduced OKRs and a technical account management function, cutting integration time by 50% and reducing churn among top accounts.</li>
+<li>Worked directly with major customers including Walmart, Máquina de Vendas, Saraiva, Centauro, and Nova.com.</li>
+</ul>
+<h3>Product Manager</h3>
+<p>Pixeon Medical Systems - Florianopolis / Sao Paulo, Brazil - Oct 2010 to Jan 2014</p>
+<ul>
+<li>Owned the LIS/RIS/PACS product portfolio, translating market and sales needs into engineering roadmaps.</li>
+<li>Led the full cycle for six new products — from problem definition through ANVISA registration, pricing, and go-to-market — and helped unify portfolios through the Medical Systems / Pixeon merger.</li>
+</ul>
+<h3>Full-stack Engineer</h3>
+<p>Pixeon Medical Systems - Brazil - Jan 2007 to Oct 2010</p>
+<ul>
+<li>Built a desktop DICOM viewer for CT, MRI, ultrasound, and CR imaging with C++, Qt, and Java (Swing, J2EE), working across requirements, backend, and frontend under Scrum and CI.</li>
+</ul>
+<h3>Information Technology Analyst</h3>
+<p>Tigre S.A. - Joinville, Brazil - Jul 2006 to Jan 2007</p>
+<ul>
+<li>IT analyst at a large industrial manufacturer, before moving into product and software engineering.</li>
+</ul></div></section></div><aside><section class="side" aria-labelledby="en-domains">
+    <h3 class="side-h" id="en-domains">Domains</h3>
+    <div class="prose"><ul>
+<li>Developer tools — CLIs, agent harnesses, AI on rails</li>
+<li>E-commerce — personalization at scale</li>
+<li>Fintech — personal finance tooling</li>
+<li>Healthcare — platforms, imaging, diagnostics</li>
+<li>ERP / SaaS — construction and diagnostics</li>
+<li>Industrial — early IT foundations</li>
 </ul></div>
   </section>
-<section class="side-block" aria-labelledby="languages">
-    <h2 id="languages">Languages</h2>
-    <div class="markdown"><ul>
-<li>Portuguese - Native or bilingual proficiency</li>
-<li>English - Professional working proficiency</li>
-<li>Spanish - Basic to intermediate proficiency</li>
+<section class="side" aria-labelledby="en-expertise">
+    <h3 class="side-h" id="en-expertise">Expertise</h3>
+    <div class="prose"><ul class="tags"><li>Product Engineering</li><li>Full-Stack Engineering</li><li>System Design</li><li>Cloud-Native Architecture</li><li>AI-Enhanced Engineering</li><li>Developer Tools &amp; CLIs</li><li>Local-First Systems</li><li>Release Engineering</li><li>Zero-downtime Deployments</li><li>Engineering Leadership</li><li>Google Cloud</li><li>AWS</li><li>Interoperability (DICOM / HL7 / FHIR)</li><li>LGPD-aware Systems.</li></ul></div>
+  </section>
+<section class="side" aria-labelledby="en-education">
+    <h3 class="side-h" id="en-education">Education</h3>
+    <div class="prose"><p>Universidade do Vale do Itajaí — BS in Computer Engineering (software engineering, hardware integration) — 2001 to 2005.</p></div>
+  </section>
+<section class="side" aria-labelledby="en-certifications">
+    <h3 class="side-h" id="en-certifications">Certifications</h3>
+    <div class="prose"><ul>
+<li>Practical Product Management — Pragmatic Marketing — 2010</li>
+<li>EMPRETEC — 2009</li>
 </ul></div>
-  </section></aside>
+  </section>
+<section class="side" aria-labelledby="en-languages">
+    <h3 class="side-h" id="en-languages">Languages</h3>
+    <div class="prose"><ul>
+<li>Portuguese — Native or bilingual proficiency</li>
+<li>English — Professional working proficiency</li>
+<li>Spanish — Basic to intermediate proficiency</li>
+</ul></div>
+  </section></aside></div>
+<div class="lang pt" data-lang-block="pt"><div class="content"><section class="sec sec-profile" aria-labelledby="pt-perfil"><h2 class="sec-h" id="pt-perfil"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Perfil</span><span class="sec-rule"></span></h2><div class="lede"><p>Senior Product Engineer e líder de engenharia com foco em produto, com mais de 15 anos construindo produtos digitais complexos de ponta a ponta — descoberta, modelagem de domínio, arquitetura, implementação e produção.</p>
+<p>Trabalho melhor onde produto e engenharia não se separam: fluxos complexos, sistemas operacionais, domínios regulados, plataformas cloud-native, ferramentas internas, integrações e automação que precisa se manter confiável em produção. Minha trajetória cobre engenharia full-stack, gestão de produto, nuvem, workflows aprimorados por IA e integração de hardware — como engenheiro de software, product manager, CTO/fundador, engineering manager, head of engineering e product engineer hands-on.</p>
+<p>Liderei plataformas usadas em operações críticas — incluindo o Coreum na Micromed, destacado pelo Google Cloud — e construo ferramentas open-source para desenvolvedores em torno de sistemas local-first, automação e engenharia aprimorada por IA.</p></div></section>
+<section class="sec sec-case" aria-labelledby="pt-estudo-de-caso-em-destaque"><h2 class="sec-h" id="pt-estudo-de-caso-em-destaque"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Estudo de Caso em Destaque</span><span class="sec-rule"></span></h2><div class="case"><h3>Coreum no Google Cloud: escalando uma plataforma cloud-native</h3>
+<p>Publicado pelo Google Cloud: <a href="https://cloud.google.com/customers/micromed">https://cloud.google.com/customers/micromed</a></p>
+<p>Liderei o Coreum do zero até se tornar a plataforma cloud-native da Micromed — fluxos escaláveis, recursos de IA, integração com ERP e uma base de produção feita para releases rápidos e seguros (ela sustenta o diagnóstico cardiológico). O estudo de caso do Google Cloud reporta:</p>
+<ul>
+<li>Redução de 50%+ no custo de infraestrutura</li>
+<li>Carregamento 10x mais rápido, de 2 segundos para 200 milissegundos</li>
+<li>20TB migrados com apenas 3 horas de downtime</li>
+<li>Múltiplos releases diários com zero downtime</li>
+<li>10.000+ cargas processadas por dia</li>
+</ul></div></section>
+<section class="sec" aria-labelledby="pt-como-eu-construo"><h2 class="sec-h" id="pt-como-eu-construo"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Como Eu Construo</span><span class="sec-rule"></span></h2><div class="prose"><p>Encaro engenharia de produto como uma disciplina de ciclo completo. Meu loop preferido:</p>
+<p><strong>Problema → Modelo de domínio → Comportamento do produto → Arquitetura → Implementação → Produção → Observabilidade → Iteração.</strong></p>
+<p>Começo perto do problema real — usuários, fluxos, restrições de negócio, riscos operacionais, edge cases, critérios de sucesso — depois modelo o domínio, desenho o sistema, construo o produto, coloco no ar, observo como ele se comporta em produção e melhoro continuamente.</p>
+<p>IA faz parte do meu workflow, mas não é o ponto do trabalho. Uso coding agents, ferramentas terminal-first, prompts estruturados, skills reutilizáveis, harnesses locais, automação, testes, ADRs, code review e loops de validação para ir mais rápido sem perder arquitetura, manutenibilidade e accountability.</p></div></section>
+<section class="sec" aria-labelledby="pt-open-source"><h2 class="sec-h" id="pt-open-source"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Open Source</span><span class="sec-rule"></span></h2><div class="prose"><p>Construo no aberto — ferramentas Rust terminal-first que colocam IA nos trilhos.</p>
+<h3>phai-run/phai</h3>
+<p>Fundador e mantenedor do phai, um produto open-source de finanças pessoais local-first, construído em Rust. Combina ingestão de dados bancários, armazenamento em SQLite/BigQuery, classificação por regras, auditabilidade, workflows de CLI, dashboards, integração MCP e um web app local embutido num binário único.</p>
+<p>O projeto também é um harness de engenharia para desenvolvimento assistido por IA, com ADRs, TDD, CI, regras de privacidade, quality gates, automação de release e guardrails rígidos para manter mudanças assistidas por agentes revisáveis e prontas para produção.</p>
+<p>Tecnologias: Rust, SQLite, BigQuery, Pluggy, React, LiveStore, MCP, harness de engenharia assistida por IA.</p>
+<p>Projeto: <a href="https://github.com/phai-run/phai">https://github.com/phai-run/phai</a></p>
+<h3>feliperun/eai</h3>
+<p>CLI open-source em Rust que transforma linguagem natural em comandos de shell seguros por um fluxo inspecionar-confirmar-executar. Suporta múltiplos provedores de LLM, contexto via pipe, explicação de comandos, geração de scripts, bookmarks, completions e integração com o shell.</p>
+<p>Tecnologias: Rust, Ollama, Gemini, Groq, OpenAI, UX de shell.</p>
+<p>Projeto: <a href="https://github.com/feliperun/eai">https://github.com/feliperun/eai</a></p>
+<h3>feliperun/dsync</h3>
+<p>CLI open-source em Rust para manter o Markdown como fonte da verdade local enquanto sincroniza documentos com Google Docs e Linear Docs. Suporta criação e importação de documentos, links no frontmatter, cross-links e uma arquitetura de provedores extensível.</p>
+<p>Tecnologias: Rust, Markdown, Google Docs, Linear Docs, arquitetura de provedores.</p>
+<p>Projeto: <a href="https://github.com/feliperun/dsync">https://github.com/feliperun/dsync</a></p></div></section>
+<section class="sec sec-exp" aria-labelledby="pt-experiencia"><h2 class="sec-h" id="pt-experiencia"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Experiência</span><span class="sec-rule"></span></h2><div class="prose"><h3>Senior Product Engineer</h3>
+<p>Micromed Health - Florianópolis, Brasil - Jan 2026 até o presente</p>
+<p>Migrei para um foco hands-on em engenharia de produto, atuando em descoberta, modelagem de domínio, arquitetura, implementação, validação, release e operação em produção.</p>
+<p>Trabalhando principalmente com React, Node.js, TypeScript, Python, Rust, Google Cloud e Vercel em aplicações web, serviços de processamento de sinais, integração nativa com hardware, infraestrutura de nuvem e fluxos de produção.</p>
+<ul>
+<li>Liderando iniciativas de engenharia de produto ponta a ponta, do Figma e do design de produto à implementação, validação, release, observabilidade e iteração em produção.</li>
+<li>Construindo experiências de produto web com React, Node.js e TypeScript, conectando frontend, backend, APIs, autenticação, fluxos de dados e ferramental operacional.</li>
+<li>Usando Python para workflows de processamento de sinais de ECG e Rust como camada de integração nativa entre hardware médico, PCs locais e sistemas em nuvem.</li>
+<li>Construindo sobre o Google Cloud como base de infraestrutura cloud-native e usando a Vercel para deploy de frontend, previews e entrega de aplicações web.</li>
+<li>Desenhando um harness de engenharia aprimorado por IA com coding agents, prompts estruturados, skills reutilizáveis, ADRs, testes, loops de validação, code review e disciplina de release.</li>
+<li>Criando skills de engenharia reutilizáveis para Figma-to-code, review de UX, modelagem de produto, planejamento técnico, code review, validação de release, investigação de produção, documentação e análise de dados.</li>
+<li>Trabalhando com um workflow de IA terminal-first usando pi.dev, Claude CLI, Cursor CLI, ferramental local de dev e Superset para análise de dados e feedback loops de produção.</li>
+<li>Aplicando uma abordagem de loop-engineering: modelar o problema, construir, validar, revisar, entregar, monitorar o comportamento em produção e realimentar os aprendizados no produto.</li>
+<li>Atuando como builder sênior hands-on, trazendo experiência de liderança para decisões técnicas, trade-offs de produto, alinhamento de time e prontidão para produção.</li>
+</ul>
+<h3>Head of Engineering</h3>
+<p>Micromed Health - Florianópolis, Brasil - Mai 2022 a Jul 2026</p>
+<p>Liderei a engenharia do Coreum, a plataforma cloud-native da Micromed para diagnóstico cardiológico, fluxos de exame, análise assistida por IA, integração com ERP, dispositivos conectados e operação em produção.</p>
+<ul>
+<li>Liderei o Coreum do desenvolvimento inicial até se tornar uma plataforma de estudo de caso do Google Cloud.</li>
+<li>Contribuí para um programa de modernização que reduziu custos de infraestrutura em mais de 50%, melhorou o carregamento de exames de 2 segundos para 200 milissegundos, migrou 20TB de dados com apenas 3 horas de downtime e habilitou múltiplos releases diários com zero downtime.</li>
+<li>Estruturei processo e cultura de engenharia para suportar o crescimento do time, novos projetos, entrega mais rápida e operação mais confiável.</li>
+<li>Construí e evoluí práticas de engenharia em arquitetura, entrega, operação de nuvem, confiabilidade, segurança, desenvolvimento assistido por IA, disciplina de review e prontidão para produção.</li>
+<li>Liderei e apoiei times multidisciplinares em backend, frontend, UX, nuvem, firmware, eletrônica, QA, integrações e entrega de produto.</li>
+<li>Ajudei a consolidar sistemas críticos no Google Cloud, incluindo ERP e Coreum, melhorando confiabilidade, segurança, velocidade de integração e eficiência operacional.</li>
+<li>Avancei o roadmap da Micromed para cardiologia com IA, dispositivos médicos conectados, nuvem híbrida, edge computing e interoperabilidade com padrões como DICOM, HL7 e FHIR.</li>
+<li>Conectei estratégia de produto, engenharia de software, fluxos clínicos, integração de hardware, arquitetura de nuvem e execução da entrega.</li>
+</ul>
+<h3>Engineering Manager</h3>
+<p>Micromed Health - Florianópolis, Brasil - Nov 2020 a Jun 2022</p>
+<p>Entrei na Micromed para liderar a engenharia do zero de uma solução de monitoramento de pacientes internados, combinando aquisição de ECG, processamento em nuvem, algoritmos de machine learning e predição de risco cardíaco.</p>
+<ul>
+<li>Montei e liderei um time interno de sete pessoas: seis engenheiros e um designer de UX responsáveis por core da plataforma, back ends, front ends, design system e infraestrutura de nuvem.</li>
+<li>Coordenei dez engenheiros terceiros entre microsserviços de IA, firmware e eletrônica, conectando data science, software embarcado, hardware e entrega de produto.</li>
+<li>Fui dono do design de sistema e liderei o desenvolvimento ponta a ponta do projeto em software, nuvem, integração de machine learning, integração de hardware e execução de produto.</li>
+<li>Conectei requisitos de produto, fluxos clínicos, decisões de arquitetura e planejamento de entrega em um modelo coerente de execução.</li>
+</ul>
+<h3>Engineering Manager</h3>
+<p>Animati - Florianópolis, Brasil - Jun 2019 a Out 2020</p>
+<p>Liderei o desenvolvimento do S.I.M., um sistema integrado de medicina diagnóstica e SaaS cloud-native feito para preencher lacunas de fluxo em RIS/PACS.</p>
+<ul>
+<li>Gerenciei o ciclo completo de desenvolvimento do produto, da descoberta e arquitetura à entrega para clientes.</li>
+<li>Montei um time do zero com UX e engenheiros full-stack em React, TypeScript, Python, Django REST, Node.js, Firebase e arquitetura serverless.</li>
+<li>Introduzi pensamento de design system, modelagem detalhada de UX, micro-frontends e padrões de nuvem que reduziam escala fora do horário de pico.</li>
+<li>Equilibrei arquitetura hands-on, liderança de time, execução de entrega e direção de produto.</li>
+</ul>
+<h3>Product Manager — Saúde, depois Construção</h3>
+<p>Softplan - Florianópolis, Brasil - Mar 2018 a Mai 2019</p>
+<ul>
+<li>Conduzi a descoberta de produto para uma nova unidade de negócio de saúde, avaliando caminhos de build/buy/partner e apresentando opções estratégicas ao CEO; trabalhei com engenheiros de ML em um produto de BI para planos de saúde.</li>
+<li>Antes, gerenciei os módulos de CRM e comercial do Sienge, um ERP de construção usado em todo o Brasil — roadmap, canais de venda, grandes clientes e planejamento ágil.</li>
+</ul>
+<h3>Chief Technology Officer &amp; Fundador</h3>
+<p>Healfies - Florianópolis, Brasil - Jan 2015 a Mar 2018</p>
+<p>Fundei e liderei a tecnologia de uma rede de saúde onde pessoas e organizações podiam organizar e compartilhar informações com segurança.</p>
+<ul>
+<li>Fui dono do design de sistema da plataforma, do roadmap de produto, da estratégia técnica e da formação do time do zero — liderando sete pessoas entre engenharia full-stack, UX e QA.</li>
+<li>Atuei hands-on em estratégia, design, testes, deploy e código com Node.js, MongoDB e AngularJS.</li>
+<li>Projetei e operei infraestrutura na AWS e no Google Cloud: microsserviços, armazenamento, functions, Kubernetes, gestão de custo e operação em produção.</li>
+<li>Liderei ETL e interoperabilidade clínica entre CIS, LIS, RIS, HIS e PACS via APIs REST.</li>
+<li>Vivi o ciclo completo de startup — descoberta, captação, contratação, entrega, operação, parcerias — ajudando a captar R$2,2M, conectar 23 centros de diagnóstico, entregar 2M de registros e cadastrar 10 mil usuários.</li>
+</ul>
+<h3>Tech Lead</h3>
+<p>Chaordic - Florianópolis, Brasil - Jan 2014 a Mai 2015</p>
+<p>Liderei a entrega e integração de uma plataforma de personalização para as maiores marcas de e-commerce do Brasil.</p>
+<ul>
+<li>Atuei como PM e líder técnico de oito engenheiros em JavaScript, UX/frontend e QA.</li>
+<li>Introduzi OKRs e uma função de technical account management, reduzindo o tempo de integração em 50% e o churn entre as principais contas.</li>
+<li>Trabalhei diretamente com grandes clientes, incluindo Walmart, Máquina de Vendas, Saraiva, Centauro e Nova.com.</li>
+</ul>
+<h3>Product Manager</h3>
+<p>Pixeon Medical Systems - Florianópolis / São Paulo, Brasil - Out 2010 a Jan 2014</p>
+<ul>
+<li>Fui dono do portfólio de produtos LIS/RIS/PACS, traduzindo necessidades de mercado e vendas em roadmaps de engenharia.</li>
+<li>Conduzi o ciclo completo de seis novos produtos — da definição do problema ao registro na ANVISA, precificação e go-to-market — e ajudei a unificar portfólios na fusão Medical Systems / Pixeon.</li>
+</ul>
+<h3>Full-stack Engineer</h3>
+<p>Pixeon Medical Systems - Brasil - Jan 2007 a Out 2010</p>
+<ul>
+<li>Construí um visualizador DICOM desktop para imagens de TC, RM, ultrassom e CR com C++, Qt e Java (Swing, J2EE), atuando em requisitos, backend e frontend sob Scrum e CI.</li>
+</ul>
+<h3>Analista de Tecnologia da Informação</h3>
+<p>Tigre S.A. - Joinville, Brasil - Jul 2006 a Jan 2007</p>
+<ul>
+<li>Analista de TI em uma grande indústria, antes de migrar para produto e engenharia de software.</li>
+</ul></div></section></div><aside><section class="side" aria-labelledby="pt-dominios">
+    <h3 class="side-h" id="pt-dominios">Domínios</h3>
+    <div class="prose"><ul>
+<li>Ferramentas de dev — CLIs, harnesses de agentes, IA nos trilhos</li>
+<li>E-commerce — personalização em escala</li>
+<li>Fintech — ferramentas de finanças pessoais</li>
+<li>Saúde — plataformas, imagem, diagnóstico</li>
+<li>ERP / SaaS — construção e diagnóstico</li>
+<li>Indústria — base inicial em TI</li>
+</ul></div>
+  </section>
+<section class="side" aria-labelledby="pt-especialidades">
+    <h3 class="side-h" id="pt-especialidades">Especialidades</h3>
+    <div class="prose"><ul class="tags"><li>Engenharia de Produto</li><li>Engenharia Full-Stack</li><li>Design de Sistemas</li><li>Arquitetura Cloud-Native</li><li>Engenharia Aprimorada por IA</li><li>Ferramentas de Dev &amp; CLIs</li><li>Sistemas Local-First</li><li>Release Engineering</li><li>Deploys sem Downtime</li><li>Liderança de Engenharia</li><li>Google Cloud</li><li>AWS</li><li>Interoperabilidade (DICOM / HL7 / FHIR)</li><li>Sistemas com LGPD.</li></ul></div>
+  </section>
+<section class="side" aria-labelledby="pt-formacao">
+    <h3 class="side-h" id="pt-formacao">Formação</h3>
+    <div class="prose"><p>Universidade do Vale do Itajaí — Bacharelado em Engenharia de Computação (engenharia de software, integração de hardware) — 2001 a 2005.</p></div>
+  </section>
+<section class="side" aria-labelledby="pt-certificacoes">
+    <h3 class="side-h" id="pt-certificacoes">Certificações</h3>
+    <div class="prose"><ul>
+<li>Practical Product Management — Pragmatic Marketing — 2010</li>
+<li>EMPRETEC — 2009</li>
+</ul></div>
+  </section>
+<section class="side" aria-labelledby="pt-idiomas">
+    <h3 class="side-h" id="pt-idiomas">Idiomas</h3>
+    <div class="prose"><ul>
+<li>Português — Nativo ou proficiência bilíngue</li>
+<li>Inglês — Proficiência profissional</li>
+<li>Espanhol — Proficiência básica a intermediária</li>
+</ul></div>
+  </section></aside></div>
     </main>
+
+    <footer class="foot">
+      <span>Rendered from README · 2026</span>
+      <span class="flat"></span>
+      <span>cv.felipe.run</span>
+    </footer>
   </article>
 
-  <script type="text/plain" id="resume-markdown"># Felipe R. Broering
+  <script type="text/plain" id="md-en"># Felipe R. Broering
 
-## Senior Product Engineer (Full-Stack) / Product-minded Engineering Leader
+Senior Product Engineer · Product-minded Engineering Leader
 
 Santa Catarina, Brazil
 
@@ -1329,63 +1059,67 @@ Santa Catarina, Brazil
 - LinkedIn: https://www.linkedin.com/in/felipebroering/
 - GitHub: https://github.com/feliperun
 
-## Mini Bio
+## Profile
 
-Senior Product Engineer and product-minded engineering leader with 15+ years building complex digital products from discovery to production.
+Senior Product Engineer and product-minded engineering leader with 15+ years building complex digital products end to end — discovery, domain modeling, architecture, implementation, and production.
 
-I work best in full-cycle product engineering: understanding ambiguous business or user problems, modeling the domain, designing the architecture, building the software, shipping to production, monitoring real-world behavior, and iterating based on evidence.
+I work best where product and engineering can't be separated: complex workflows, operational systems, regulated domains, cloud-native platforms, internal tools, integrations, and automation that has to stay reliable in production. My background spans full-stack engineering, product management, cloud, AI-enhanced workflows, and hardware integration — as software engineer, product manager, CTO/founder, engineering manager, head of engineering, and hands-on product engineer.
 
-My background combines hands-on full-stack engineering, product management, cloud platforms, AI-enhanced engineering workflows, healthcare technology, hardware integration, and engineering leadership. I have worked as a software engineer, product manager, CTO/founder, engineering manager, head of engineering, and hands-on product engineer.
-
-I am especially strong in environments where product and engineering cannot be separated: complex workflows, operational systems, regulated domains, cloud-native platforms, internal tools, integrations, automation, and systems that need to be reliable in production.
-
-Over the last several years, I have led and built platforms used in critical healthcare operations, including Coreum at Micromed, featured by Google Cloud for its cloud modernization, cost reduction, performance gains, large-scale data migration, and zero-downtime release capabilities.
-
-I also enjoy building useful open-source tools that solve real problems for myself and others, especially around developer experience, local-first systems, automation, AI-enhanced engineering, and practical product workflows.
-
-## Hashtags
-
-#ProductEngineering #FullStackEngineering #EngineeringLeadership #ProductMindedEngineering #SoftwareArchitecture #CloudNative #AIEnhancedEngineering #OpenSource #DeveloperTools #HealthcareTechnology #Rust #TypeScript #React #NodeJS #GoogleCloud #Vercel
-
-## Selected Impact
-
-- Led Coreum from zero into Micromed's cloud-native platform for cardiology diagnostics, later featured as a Google Cloud customer case study.
-- Contributed to 50%+ infrastructure cost reduction during Micromed's Google Cloud modernization.
-- Improved exam loading performance by 10x, from 2 seconds to 200 milliseconds.
-- Participated in a 20TB healthcare data migration completed with only 3 hours of downtime.
-- Helped enable multiple daily zero-downtime releases for critical diagnostic workflows.
-- Supported platforms processing 10k+ exams per day.
-- Co-founded and led Healfies as CTO, helping raise R$2.2M, deliver 2M health records, connect 23 diagnostic centers, and reach 10k registered users.
-- Created and maintain useful open-source tools around personal finance, developer experience, AI-enhanced workflows, Markdown-based documentation, and local-first/product engineering systems.
-- Built and led multidisciplinary teams across software engineering, UX, cloud, AI, firmware, electronics, and healthcare operations.
-
-## How I Build
-
-I approach product engineering as a full-cycle discipline.
-
-My preferred loop is:
-
-Problem → Domain model → Product behavior → Architecture → Implementation → Production → Observability → Iteration.
-
-I like to start close to the real problem: users, workflows, business constraints, operational risks, edge cases, and success criteria. From there, I model the domain, design the system, build the product, ship it, monitor how it behaves in production, and improve it continuously.
-
-AI is part of my workflow, but not the point of the work. I use coding agents, terminal-first tools, structured prompts, reusable skills, local harnesses, automation, tests, ADRs, code review, data analysis, and validation loops to move faster while preserving architecture, maintainability, and accountability.
+I've led platforms used in critical operations — including Coreum at Micromed, featured by Google Cloud — and I build open-source developer tools around local-first systems, automation, and AI-enhanced engineering.
 
 ## Featured Case Study
 
-### Micromed's Coreum Platform is unlocking AI-powered cardiology at scale with Google Cloud
+### Coreum on Google Cloud: scaling a cloud-native platform
 
 Published by Google Cloud: https://cloud.google.com/customers/micromed
 
-Led the development of Coreum from zero into Micromed's cloud-native health platform for cardiology diagnostics, enabling scalable exam workflows, AI-powered cardiology, ERP integration, and a production foundation for faster releases and safer operations.
-
-Google Cloud case study results:
+Led Coreum from zero into Micromed's cloud-native platform — scalable workflows, AI features, ERP integration, and a production foundation built for fast, safe releases (it powers cardiology diagnostics). The Google Cloud case study reports:
 
 - 50%+ infrastructure cost reduction
-- 10x exam loading speed improvement, from 2 seconds to 200 milliseconds
+- 10x faster load times, from 2 seconds to 200 milliseconds
 - 20TB migrated with only 3 hours of downtime
 - Multiple daily releases with zero downtime
-- More than 10,000 exams processed per day by Micromed's platforms
+- 10,000+ workloads processed per day
+
+## How I Build
+
+I approach product engineering as a full-cycle discipline. My preferred loop:
+
+**Problem → Domain model → Product behavior → Architecture → Implementation → Production → Observability → Iteration.**
+
+I start close to the real problem — users, workflows, business constraints, operational risks, edge cases, success criteria — then model the domain, design the system, build the product, ship it, watch how it behaves in production, and improve it continuously.
+
+AI is part of my workflow, but not the point of the work. I use coding agents, terminal-first tools, structured prompts, reusable skills, local harnesses, automation, tests, ADRs, code review, and validation loops to move faster while preserving architecture, maintainability, and accountability.
+
+## Open Source
+
+I build in the open — terminal-first Rust tools that put AI on rails.
+
+### phai-run/phai
+
+Founder and maintainer of phai, an open-source, local-first personal finance product built in Rust. It combines banking data ingestion, SQLite/BigQuery storage, rule-based classification, auditability, CLI workflows, dashboards, MCP integration, and a local web app embedded into a single binary.
+
+The project doubles as an engineering harness for AI-assisted development, with ADRs, TDD, CI, privacy rules, quality gates, release automation, and strict guardrails to keep agent-assisted changes reviewable and production-ready.
+
+Technologies: Rust, SQLite, BigQuery, Pluggy, React, LiveStore, MCP, AI-assisted engineering harness.
+
+Project: https://github.com/phai-run/phai
+
+### feliperun/eai
+
+Open-source Rust CLI that turns natural language into safe shell commands through an inspect-confirm-run workflow. Supports multiple LLM providers, pipe context, command explanation, script generation, bookmarks, completions, and shell integration.
+
+Technologies: Rust, Ollama, Gemini, Groq, OpenAI, shell UX.
+
+Project: https://github.com/feliperun/eai
+
+### feliperun/dsync
+
+Open-source Rust CLI for keeping Markdown as the local source of truth while syncing documents with Google Docs and Linear Docs. Supports document creation, import, frontmatter links, cross-links, and an extensible provider architecture.
+
+Technologies: Rust, Markdown, Google Docs, Linear Docs, provider architecture.
+
+Project: https://github.com/feliperun/dsync
 
 ## Experience
 
@@ -1432,189 +1166,367 @@ Joined Micromed to lead engineering from scratch for an inpatient monitoring sol
 - Coordinated ten third-party engineers across AI microservices, firmware, and electronics, connecting data science, embedded software, hardware, and product delivery.
 - Owned system design and led end-to-end project development across software, cloud, machine learning integration, hardware integration, and product execution.
 - Connected product requirements, clinical workflows, architecture decisions, and delivery planning into a coherent execution model.
-- Helped establish the foundation for Micromed's later cloud-native platform initiatives.
 
 ### Engineering Manager
 
-Animati - Computacao Aplicada a Saude - Florianopolis, Brazil - Jun 2019 to Oct 2020
+Animati - Florianopolis, Brazil - Jun 2019 to Oct 2020
 
 Led development of S.I.M., an integrated diagnostic medicine system and cloud-native SaaS designed to fill RIS/PACS workflow gaps.
 
 - Managed the full product development cycle from problem discovery and software architecture to customer delivery.
 - Built a team from scratch with UX and full-stack engineers working with React, TypeScript, Python, Django REST, Node.js, Firebase, and serverless architecture.
 - Introduced design-system thinking, detailed UX modeling, micro-frontends, and cost-efficient cloud patterns that could scale down during off-hours.
-- Worked closely with users and stakeholders to translate diagnostic medicine workflows into practical product and engineering decisions.
 - Balanced hands-on architecture, team leadership, delivery execution, and product direction.
 
-### Product Manager for Healthcare Solutions
+### Product Manager — Healthcare, then Construction
 
-Softplan Planejamento e Sistemas - Florianopolis, Brazil - Dec 2018 to May 2019
+Softplan - Florianopolis, Brazil - Mar 2018 to May 2019
 
-Led product discovery for a new healthcare business unit, evaluating market opportunities, build-buy-partner paths, and strategic product directions.
+- Led product discovery for a new healthcare business unit, evaluating build/buy/partner paths and presenting strategic options to the CEO; worked with ML engineers on a health-insurance BI product.
+- Earlier, managed CRM and commercial modules for Sienge, a construction ERP used across Brazil — roadmap, sales channels, large customers, and agile planning.
 
-- Evaluated healthcare product opportunities and presented strategic options to the CEO.
-- Worked with machine learning engineers to improve user experience and identify new features for a healthcare insurance business intelligence product.
-- Connected product strategy, technical feasibility, business constraints, and market validation.
-- Helped structure early discovery for healthcare products inside an established enterprise software company.
-
-### Product Manager for Construction Business
-
-Softplan Planejamento e Sistemas - Florianopolis, Brazil - Mar 2018 to Nov 2018
-
-Managed CRM and commercial modules for Sienge, a construction business ERP used by companies across Brazil.
-
-- Owned roadmap, sales-channel alignment, special projects, large-customer needs, and agile planning.
-- Collaborated with full-stack engineers, UX designers, and architecture teams on new platform features and product direction.
-- Translated customer, commercial, and operational needs into roadmap decisions and engineering priorities.
-- Worked across discovery, prioritization, stakeholder alignment, and delivery execution.
-
-### Chief Technology Officer and Founder
+### Chief Technology Officer &amp; Founder
 
 Healfies - Florianopolis, Brazil - Jan 2015 to Mar 2018
 
-Founded and led technology for a healthcare network where patients, professionals, and organizations could securely organize and share health information.
+Founded and led technology for a healthcare network where people and organizations could securely organize and share information.
 
-- Owned platform system design, product roadmap, technical strategy, and team building from scratch.
-- Led seven people across full-stack engineering, UX, and quality assurance.
-- Worked hands-on across strategy, design, planning, testing, deployment, and coding with Node.js, MongoDB, and AngularJS.
-- Designed and operated cloud infrastructure using AWS and Google Cloud, including microservices, data storage, functions, Kubernetes, cost management, and production operations.
-- Led integration work for ETLs and interoperability with clinical systems including CIS, LIS, RIS, HIS, and PACS through REST APIs.
-- Helped raise R$2.2M, deliver health records from 23 diagnostic centers, reach 2M delivered health records, and register 10K users.
-- Experienced the full startup cycle: product discovery, fundraising, hiring, architecture, development, delivery, operations, partnerships, and customer validation.
+- Owned platform system design, product roadmap, technical strategy, and team building from scratch — leading seven people across full-stack engineering, UX, and QA.
+- Worked hands-on across strategy, design, testing, deployment, and coding with Node.js, MongoDB, and AngularJS.
+- Designed and operated AWS and Google Cloud infrastructure: microservices, storage, functions, Kubernetes, cost management, and production operations.
+- Led ETL and clinical interoperability across CIS, LIS, RIS, HIS, and PACS via REST APIs.
+- Lived the full startup cycle — discovery, fundraising, hiring, delivery, operations, partnerships — helping raise R$2.2M, connect 23 diagnostic centers, deliver 2M records, and register 10K users.
 
 ### Tech Lead
 
 Chaordic - Florianopolis, Brazil - Jan 2014 to May 2015
 
-Led customization, delivery, and integration projects for major Brazilian e-commerce customers.
+Led delivery and integration of a personalization platform for major Brazilian e-commerce brands.
 
-- Acted as project manager and technical lead for eight engineers across JavaScript, UX/frontend, and QA.
-- Implemented OKRs for the team, aligning company strategy with daily execution and reducing integration time by 50%.
-- Helped reduce churn and increase loyalty among large Brazilian e-commerce customers by implementing a technical account management function.
-- Worked directly with major customers including Walmart, Maquina de Vendas, Saraiva, Centauro, and Nova.com.
-- Operated at the intersection of technical delivery, customer success, product customization, and engineering execution.
+- Acted as PM and technical lead for eight engineers across JavaScript, UX/frontend, and QA.
+- Introduced OKRs and a technical account management function, cutting integration time by 50% and reducing churn among top accounts.
+- Worked directly with major customers including Walmart, Máquina de Vendas, Saraiva, Centauro, and Nova.com.
 
 ### Product Manager
 
 Pixeon Medical Systems - Florianopolis / Sao Paulo, Brazil - Oct 2010 to Jan 2014
 
-Created and implemented product management and product intelligence inside the marketing department for healthcare software products.
-
-- Owned LIS, RIS, and PACS product portfolio direction, translating market, customer, and sales needs into engineering roadmaps.
-- Led the full cycle for six new products, from problem definition and solution design to development, branding, pricing, ANVISA registration, launch, sales training, and performance monitoring.
-- Participated in the merger of Medical Systems and Pixeon, helping unify processes and product portfolios.
-- Worked across healthcare workflows, product strategy, sales enablement, engineering alignment, and regulatory requirements.
-- Built a strong foundation in product discovery, market analysis, product launch, and healthcare software operations.
+- Owned the LIS/RIS/PACS product portfolio, translating market and sales needs into engineering roadmaps.
+- Led the full cycle for six new products — from problem definition through ANVISA registration, pricing, and go-to-market — and helped unify portfolios through the Medical Systems / Pixeon merger.
 
 ### Full-stack Engineer
 
 Pixeon Medical Systems - Brazil - Jan 2007 to Oct 2010
 
-Started as a hands-on software engineer building healthcare imaging software and later expanded into product and project responsibilities.
-
-- Developed a desktop DICOM viewer for CT, MRI, ultrasound, CR, and other medical imaging modalities using C++, Qt, Java Swing, and Java J2EE.
-- Worked across discovery, requirements mapping, backend development, frontend implementation, and stakeholder approval.
-- Applied Scrum, Maven configuration management, and Bamboo continuous integration.
-- Added project management responsibilities supporting engineering, sales, and customer delivery.
-- Built early expertise in medical imaging, DICOM workflows, full-stack development, and healthcare product delivery.
+- Built a desktop DICOM viewer for CT, MRI, ultrasound, and CR imaging with C++, Qt, and Java (Swing, J2EE), working across requirements, backend, and frontend under Scrum and CI.
 
 ### Information Technology Analyst
 
-Tigre S.A. - Tubos e Conexoes - Joinville, Brazil - Jul 2006 to Jan 2007
+Tigre S.A. - Joinville, Brazil - Jul 2006 to Jan 2007
 
-Worked as an information technology analyst before moving deeper into software engineering, product development, and healthcare technology.
+- IT analyst at a large industrial manufacturer, before moving into product and software engineering.
 
-## Selected Open Source Projects
+## Domains
 
-### phai-run/phai
-
-Founder and maintainer of phai, an open-source, local-first personal finance product built in Rust. It combines banking data ingestion, SQLite/BigQuery storage, rule-based classification, auditability, CLI workflows, dashboards, MCP integration, and a local web app embedded into a single binary.
-
-The project is also an engineering harness for AI-assisted development, with ADRs, TDD, CI, privacy rules, quality gates, release automation, and strict guardrails to keep agent-assisted changes reviewable and production-ready.
-
-Technologies: Rust, SQLite, BigQuery, Pluggy, React, LiveStore, MCP, ADRs, AI-assisted engineering harness.
-
-Project: https://github.com/phai-run/phai
-
-### feliperun/eai
-
-Open-source Rust CLI that turns natural language into safe shell commands through an inspect-confirm-run workflow. Supports multiple LLM providers, pipe context, command explanation, script generation, bookmarks, completions, and shell integration.
-
-Technologies: Rust, Ollama, Gemini, Groq, OpenAI, shell UX.
-
-Project: https://github.com/feliperun/eai
-
-### feliperun/dsync
-
-Open-source Rust CLI for keeping Markdown as the local source of truth while syncing documents with Google Docs and Linear Docs. Supports document creation, import, frontmatter links, cross-links, and an extensible provider architecture.
-
-Technologies: Rust, Markdown, Google Docs, Linear Docs, provider architecture.
-
-Project: https://github.com/feliperun/dsync
+- Developer tools — CLIs, agent harnesses, AI on rails
+- E-commerce — personalization at scale
+- Fintech — personal finance tooling
+- Healthcare — platforms, imaging, diagnostics
+- ERP / SaaS — construction and diagnostics
+- Industrial — early IT foundations
 
 ## Expertise
 
-**Product Engineering:** product discovery, domain modeling, workflow design, system design, full-cycle product development, production operations, observability, iteration.
-
-**Software Engineering:** full-stack development, cloud-native architecture, APIs, integrations, local-first systems, CLI tools, automation, release engineering, zero-downtime deployments.
-
-**AI-enhanced Engineering:** coding agents, engineering harnesses, reusable skills, guardrails, ADRs, validation loops, test-driven development, review workflows, internal developer tools.
-
-**Open Source:** developer tools, local-first products, CLI design, Markdown workflows, personal finance tooling, AI-assisted development systems.
-
-**Leadership:** engineering strategy, technical leadership, team building, product-minded execution, cross-functional collaboration, roadmap translation, stakeholder alignment.
-
-**Healthcare and Regulated Systems:** clinical workflows, diagnostic platforms, connected devices, interoperability, DICOM, HL7, FHIR, LGPD-aware systems, healthcare operations.
-
-**Cloud and Operations:** Google Cloud, AWS, cloud modernization, infrastructure cost optimization, production reliability, monitoring, operational efficiency, data migration, scalable platforms.
+Product Engineering, Full-Stack Engineering, System Design, Cloud-Native Architecture, AI-Enhanced Engineering, Developer Tools &amp; CLIs, Local-First Systems, Release Engineering, Zero-downtime Deployments, Engineering Leadership, Google Cloud, AWS, Interoperability (DICOM / HL7 / FHIR), LGPD-aware Systems.
 
 ## Education
 
-Universidade do Vale do Itajai - BS in Computer Engineering, Software Engineering, Hardware Integration - 2001 to 2005.
+Universidade do Vale do Itajaí — BS in Computer Engineering (software engineering, hardware integration) — 2001 to 2005.
 
 ## Certifications
 
-- Practical Product Management - Pragmatic Marketing, Inc - 2010
-- EMPRETEC - 2009
+- Practical Product Management — Pragmatic Marketing — 2010
+- EMPRETEC — 2009
 
 ## Languages
 
-- Portuguese - Native or bilingual proficiency
-- English - Professional working proficiency
-- Spanish - Basic to intermediate proficiency</script>
-  <script>
-    (() => {
-      const status = document.querySelector(".copy-status");
-      const markdownNode = document.getElementById("resume-markdown");
+- Portuguese — Native or bilingual proficiency
+- English — Professional working proficiency
+- Spanish — Basic to intermediate proficiency
 
-      document.querySelector("[data-action='download-pdf']").addEventListener("click", () => {
+## Hashtags
+
+#ProductEngineering #FullStackEngineering #EngineeringLeadership #ProductMindedEngineering #SoftwareArchitecture #CloudNative #AIEnhancedEngineering #OpenSource #DeveloperTools #HealthcareTechnology #Rust #TypeScript #React #NodeJS #GoogleCloud #Vercel</script>
+  <script type="text/plain" id="md-pt"># Felipe R. Broering
+
+Senior Product Engineer · Líder de Engenharia com foco em Produto
+
+Santa Catarina, Brasil
+
+- Email: hi@felipe.run
+- LinkedIn: https://www.linkedin.com/in/felipebroering/
+- GitHub: https://github.com/feliperun
+
+## Perfil
+
+Senior Product Engineer e líder de engenharia com foco em produto, com mais de 15 anos construindo produtos digitais complexos de ponta a ponta — descoberta, modelagem de domínio, arquitetura, implementação e produção.
+
+Trabalho melhor onde produto e engenharia não se separam: fluxos complexos, sistemas operacionais, domínios regulados, plataformas cloud-native, ferramentas internas, integrações e automação que precisa se manter confiável em produção. Minha trajetória cobre engenharia full-stack, gestão de produto, nuvem, workflows aprimorados por IA e integração de hardware — como engenheiro de software, product manager, CTO/fundador, engineering manager, head of engineering e product engineer hands-on.
+
+Liderei plataformas usadas em operações críticas — incluindo o Coreum na Micromed, destacado pelo Google Cloud — e construo ferramentas open-source para desenvolvedores em torno de sistemas local-first, automação e engenharia aprimorada por IA.
+
+## Estudo de Caso em Destaque
+
+### Coreum no Google Cloud: escalando uma plataforma cloud-native
+
+Publicado pelo Google Cloud: https://cloud.google.com/customers/micromed
+
+Liderei o Coreum do zero até se tornar a plataforma cloud-native da Micromed — fluxos escaláveis, recursos de IA, integração com ERP e uma base de produção feita para releases rápidos e seguros (ela sustenta o diagnóstico cardiológico). O estudo de caso do Google Cloud reporta:
+
+- Redução de 50%+ no custo de infraestrutura
+- Carregamento 10x mais rápido, de 2 segundos para 200 milissegundos
+- 20TB migrados com apenas 3 horas de downtime
+- Múltiplos releases diários com zero downtime
+- 10.000+ cargas processadas por dia
+
+## Como Eu Construo
+
+Encaro engenharia de produto como uma disciplina de ciclo completo. Meu loop preferido:
+
+**Problema → Modelo de domínio → Comportamento do produto → Arquitetura → Implementação → Produção → Observabilidade → Iteração.**
+
+Começo perto do problema real — usuários, fluxos, restrições de negócio, riscos operacionais, edge cases, critérios de sucesso — depois modelo o domínio, desenho o sistema, construo o produto, coloco no ar, observo como ele se comporta em produção e melhoro continuamente.
+
+IA faz parte do meu workflow, mas não é o ponto do trabalho. Uso coding agents, ferramentas terminal-first, prompts estruturados, skills reutilizáveis, harnesses locais, automação, testes, ADRs, code review e loops de validação para ir mais rápido sem perder arquitetura, manutenibilidade e accountability.
+
+## Open Source
+
+Construo no aberto — ferramentas Rust terminal-first que colocam IA nos trilhos.
+
+### phai-run/phai
+
+Fundador e mantenedor do phai, um produto open-source de finanças pessoais local-first, construído em Rust. Combina ingestão de dados bancários, armazenamento em SQLite/BigQuery, classificação por regras, auditabilidade, workflows de CLI, dashboards, integração MCP e um web app local embutido num binário único.
+
+O projeto também é um harness de engenharia para desenvolvimento assistido por IA, com ADRs, TDD, CI, regras de privacidade, quality gates, automação de release e guardrails rígidos para manter mudanças assistidas por agentes revisáveis e prontas para produção.
+
+Tecnologias: Rust, SQLite, BigQuery, Pluggy, React, LiveStore, MCP, harness de engenharia assistida por IA.
+
+Projeto: https://github.com/phai-run/phai
+
+### feliperun/eai
+
+CLI open-source em Rust que transforma linguagem natural em comandos de shell seguros por um fluxo inspecionar-confirmar-executar. Suporta múltiplos provedores de LLM, contexto via pipe, explicação de comandos, geração de scripts, bookmarks, completions e integração com o shell.
+
+Tecnologias: Rust, Ollama, Gemini, Groq, OpenAI, UX de shell.
+
+Projeto: https://github.com/feliperun/eai
+
+### feliperun/dsync
+
+CLI open-source em Rust para manter o Markdown como fonte da verdade local enquanto sincroniza documentos com Google Docs e Linear Docs. Suporta criação e importação de documentos, links no frontmatter, cross-links e uma arquitetura de provedores extensível.
+
+Tecnologias: Rust, Markdown, Google Docs, Linear Docs, arquitetura de provedores.
+
+Projeto: https://github.com/feliperun/dsync
+
+## Experiência
+
+### Senior Product Engineer
+
+Micromed Health - Florianópolis, Brasil - Jan 2026 até o presente
+
+Migrei para um foco hands-on em engenharia de produto, atuando em descoberta, modelagem de domínio, arquitetura, implementação, validação, release e operação em produção.
+
+Trabalhando principalmente com React, Node.js, TypeScript, Python, Rust, Google Cloud e Vercel em aplicações web, serviços de processamento de sinais, integração nativa com hardware, infraestrutura de nuvem e fluxos de produção.
+
+- Liderando iniciativas de engenharia de produto ponta a ponta, do Figma e do design de produto à implementação, validação, release, observabilidade e iteração em produção.
+- Construindo experiências de produto web com React, Node.js e TypeScript, conectando frontend, backend, APIs, autenticação, fluxos de dados e ferramental operacional.
+- Usando Python para workflows de processamento de sinais de ECG e Rust como camada de integração nativa entre hardware médico, PCs locais e sistemas em nuvem.
+- Construindo sobre o Google Cloud como base de infraestrutura cloud-native e usando a Vercel para deploy de frontend, previews e entrega de aplicações web.
+- Desenhando um harness de engenharia aprimorado por IA com coding agents, prompts estruturados, skills reutilizáveis, ADRs, testes, loops de validação, code review e disciplina de release.
+- Criando skills de engenharia reutilizáveis para Figma-to-code, review de UX, modelagem de produto, planejamento técnico, code review, validação de release, investigação de produção, documentação e análise de dados.
+- Trabalhando com um workflow de IA terminal-first usando pi.dev, Claude CLI, Cursor CLI, ferramental local de dev e Superset para análise de dados e feedback loops de produção.
+- Aplicando uma abordagem de loop-engineering: modelar o problema, construir, validar, revisar, entregar, monitorar o comportamento em produção e realimentar os aprendizados no produto.
+- Atuando como builder sênior hands-on, trazendo experiência de liderança para decisões técnicas, trade-offs de produto, alinhamento de time e prontidão para produção.
+
+### Head of Engineering
+
+Micromed Health - Florianópolis, Brasil - Mai 2022 a Jul 2026
+
+Liderei a engenharia do Coreum, a plataforma cloud-native da Micromed para diagnóstico cardiológico, fluxos de exame, análise assistida por IA, integração com ERP, dispositivos conectados e operação em produção.
+
+- Liderei o Coreum do desenvolvimento inicial até se tornar uma plataforma de estudo de caso do Google Cloud.
+- Contribuí para um programa de modernização que reduziu custos de infraestrutura em mais de 50%, melhorou o carregamento de exames de 2 segundos para 200 milissegundos, migrou 20TB de dados com apenas 3 horas de downtime e habilitou múltiplos releases diários com zero downtime.
+- Estruturei processo e cultura de engenharia para suportar o crescimento do time, novos projetos, entrega mais rápida e operação mais confiável.
+- Construí e evoluí práticas de engenharia em arquitetura, entrega, operação de nuvem, confiabilidade, segurança, desenvolvimento assistido por IA, disciplina de review e prontidão para produção.
+- Liderei e apoiei times multidisciplinares em backend, frontend, UX, nuvem, firmware, eletrônica, QA, integrações e entrega de produto.
+- Ajudei a consolidar sistemas críticos no Google Cloud, incluindo ERP e Coreum, melhorando confiabilidade, segurança, velocidade de integração e eficiência operacional.
+- Avancei o roadmap da Micromed para cardiologia com IA, dispositivos médicos conectados, nuvem híbrida, edge computing e interoperabilidade com padrões como DICOM, HL7 e FHIR.
+- Conectei estratégia de produto, engenharia de software, fluxos clínicos, integração de hardware, arquitetura de nuvem e execução da entrega.
+
+### Engineering Manager
+
+Micromed Health - Florianópolis, Brasil - Nov 2020 a Jun 2022
+
+Entrei na Micromed para liderar a engenharia do zero de uma solução de monitoramento de pacientes internados, combinando aquisição de ECG, processamento em nuvem, algoritmos de machine learning e predição de risco cardíaco.
+
+- Montei e liderei um time interno de sete pessoas: seis engenheiros e um designer de UX responsáveis por core da plataforma, back ends, front ends, design system e infraestrutura de nuvem.
+- Coordenei dez engenheiros terceiros entre microsserviços de IA, firmware e eletrônica, conectando data science, software embarcado, hardware e entrega de produto.
+- Fui dono do design de sistema e liderei o desenvolvimento ponta a ponta do projeto em software, nuvem, integração de machine learning, integração de hardware e execução de produto.
+- Conectei requisitos de produto, fluxos clínicos, decisões de arquitetura e planejamento de entrega em um modelo coerente de execução.
+
+### Engineering Manager
+
+Animati - Florianópolis, Brasil - Jun 2019 a Out 2020
+
+Liderei o desenvolvimento do S.I.M., um sistema integrado de medicina diagnóstica e SaaS cloud-native feito para preencher lacunas de fluxo em RIS/PACS.
+
+- Gerenciei o ciclo completo de desenvolvimento do produto, da descoberta e arquitetura à entrega para clientes.
+- Montei um time do zero com UX e engenheiros full-stack em React, TypeScript, Python, Django REST, Node.js, Firebase e arquitetura serverless.
+- Introduzi pensamento de design system, modelagem detalhada de UX, micro-frontends e padrões de nuvem que reduziam escala fora do horário de pico.
+- Equilibrei arquitetura hands-on, liderança de time, execução de entrega e direção de produto.
+
+### Product Manager — Saúde, depois Construção
+
+Softplan - Florianópolis, Brasil - Mar 2018 a Mai 2019
+
+- Conduzi a descoberta de produto para uma nova unidade de negócio de saúde, avaliando caminhos de build/buy/partner e apresentando opções estratégicas ao CEO; trabalhei com engenheiros de ML em um produto de BI para planos de saúde.
+- Antes, gerenciei os módulos de CRM e comercial do Sienge, um ERP de construção usado em todo o Brasil — roadmap, canais de venda, grandes clientes e planejamento ágil.
+
+### Chief Technology Officer &amp; Fundador
+
+Healfies - Florianópolis, Brasil - Jan 2015 a Mar 2018
+
+Fundei e liderei a tecnologia de uma rede de saúde onde pessoas e organizações podiam organizar e compartilhar informações com segurança.
+
+- Fui dono do design de sistema da plataforma, do roadmap de produto, da estratégia técnica e da formação do time do zero — liderando sete pessoas entre engenharia full-stack, UX e QA.
+- Atuei hands-on em estratégia, design, testes, deploy e código com Node.js, MongoDB e AngularJS.
+- Projetei e operei infraestrutura na AWS e no Google Cloud: microsserviços, armazenamento, functions, Kubernetes, gestão de custo e operação em produção.
+- Liderei ETL e interoperabilidade clínica entre CIS, LIS, RIS, HIS e PACS via APIs REST.
+- Vivi o ciclo completo de startup — descoberta, captação, contratação, entrega, operação, parcerias — ajudando a captar R$2,2M, conectar 23 centros de diagnóstico, entregar 2M de registros e cadastrar 10 mil usuários.
+
+### Tech Lead
+
+Chaordic - Florianópolis, Brasil - Jan 2014 a Mai 2015
+
+Liderei a entrega e integração de uma plataforma de personalização para as maiores marcas de e-commerce do Brasil.
+
+- Atuei como PM e líder técnico de oito engenheiros em JavaScript, UX/frontend e QA.
+- Introduzi OKRs e uma função de technical account management, reduzindo o tempo de integração em 50% e o churn entre as principais contas.
+- Trabalhei diretamente com grandes clientes, incluindo Walmart, Máquina de Vendas, Saraiva, Centauro e Nova.com.
+
+### Product Manager
+
+Pixeon Medical Systems - Florianópolis / São Paulo, Brasil - Out 2010 a Jan 2014
+
+- Fui dono do portfólio de produtos LIS/RIS/PACS, traduzindo necessidades de mercado e vendas em roadmaps de engenharia.
+- Conduzi o ciclo completo de seis novos produtos — da definição do problema ao registro na ANVISA, precificação e go-to-market — e ajudei a unificar portfólios na fusão Medical Systems / Pixeon.
+
+### Full-stack Engineer
+
+Pixeon Medical Systems - Brasil - Jan 2007 a Out 2010
+
+- Construí um visualizador DICOM desktop para imagens de TC, RM, ultrassom e CR com C++, Qt e Java (Swing, J2EE), atuando em requisitos, backend e frontend sob Scrum e CI.
+
+### Analista de Tecnologia da Informação
+
+Tigre S.A. - Joinville, Brasil - Jul 2006 a Jan 2007
+
+- Analista de TI em uma grande indústria, antes de migrar para produto e engenharia de software.
+
+## Domínios
+
+- Ferramentas de dev — CLIs, harnesses de agentes, IA nos trilhos
+- E-commerce — personalização em escala
+- Fintech — ferramentas de finanças pessoais
+- Saúde — plataformas, imagem, diagnóstico
+- ERP / SaaS — construção e diagnóstico
+- Indústria — base inicial em TI
+
+## Especialidades
+
+Engenharia de Produto, Engenharia Full-Stack, Design de Sistemas, Arquitetura Cloud-Native, Engenharia Aprimorada por IA, Ferramentas de Dev &amp; CLIs, Sistemas Local-First, Release Engineering, Deploys sem Downtime, Liderança de Engenharia, Google Cloud, AWS, Interoperabilidade (DICOM / HL7 / FHIR), Sistemas com LGPD.
+
+## Formação
+
+Universidade do Vale do Itajaí — Bacharelado em Engenharia de Computação (engenharia de software, integração de hardware) — 2001 a 2005.
+
+## Certificações
+
+- Practical Product Management — Pragmatic Marketing — 2010
+- EMPRETEC — 2009
+
+## Idiomas
+
+- Português — Nativo ou proficiência bilíngue
+- Inglês — Proficiência profissional
+- Espanhol — Proficiência básica a intermediária
+
+## Hashtags
+
+#ProductEngineering #FullStackEngineering #EngineeringLeadership #ProductMindedEngineering #SoftwareArchitecture #CloudNative #AIEnhancedEngineering #OpenSource #DeveloperTools #HealthcareTechnology #Rust #TypeScript #React #NodeJS #GoogleCloud #Vercel</script>
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var status = document.querySelector(".copy-status");
+      var COPIED = { en: "Copied", pt: "Copiado" };
+
+      function setLang(lang) {
+        root.setAttribute("data-lang", lang);
+        try { localStorage.setItem("cv-lang", lang); } catch (e) {}
+        var btns = document.querySelectorAll("[data-lang-btn]");
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].setAttribute("aria-pressed", btns[i].getAttribute("data-lang-btn") === lang ? "true" : "false");
+        }
+      }
+      function setTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        try { localStorage.setItem("cv-theme", theme); } catch (e) {}
+      }
+
+      var langBtns = document.querySelectorAll("[data-lang-btn]");
+      for (var i = 0; i < langBtns.length; i++) {
+        langBtns[i].addEventListener("click", function () {
+          setLang(this.getAttribute("data-lang-btn"));
+        });
+      }
+      setLang(root.getAttribute("data-lang") || "en");
+
+      document.querySelector("[data-action='theme']").addEventListener("click", function () {
+        setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+      });
+
+      document.querySelector("[data-action='download']").addEventListener("click", function () {
         window.print();
       });
 
-      document.querySelector("[data-action='copy-markdown']").addEventListener("click", async () => {
-        const textareaDecode = document.createElement("textarea");
-        textareaDecode.innerHTML = markdownNode.innerHTML;
-        const markdown = textareaDecode.value.trim() + "\n";
-
-        try {
-          await navigator.clipboard.writeText(markdown);
-          status.textContent = "Copied";
-        } catch (error) {
-          const textarea = document.createElement("textarea");
-          textarea.value = markdown;
-          textarea.setAttribute("readonly", "");
-          textarea.style.position = "fixed";
-          textarea.style.left = "-9999px";
-          document.body.appendChild(textarea);
-          textarea.select();
-          document.execCommand("copy");
-          textarea.remove();
-          status.textContent = "Copied";
+      document.querySelector("[data-action='copy']").addEventListener("click", function () {
+        var lang = root.getAttribute("data-lang") || "en";
+        var node = document.getElementById("md-" + lang);
+        var decode = document.createElement("textarea");
+        decode.innerHTML = node.textContent;
+        var markdown = decode.value.trim() + "\n";
+        function done() {
+          status.textContent = COPIED[lang];
+          window.setTimeout(function () { status.textContent = ""; }, 2000);
         }
-
-        window.setTimeout(() => {
-          status.textContent = "";
-        }, 2200);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(markdown).then(done, fallback);
+        } else {
+          fallback();
+        }
+        function fallback() {
+          var ta = document.createElement("textarea");
+          ta.value = markdown;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand("copy"); } catch (e) {}
+          ta.remove();
+          done();
+        }
       });
     })();
   </script>

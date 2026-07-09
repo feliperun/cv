@@ -1,14 +1,84 @@
 #!/usr/bin/env node
 
+/**
+ * Builds index.html from the two Markdown sources of truth:
+ *   README.md        -> English
+ *   README.pt-BR.md  -> Portuguese (Brazil)
+ *
+ * Design: an engineering-console dual theme.
+ *   dark  = terminal on monitor glass
+ *   light = clean printout on graph paper
+ * The console prompt is the signature element (hero command + section glyphs + metric sparklines).
+ * Do not edit index.html directly.
+ */
+
 const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const readmePath = path.join(ROOT, "README.md");
 const outputPath = path.join(ROOT, "index.html");
 
-const markdown = fs.readFileSync(readmePath, "utf8").trimEnd();
-const lines = markdown.split(/\r?\n/);
+const SOURCES = {
+  en: path.join(ROOT, "README.md"),
+  pt: path.join(ROOT, "README.pt-BR.md"),
+};
+
+// -- Language-independent configuration -------------------------------------
+
+// Career metrics — values are shared; labels/subs translate. Framed as
+// engineering + startup outcomes, not tied to any single domain.
+const VITALS = [
+  { value: "10×", subEn: "2s → 200ms", subPt: "2s → 200ms", en: "Latency cut", pt: "Latência" },
+  { value: "50%+", subEn: "cloud modernization", subPt: "modernização cloud", en: "Infra cost cut", pt: "Custo de infra" },
+  { value: "10k+", subEn: "processed / day", subPt: "processadas / dia", en: "Throughput", pt: "Throughput" },
+  { value: "20TB", subEn: "3h downtime", subPt: "3h de downtime", en: "Data migrated", pt: "Dados migrados" },
+  { value: "2M", subEn: "as founder", subPt: "como fundador", en: "Records delivered", pt: "Registros entregues" },
+  { value: "R$2.2M", subEn: "seed round", subPt: "rodada seed", en: "Funding raised", pt: "Captação" },
+];
+
+const FOCUS = {
+  en: ["AI engineering harnesses", "Cloud-native platforms", "0→1 products & teams", "Rust & developer tools", "Scale & reliability"],
+  pt: ["Harnesses de IA", "Plataformas cloud-native", "Produtos & times 0→1", "Rust & ferramentas de dev", "Escala & confiabilidade"],
+};
+
+// Hero console signature (domain-agnostic; reflects his terminal-first OSS).
+const TERM = {
+  prompt: "felipe@run",
+  cmd: "ship",
+  args: [
+    { flag: "--from", value: "idea" },
+    { flag: "--to", value: "production" },
+  ],
+  en: "# 15+ years shipping across e-commerce, fintech, ERP, developer tools & healthcare",
+  pt: "# 15+ anos entregando em e-commerce, fintech, ERP, ferramentas de dev & saúde",
+};
+
+const UI = {
+  en: {
+    langLabel: "EN",
+    download: "Download PDF",
+    copy: "Copy Markdown",
+    copied: "Copied",
+    operator: "Contact",
+    vitals: "Selected impact",
+    themeToDark: "Switch to dark",
+    themeToLight: "Switch to light",
+    live: "Live",
+  },
+  pt: {
+    langLabel: "PT",
+    download: "Baixar PDF",
+    copy: "Copiar Markdown",
+    copied: "Copiado",
+    operator: "Contato",
+    vitals: "Impacto",
+    themeToDark: "Mudar para escuro",
+    themeToLight: "Mudar para claro",
+    live: "Ao vivo",
+  },
+};
+
+// -- Markdown helpers -------------------------------------------------------
 
 function escapeHtml(value) {
   return value
@@ -22,7 +92,7 @@ function renderInline(value) {
   let html = escapeHtml(value);
   html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2">$1</a>');
-  html = html.replace(/(?<!["'=])(https?:\/\/[^\s<]+)/g, (url) => {
+  html = html.replace(/(?<!["'=>])(https?:\/\/[^\s<]+)/g, (url) => {
     const clean = url.replace(/[.,;:!?]+$/, "");
     const suffix = url.slice(clean.length);
     return `<a href="${clean}">${clean}</a>${suffix}`;
@@ -34,7 +104,7 @@ function slugify(value) {
   return value
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
@@ -44,17 +114,16 @@ function parseMarkdown(inputLines) {
   let paragraph = [];
   let inList = false;
 
-  function flushParagraph() {
+  const flushParagraph = () => {
     if (!paragraph.length) return;
     html.push(`<p>${renderInline(paragraph.join(" "))}</p>`);
     paragraph = [];
-  }
-
-  function closeList() {
+  };
+  const closeList = () => {
     if (!inList) return;
     html.push("</ul>");
     inList = false;
-  }
+  };
 
   for (const line of inputLines) {
     if (!line.trim()) {
@@ -62,23 +131,18 @@ function parseMarkdown(inputLines) {
       closeList();
       continue;
     }
-
     if (line.startsWith("### ")) {
       flushParagraph();
       closeList();
-      const text = line.slice(4).trim();
-      html.push(`<h3>${renderInline(text)}</h3>`);
+      html.push(`<h3>${renderInline(line.slice(4).trim())}</h3>`);
       continue;
     }
-
     if (line.startsWith("#### ")) {
       flushParagraph();
       closeList();
-      const text = line.slice(5).trim();
-      html.push(`<h4>${renderInline(text)}</h4>`);
+      html.push(`<h4>${renderInline(line.slice(5).trim())}</h4>`);
       continue;
     }
-
     if (line.startsWith("- ")) {
       flushParagraph();
       if (!inList) {
@@ -88,53 +152,26 @@ function parseMarkdown(inputLines) {
       html.push(`<li>${renderInline(line.slice(2).trim())}</li>`);
       continue;
     }
-
     paragraph.push(line.trim());
   }
-
   flushParagraph();
   closeList();
   return html.join("\n");
 }
 
-function sectionize(inputLines) {
-  const titleLine = inputLines.find((line) => line.startsWith("# "));
-  const title = titleLine ? titleLine.slice(2).trim() : "Felipe R. Broering";
-  const titleIndex = inputLines.findIndex((line) => line.startsWith("# "));
-  const bodyLines = titleIndex >= 0 ? inputLines.slice(titleIndex + 1) : inputLines;
-  const firstMeaningfulIndex = bodyLines.findIndex((line) => line.trim());
-  let introLines = bodyLines;
-  let sectionLines = [];
-  let handledIntroHeading = false;
-
-  if (firstMeaningfulIndex >= 0 && bodyLines[firstMeaningfulIndex].startsWith("## ")) {
-    const nextSectionOffset = bodyLines
-      .slice(firstMeaningfulIndex + 1)
-      .findIndex((line) => line.startsWith("## "));
-    const nextSectionIndex = nextSectionOffset >= 0 ? firstMeaningfulIndex + 1 + nextSectionOffset : -1;
-    const candidateIntro = nextSectionIndex >= 0
-      ? bodyLines.slice(firstMeaningfulIndex + 1, nextSectionIndex)
-      : bodyLines.slice(firstMeaningfulIndex + 1);
-    const looksLikeHeaderSubtitle = candidateIntro.some((line) => line.includes("Brazil") || line.startsWith("- Email"));
-
-    if (looksLikeHeaderSubtitle) {
-      introLines = [bodyLines[firstMeaningfulIndex].slice(3).trim(), ...candidateIntro];
-      sectionLines = nextSectionIndex >= 0 ? bodyLines.slice(nextSectionIndex) : [];
-      handledIntroHeading = true;
-    }
-  }
-
-  if (!handledIntroHeading) {
-    const firstSectionIndex = bodyLines.findIndex((line) => line.startsWith("## "));
-    introLines = firstSectionIndex >= 0 ? bodyLines.slice(0, firstSectionIndex) : bodyLines;
-    sectionLines = firstSectionIndex >= 0 ? bodyLines.slice(firstSectionIndex) : [];
-  }
+function sectionize(markdown) {
+  const lines = markdown.split(/\r?\n/);
+  const titleIndex = lines.findIndex((line) => line.startsWith("# "));
+  const title = titleIndex >= 0 ? lines[titleIndex].slice(2).trim() : "Felipe R. Broering";
+  const bodyLines = titleIndex >= 0 ? lines.slice(titleIndex + 1) : lines;
+  const firstSection = bodyLines.findIndex((line) => line.startsWith("## "));
+  const introLines = firstSection >= 0 ? bodyLines.slice(0, firstSection) : bodyLines;
+  const sectionLines = firstSection >= 0 ? bodyLines.slice(firstSection) : [];
   const sections = [];
 
   for (let i = 0; i < sectionLines.length; i += 1) {
-    const line = sectionLines[i];
-    if (!line.startsWith("## ")) continue;
-    const sectionTitle = line.slice(3).trim();
+    if (!sectionLines[i].startsWith("## ")) continue;
+    const sectionTitle = sectionLines[i].slice(3).trim();
     const content = [];
     i += 1;
     while (i < sectionLines.length && !sectionLines[i].startsWith("## ")) {
@@ -144,1298 +181,931 @@ function sectionize(inputLines) {
     i -= 1;
     sections.push({ title: sectionTitle, content });
   }
-
   return { title, introLines, sections };
 }
 
 function parseIntro(introLines) {
   const compact = introLines.filter((line) => line.trim());
-  const subtitle = compact.find((line) => !line.startsWith("- ")) || "";
-  const location = compact.find((line) => line.includes("Brazil")) || "";
+  const nonBullet = compact.filter((line) => !line.startsWith("- "));
+  const subtitle = nonBullet[0] || "";
+  const location = nonBullet[1] || "";
   const contact = compact
     .filter((line) => line.startsWith("- "))
     .map((line) => line.slice(2).trim());
   return { subtitle, location, contact };
 }
 
+// Role of a section, keyed on EN and PT slugs so ordering stays flexible.
+const ROLE_MAP = {
+  profile: ["profile", "perfil"],
+  case: ["featured-case-study", "estudo-de-caso-em-destaque"],
+  side: [
+    "domains", "dominios",
+    "expertise", "especialidades",
+    "education", "formacao",
+    "certifications", "certificacoes",
+    "languages", "idiomas",
+  ],
+};
+const ROLE_LOOKUP = {};
+for (const [role, slugs] of Object.entries(ROLE_MAP)) {
+  for (const slug of slugs) ROLE_LOOKUP[slug] = role;
+}
+function roleOf(slug) {
+  return ROLE_LOOKUP[slug] || "default";
+}
+
+// Sections kept in the copyable Markdown but not rendered on the page
+// (e.g. LinkedIn-style hashtags that would clutter the designed layout).
+const OMIT = new Set(["hashtags"]);
+
+// -- Signature geometry -----------------------------------------------------
+
+// A neutral rising data-trend sparkline (not a physiological signal) for tiles.
+function sparkPath({ width, height, levels, baseline = 0.86, amp = 0.72 }) {
+  const yBase = height * baseline;
+  const a = height * amp;
+  const step = width / (levels.length - 1);
+  return levels
+    .map((lv, i) => (i === 0 ? "M" : "L") + (i * step).toFixed(1) + " " + (yBase - lv * a).toFixed(1))
+    .join(" ");
+}
+
+const SPARK_LEVELS = [0.12, 0.26, 0.19, 0.4, 0.33, 0.58, 0.5, 0.8, 0.7, 1.0];
+const SPARK = sparkPath({ width: 58, height: 24, levels: SPARK_LEVELS });
+const sparkSvg = `<svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="none" aria-hidden="true"><path d="${SPARK}"></path></svg>`;
+
+// Terminal-prompt favicon: a `>` chevron + underscore cursor.
+const favicon =
+  "data:image/svg+xml," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#0a0e0d"/><path d="M9 11 L15 16 L9 21" fill="none" stroke="#2fe6b0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 21 H23" fill="none" stroke="#2fe6b0" stroke-width="2.4" stroke-linecap="round"/></svg>`
+  );
+
+// Hero console band: shared command, per-language comment line.
+function renderTermBand() {
+  const args = TERM.args
+    .map((a) => `<span class="t-flag">${escapeHtml(a.flag)}</span> <span class="t-val">${escapeHtml(a.value)}</span>`)
+    .join(" ");
+  const ariaLabel = `${TERM.prompt}:~$ ${TERM.cmd} ${TERM.args.map((a) => a.flag + " " + a.value).join(" ")}`;
+  const outs = ["en", "pt"]
+    .map((lang) => `<div class="lang ${lang}"><p class="term-out">${escapeHtml(TERM[lang])}</p></div>`)
+    .join("\n");
+  return `<div class="term-band">
+    <div class="term" role="img" aria-label="${escapeHtml(ariaLabel)}"><span class="t-prompt">${escapeHtml(TERM.prompt)}</span><span class="t-sep">:~$</span> <span class="t-cmd">${escapeHtml(TERM.cmd)}</span> ${args}<span class="t-cursor" aria-hidden="true"></span></div>
+    ${outs}
+  </div>`;
+}
+
+// -- Per-language rendering -------------------------------------------------
+
 function contactHtml(contactItems) {
   return contactItems
     .map((item) => {
       const [label, ...rest] = item.split(":");
       const value = rest.join(":").trim();
-      const url = value.match(/^https?:\/\/(.+)$/);
-      const linkedinHandle = value.match(/linkedin\.com\/in\/([^/?#]+)/)?.[1];
-      const githubHandle = value.match(/github\.com\/([^/?#]+)/)?.[1];
-      const linkText = linkedinHandle || githubHandle || url?.[1].replace(/\/$/, "");
-      const rendered = url
-        ? `<a href="${escapeHtml(value)}">${escapeHtml(linkText)}</a>`
-        : label.trim().toLowerCase() === "email"
-          ? `<a href="mailto:${escapeHtml(value)}">${escapeHtml(value)}</a>`
-          : renderInline(value);
-      return `<div><strong>${escapeHtml(label.trim())}</strong><br>${rendered}</div>`;
+      let rendered;
+      if (/^https?:\/\/\S+$/.test(value)) {
+        const short = value.replace(/^https?:\/\//, "").replace(/\/$/, "");
+        rendered = `<a href="${value}">${escapeHtml(short)}</a>`;
+      } else {
+        rendered = renderInline(value);
+      }
+      return `<div class="contact-row"><span class="contact-k">${escapeHtml(label.trim())}</span><span class="contact-v">${rendered}</span></div>`;
     })
     .join("\n");
 }
 
-function nonEmpty(lines) {
-  return lines.map((line) => line.trim()).filter(Boolean);
-}
-
-function splitByH3(content) {
-  const blocks = [];
-  let current = null;
-
-  for (const line of content) {
-    if (line.startsWith("### ")) {
-      if (current) blocks.push(current);
-      current = { title: line.slice(4).trim(), lines: [] };
-      continue;
-    }
-
-    if (current) current.lines.push(line);
-  }
-
-  if (current) blocks.push(current);
-  return blocks;
-}
-
-function extractMetric(line) {
-  const text = line.replace(/^\-\s*/, "").replace(/\.$/, "").trim();
-
-  if (text.startsWith("More than 10,000")) {
-    return ["10k+", text.replace(/^More than 10,000\s*/, "")];
-  }
-
-  if (text.startsWith("Multiple daily")) {
-    return ["0", "downtime for multiple daily releases"];
-  }
-
-  const match = text.match(/^(\S+)\s+(.+)$/);
-  return match ? [match[1], match[2]] : ["", text];
-}
-
-function renderCaseStudy(section, id) {
-  const block = splitByH3(section.content)[0];
-  const title = block?.title || "Featured case study";
-  const content = block ? block.lines : section.content;
-  const lines = nonEmpty(content);
-  const published = lines.find((line) => line.startsWith("Published by"));
-  const caseUrl = published?.match(/https?:\/\/\S+/)?.[0];
-  const resultIndex = lines.findIndex((line) => line.endsWith("results:"));
-  const bodyLines = lines.filter((line) => {
-    if (line.startsWith("Published by")) return false;
-    if (line.endsWith("results:")) return false;
-    if (line.startsWith("- ")) return false;
-    return true;
-  });
-  const metricLines = lines.filter((line) => line.startsWith("- "));
-  const metrics = metricLines
-    .map(extractMetric)
-    .map(([value, label]) => `<li><strong>${renderInline(value)}</strong>${renderInline(label)}</li>`)
-    .join("\n");
-  const body = bodyLines.map((line) => `<p>${renderInline(line)}</p>`).join("\n");
-  const linkedTitle = caseUrl ? `<a href="${caseUrl}">${renderInline(title)}</a>` : renderInline(title);
-
-  return `<section class="section section-case" aria-labelledby="${id}">
-      <h2 id="${id}">${escapeHtml(section.title)}</h2>
-      <article class="case-study">
-        ${published ? `<p class="case-label">${renderInline(published.replace(/:\s*https?:\/\/\S+/, ""))}</p>` : ""}
-        <h3>${linkedTitle}</h3>
-        ${body}
-        ${resultIndex >= 0 ? `<ul class="case-metrics" aria-label="Google Cloud case study results">${metrics}</ul>` : ""}
-      </article>
-    </section>`;
-}
-
-function renderOpenSource(section, id) {
-  const meta = {
-    "phai-run/phai": "Founder / maintainer",
-    "feliperun/eai": "Rust CLI",
-    "feliperun/dsync": "Document sync",
-  };
-  const defaultMeta = section.title === "Selected Projects" ? "Project" : "Open Source";
-  const classes = ["", "secondary", "tertiary"];
-  const projects = splitByH3(section.content)
-    .map((project, index) => {
-      const lines = nonEmpty(project.lines);
-      const techLine = lines.find((line) => line.startsWith("Technologies:"));
-      const projectLine = lines.find((line) => line.startsWith("Project:"));
-      const projectUrl = projectLine?.match(/https?:\/\/\S+/)?.[0];
-      const bodyLines = lines.filter((line) => !line.startsWith("Technologies:") && !line.startsWith("Project:"));
-      const tech = techLine
-        ? techLine
-            .replace(/^Technologies:\s*/, "")
-            .replace(/\.$/, "")
-            .split(",")
-            .map((item) => item.trim())
-            .filter(Boolean)
-        : [];
-      const techHtml = tech.map((item) => `<li>${escapeHtml(item)}</li>`).join("\n");
-      const title = projectUrl ? `<a href="${projectUrl}">${escapeHtml(project.title)}</a>` : escapeHtml(project.title);
-      const className = classes[index] ? ` ${classes[index]}` : "";
-
-      return `<article class="project${className}">
-              <div class="project-head">
-                <h3>${title}</h3>
-                <span class="project-meta">${escapeHtml(meta[project.title] || defaultMeta)}</span>
-              </div>
-              ${bodyLines.map((line) => `<p>${renderInline(line)}</p>`).join("\n")}
-              ${techHtml ? `<ul class="project-tech">${techHtml}</ul>` : ""}
-            </article>`;
-    })
-    .join("\n");
-
-  return `<section class="section section-open-source" aria-labelledby="${id}">
-      <h2 id="${id}">${escapeHtml(section.title)}</h2>
-      <div class="project-list">${projects}</div>
-    </section>`;
-}
-
-function renderHashtags(section, id) {
-  const tags = nonEmpty(section.content)
-    .join(" ")
-    .split(/\s+/)
-    .map((item) => item.trim())
-    .filter((item) => item.startsWith("#"))
-    .map((item) => `<li>${escapeHtml(item)}</li>`)
-    .join("\n");
-
-  return `<section class="section section-hashtags" aria-labelledby="${id}">
-      <h2 id="${id}">${escapeHtml(section.title)}</h2>
-      <ul class="hashtag-list">${tags}</ul>
-    </section>`;
-}
-
-function renderExperience(section, id) {
-  const roles = splitByH3(section.content)
-    .map((role) => {
-      const lines = nonEmpty(role.lines);
-      const prose = lines.filter((line) => !line.startsWith("- "));
-      const meta = prose[0] || "";
-      const summary = prose
-        .slice(1)
-        .map((line) => `<p>${renderInline(line)}</p>`)
-        .join("\n");
-      const bullets = lines.filter((line) => line.startsWith("- "));
-      const list = bullets.map((line) => `<li>${renderInline(line.slice(2).trim())}</li>`).join("\n");
-
-      return `<div class="role">
-            <div>
-              <h3>${renderInline(role.title)}</h3>
-              ${meta ? `<div class="meta">${renderInline(meta)}</div>` : ""}
-            </div>
-            ${summary ? `<div class="role-summary">${summary}</div>` : ""}
-            ${list ? `<ul>${list}</ul>` : ""}
-          </div>`;
-    })
-    .join("\n");
-
-  return `<section class="section section-experience" aria-labelledby="${id}">
-      <h2 id="${id}">${escapeHtml(section.title)}</h2>
-      <div class="timeline">${roles}</div>
-    </section>`;
-}
-
-function renderSection(section) {
-  const id = slugify(section.title);
+function renderMainSection(section, lang) {
+  const slug = slugify(section.title);
+  const id = `${lang}-${slug}`;
+  const role = roleOf(slug);
   const body = parseMarkdown(section.content);
-  const lower = section.title.toLowerCase();
+  const head = `<h2 class="sec-h" id="${id}"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>${escapeHtml(section.title)}</span><span class="sec-rule"></span></h2>`;
 
-  if (lower === "profile" || lower === "mini bio") {
-    return `<section class="section section-profile" aria-labelledby="${id}">
-      <h2 id="${id}">${escapeHtml(section.title)}</h2>
-      <div class="highlight">${body}</div>
-    </section>`;
+  if (role === "profile") {
+    return `<section class="sec sec-profile" aria-labelledby="${id}">${head}<div class="lede">${body}</div></section>`;
   }
-
-  if (lower === "featured case study") {
-    return renderCaseStudy(section, id);
+  if (role === "case") {
+    return `<section class="sec sec-case" aria-labelledby="${id}">${head}<div class="case">${body}</div></section>`;
   }
+  const extra = slug === "experience" || slug === "experiencia" ? " sec-exp" : "";
+  return `<section class="sec${extra}" aria-labelledby="${id}">${head}<div class="prose">${body}</div></section>`;
+}
 
-  if (lower === "hashtags") {
-    return renderHashtags(section, id);
-  }
-
-  if (lower === "open source" || lower === "selected projects" || lower === "selected open source projects") {
-    return renderOpenSource(section, id);
-  }
-
-  if (lower === "experience") {
-    return renderExperience(section, id);
-  }
-
-  return `<section class="section" aria-labelledby="${id}">
-    <h2 id="${id}">${escapeHtml(section.title)}</h2>
-    <div class="markdown">${body}</div>
+function renderSideSection(section, lang) {
+  const slug = slugify(section.title);
+  const id = `${lang}-${slug}`;
+  const isTags = slug === "expertise" || slug === "especialidades";
+  const body = isTags ? renderTagCloud(section.content) : parseMarkdown(section.content);
+  return `<section class="side" aria-labelledby="${id}">
+    <h3 class="side-h" id="${id}">${escapeHtml(section.title)}</h3>
+    <div class="prose">${body}</div>
   </section>`;
 }
 
-const sideSectionTitles = new Set([
-  "Selected Impact",
-  "Expertise",
-  "Education",
-  "Certifications",
-  "Languages",
-]);
+function renderTagCloud(contentLines) {
+  const text = contentLines.filter((l) => l.trim()).join(" ").trim();
+  const tags = text.split(",").map((t) => t.trim()).filter(Boolean);
+  return `<ul class="tags">${tags.map((t) => `<li>${escapeHtml(t)}</li>`).join("")}</ul>`;
+}
 
-const { title, introLines, sections } = sectionize(lines);
-const { subtitle, location, contact } = parseIntro(introLines);
-const mainSections = sections.filter((section) => !sideSectionTitles.has(section.title));
-const sideSections = sections.filter((section) => sideSectionTitles.has(section.title));
-
-const mainHtml = mainSections.map(renderSection).join("\n");
-const sideHtml = sideSections.map((section) => {
-  const id = slugify(section.title);
-  const lower = section.title.toLowerCase();
-  let body = parseMarkdown(section.content);
-
-  if (lower === "selected impact") {
-    const impactItems = nonEmpty(section.content)
-      .filter((line) => line.startsWith("- "))
-      .map((line) => `<li>${renderInline(line.slice(2).trim())}</li>`)
-      .join("\n");
-    body = `<ul class="impact-list">${impactItems}</ul>`;
-  }
-
-  if (lower === "expertise") {
-    const groups = nonEmpty(section.content)
-      .map((line) => {
-        const match = line.match(/^\*\*([^*]+):\*\*\s*(.+)$/);
-        if (!match) return "";
-        const tags = match[2]
-          .replace(/\.$/, "")
-          .split(",")
-          .map((item) => item.trim())
-          .filter(Boolean)
-          .map((item) => `<li>${escapeHtml(item)}</li>`)
-          .join("\n");
-
-        return `<div class="expertise-group">
-          <h3>${escapeHtml(match[1])}</h3>
-          <ul class="tag-list">${tags}</ul>
-        </div>`;
-      })
-      .filter(Boolean)
-      .join("\n");
-    body = groups || body;
-  }
-
-  return `<section class="side-block" aria-labelledby="${id}">
-    <h2 id="${id}">${escapeHtml(section.title)}</h2>
-    <div class="markdown">${body}</div>
+function renderVitals(lang) {
+  const t = UI[lang];
+  const cells = VITALS.map((v) => {
+    const sub = lang === "pt" ? v.subPt : v.subEn;
+    return `<div class="vital">
+      <span class="vital-label">${escapeHtml(lang === "pt" ? v.pt : v.en)}</span>
+      <span class="vital-value">${escapeHtml(v.value)}</span>
+      <span class="vital-sub">${escapeHtml(sub)}</span>
+      ${sparkSvg}
+    </div>`;
+  }).join("\n");
+  return `<section class="vitals-wrap" aria-label="${escapeHtml(t.vitals)}">
+    <div class="vitals-cap"><span class="dot"></span><span>${escapeHtml(t.vitals)}</span></div>
+    <div class="vitals">${cells}</div>
   </section>`;
-}).join("\n");
+}
+
+function renderHeroCopy(lang, subtitle, location) {
+  const chips = FOCUS[lang].map((f) => `<li>${escapeHtml(f)}</li>`).join("");
+  return `<div class="hero-copy">
+    <p class="eyebrow">${escapeHtml(subtitle)}</p>
+    <h1>Felipe R.<br>Broering</h1>
+    <p class="loc">${escapeHtml(location)}</p>
+    <ul class="focus" aria-label="Focus areas">${chips}</ul>
+  </div>`;
+}
+
+function renderContact(lang, contact) {
+  const t = UI[lang];
+  return `<div class="operator-tag">${escapeHtml(t.operator)}</div>
+    <address class="contact">${contactHtml(contact)}</address>`;
+}
+
+function langBlock(lang, inner) {
+  return `<div class="lang ${lang}" data-lang-block="${lang}">${inner}</div>`;
+}
+
+// -- Assemble ---------------------------------------------------------------
+
+const parsed = {};
+const markdownRaw = {};
+for (const lang of ["en", "pt"]) {
+  markdownRaw[lang] = fs.readFileSync(SOURCES[lang], "utf8").trimEnd();
+  const { title, introLines, sections } = sectionize(markdownRaw[lang]);
+  const intro = parseIntro(introLines);
+  parsed[lang] = { title, intro, sections };
+}
+
+const title = parsed.en.title;
+
+function buildHeroCopyBlocks() {
+  return ["en", "pt"]
+    .map((lang) => langBlock(lang, renderHeroCopy(lang, parsed[lang].intro.subtitle, parsed[lang].intro.location)))
+    .join("\n");
+}
+
+function buildContactBlocks() {
+  return ["en", "pt"]
+    .map((lang) => langBlock(lang, renderContact(lang, parsed[lang].intro.contact)))
+    .join("\n");
+}
+
+function buildVitalsBlocks() {
+  return ["en", "pt"].map((lang) => langBlock(lang, renderVitals(lang))).join("\n");
+}
+
+function buildBodyBlocks() {
+  return ["en", "pt"]
+    .map((lang) => {
+      const { sections } = parsed[lang];
+      const visible = sections.filter((s) => !OMIT.has(slugify(s.title)));
+      const main = visible.filter((s) => roleOf(slugify(s.title)) !== "side");
+      const side = visible.filter((s) => roleOf(slugify(s.title)) === "side");
+      const mainHtml = main.map((s) => renderMainSection(s, lang)).join("\n");
+      const sideHtml = side.map((s) => renderSideSection(s, lang)).join("\n");
+      const inner = `<div class="content">${mainHtml}</div><aside>${sideHtml}</aside>`;
+      return langBlock(lang, inner);
+    })
+    .join("\n");
+}
+
+const jsonLd = JSON.stringify(
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: title,
+    url: "https://cv.felipe.run",
+    sameAs: ["https://www.linkedin.com/in/felipebroering/", "https://github.com/feliperun"],
+    jobTitle: "Senior Product Engineer",
+    worksFor: { "@type": "Organization", name: "Micromed" },
+    address: { "@type": "PostalAddress", addressRegion: "Santa Catarina", addressCountry: "Brazil" },
+  },
+  null,
+  2
+);
+
+const css = `
+:root {
+  --bg: #0a0e0d;
+  --bg-2: #0d1211;
+  --panel: #0f1615;
+  --raise: #121a18;
+  --ink: #e9f2ec;
+  --muted: #8ba39a;
+  --faint: #56685f;
+  --line: rgba(120, 210, 180, 0.16);
+  --line-2: rgba(120, 210, 180, 0.08);
+  --grid: rgba(60, 220, 170, 0.045);
+  --grid-strong: rgba(60, 220, 170, 0.07);
+  --signal: #2fe6b0;
+  --signal-ink: #2fe6b0;
+  --signal-soft: rgba(47, 230, 176, 0.13);
+  --amber: #ffb44d;
+  --glow: 0 0 22px rgba(47, 230, 176, 0.28);
+  --shadow: 0 40px 120px rgba(0, 0, 0, 0.55);
+  --grid-size: 26px;
+  --serif: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+html[data-theme="light"] {
+  --bg: #f5efe9;
+  --bg-2: #fdfaf6;
+  --panel: #fffbf6;
+  --raise: #fffaf4;
+  --ink: #16211d;
+  --muted: #5c675f;
+  --faint: #9aa39a;
+  --line: rgba(20, 40, 32, 0.14);
+  --line-2: rgba(20, 40, 32, 0.08);
+  --grid: rgba(214, 116, 84, 0.09);
+  --grid-strong: rgba(214, 116, 84, 0.16);
+  --signal: #0e7c66;
+  --signal-ink: #0b5c4c;
+  --signal-soft: rgba(14, 124, 102, 0.1);
+  --amber: #b5651a;
+  --glow: none;
+  --shadow: 0 30px 90px rgba(70, 50, 30, 0.14);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
+    linear-gradient(var(--grid-strong) 1px, transparent 1px) 0 0 / calc(var(--grid-size) * 5) calc(var(--grid-size) * 5),
+    linear-gradient(90deg, var(--grid-strong) 1px, transparent 1px) 0 0 / calc(var(--grid-size) * 5) calc(var(--grid-size) * 5),
+    var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--signal-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  transition: border-color 0.15s, color 0.15s;
+  word-break: break-word;
+}
+a:hover { border-color: var(--signal); }
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* language switching */
+.lang { display: none; }
+html[data-lang="en"] .lang.en,
+html[data-lang="pt"] .lang.pt { display: contents; }
+
+/* ---- toolbar ---- */
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 18px;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+.device {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.device .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--signal);
+  box-shadow: var(--glow);
+  animation: blink 2.4s steps(1) infinite;
+}
+.device b { color: var(--ink); font-weight: 600; }
+.toolbar .spacer { flex: 1; }
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.seg button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.seg button[aria-pressed="true"] {
+  background: var(--signal-soft);
+  color: var(--signal-ink);
+}
+.tbtn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--raise);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  padding: 6px 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tbtn:hover { border-color: var(--signal); }
+.tbtn.icon { padding: 6px 10px; }
+.copy-status { color: var(--signal-ink); min-width: 58px; }
+
+/* ---- shell ---- */
+.resume {
+  width: min(1120px, 100% - 36px);
+  margin: 30px auto 60px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+/* ---- hero ---- */
+header {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  gap: 46px;
+  padding: 54px 56px 34px;
+  border-bottom: 1px solid var(--line);
+}
+.eyebrow {
+  margin: 0 0 20px;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--signal-ink);
+  text-transform: uppercase;
+}
+h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(2.9rem, 6.4vw, 5.4rem);
+  line-height: 0.94;
+  letter-spacing: -0.02em;
+}
+.loc {
+  margin: 18px 0 0;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.focus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.focus li {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  font-weight: 500;
+  padding: 6px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--panel);
+}
+
+.profile-panel { align-self: start; }
+.portrait {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  filter: grayscale(1) contrast(1.04);
+}
+html[data-theme="dark"] .portrait {
+  filter: grayscale(1) contrast(1.05) brightness(0.92);
+}
+.operator-tag {
+  margin: 12px 0 10px;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.contact { display: grid; gap: 9px; font-style: normal; }
+.contact-row { display: grid; gap: 1px; }
+.contact-k {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.contact-v { font-size: 0.86rem; color: var(--ink); }
+.contact-v a { border-bottom-color: var(--line-2); }
+
+/* ---- console signature ---- */
+.term-band {
+  padding: 20px 56px 22px;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, var(--signal-soft), transparent 70%),
+    var(--panel);
+}
+.term {
+  font-family: var(--mono);
+  font-size: clamp(0.9rem, 2vw, 1.08rem);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.t-prompt { color: var(--signal-ink); font-weight: 600; }
+.t-sep { color: var(--faint); }
+.t-cmd { color: var(--ink); font-weight: 600; }
+.t-flag { color: var(--amber); }
+.t-val { color: var(--muted); }
+.t-cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 0.18em;
+  vertical-align: -0.18em;
+  background: var(--signal);
+  box-shadow: var(--glow);
+  animation: cursor 1.1s steps(1) infinite;
+}
+.term-out {
+  margin: 8px 0 0;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--faint);
+}
+
+/* ---- vitals monitor ---- */
+.vitals-wrap {
+  padding: 26px 56px 30px;
+  border-bottom: 1px solid var(--line);
+}
+.vitals-cap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.vitals-cap .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--amber);
+}
+.vitals {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--panel);
+}
+.vital {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 16px 40px;
+  border-right: 1px solid var(--line);
+  min-width: 0;
+}
+.vital:last-child { border-right: 0; }
+.vital-label {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.vital-value {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.9rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.vital-sub {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--signal-ink);
+}
+.vital .spark {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 12px;
+  width: auto;
+  height: 20px;
+  opacity: 0.85;
+}
+.vital .spark path {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- main grid ---- */
+main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 50px;
+  padding: 42px 56px 20px;
+}
+.content { min-width: 0; }
+
+.sec + .sec { margin-top: 38px; }
+.sec-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sec-glyph {
+  color: var(--signal);
+  font-size: 0.85em;
+  line-height: 1;
+}
+.sec-rule { flex: 1; height: 1px; background: var(--line); }
+
+h3 {
+  margin: 22px 0 3px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1.12rem;
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+}
+h3:first-child { margin-top: 0; }
+
+.prose p, .lede p, .case p { margin: 0; color: var(--muted); }
+.prose p + p, .lede p + p, .case p + p,
+.prose h3 + p, .prose h4 + p { margin-top: 10px; }
+.prose ul, .lede ul, .case ul { margin: 9px 0 0; padding-left: 1.1rem; }
+.prose li, .case li, .lede li { color: var(--muted); }
+.prose li + li, .case li + li, .lede li + li { margin-top: 6px; }
+.prose li::marker { color: var(--signal); }
+
+/* profile lede */
+.lede p {
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+.lede p + p { color: var(--muted); font-size: 1rem; }
+
+/* the featured case card */
+.sec-case .case {
+  position: relative;
+  padding: 24px 26px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, var(--signal-soft), transparent 60%),
+    var(--panel);
+  border-radius: 4px;
+}
+.sec-case .case::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--signal);
+}
+.sec-case h3 { color: var(--ink); }
+
+/* experience — role date line + lead wire */
+.sec-exp .prose { position: relative; padding-left: 22px; }
+.sec-exp .prose::before {
+  content: "";
+  position: absolute;
+  left: 3px; top: 8px; bottom: 8px;
+  width: 1px;
+  background: var(--line);
+}
+.sec-exp .prose h3 { position: relative; }
+.sec-exp .prose h3::before {
+  content: "";
+  position: absolute;
+  left: -22px; top: 0.5em;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 4px var(--bg-2);
+}
+.sec-exp .prose h3 + p {
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+/* aside */
+aside { display: grid; gap: 26px; align-content: start; }
+.side { border-top: 1px solid var(--line); padding-top: 20px; }
+.side:first-child { border-top: 0; padding-top: 0; }
+.side-h {
+  margin: 0 0 12px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.side .prose p { font-size: 0.9rem; }
+.side .prose ul { list-style: none; padding-left: 0; margin: 0; }
+.side .prose li { margin-top: 8px; font-size: 0.9rem; color: var(--ink); }
+.side .prose li:first-child { margin-top: 0; }
+.tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 0; padding: 0; list-style: none; }
+.tags li {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--panel);
+}
+
+/* footer */
+.foot {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 56px 40px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--faint);
+}
+.foot .flat { flex: 1; height: 1px; background: repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px); }
+
+/* ---- responsive ---- */
+@media (max-width: 900px) {
+  .resume { width: 100%; margin: 0; border-left: 0; border-right: 0; }
+  header, .term-band, .vitals-wrap, main, .foot {
+    padding-left: 22px; padding-right: 22px;
+  }
+  header { grid-template-columns: 1fr; gap: 26px; padding-top: 34px; }
+  .profile-panel {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+  .operator-tag { margin-top: 0; }
+  main { grid-template-columns: 1fr; gap: 34px; padding-top: 34px; }
+  .vitals { grid-template-columns: repeat(3, 1fr); }
+  .vital:nth-child(3) { border-right: 0; }
+  .vital:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
+}
+
+@media (max-width: 560px) {
+  .toolbar { flex-wrap: wrap; gap: 10px; }
+  .toolbar .device { width: 100%; }
+  header, .term-band, .vitals-wrap, main, .foot {
+    padding-left: 16px; padding-right: 16px;
+  }
+  .profile-panel { grid-template-columns: 104px minmax(0, 1fr); }
+  .vitals { grid-template-columns: repeat(2, 1fr); }
+  .vital { border-right: 1px solid var(--line); }
+  .vital:nth-child(2n) { border-right: 0; }
+  .vital:nth-child(-n+4) { border-bottom: 1px solid var(--line); }
+  h1 { font-size: clamp(2.6rem, 13vw, 3.4rem); }
+}
+
+/* ---- motion / a11y ---- */
+@keyframes cursor { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+@keyframes blink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0.28; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .t-cursor { animation: none; }
+  .device .dot { animation: none; }
+}
+
+/* ---- print: clean light printout ---- */
+@page { margin: 0.5in; }
+@media print {
+  :root, html[data-theme="dark"], html[data-theme="light"] {
+    --bg: #fff; --bg-2: #fff; --panel: #fff; --raise: #fff;
+    --ink: #14201c; --muted: #333; --faint: #666;
+    --line: #d7d0c6; --line-2: #e2ddd4;
+    --grid: transparent; --grid-strong: transparent;
+    --signal: #0b5c4c; --signal-ink: #0b5c4c; --signal-soft: rgba(11,92,76,0.06);
+    --amber: #a05a13; --glow: none; --shadow: none;
+  }
+  body { background: #fff; }
+  .toolbar, .foot .flat { display: none; }
+  .resume { width: 100%; margin: 0; border: 0; box-shadow: none; }
+  header, .term-band, .vitals-wrap, main, .foot { padding-left: 0; padding-right: 0; }
+  header { grid-template-columns: minmax(0,1fr) 180px; padding-top: 8px; }
+  .portrait { max-width: 180px; }
+  .term-band { background: none; border-bottom-color: var(--line); }
+  .t-cursor { display: none; }
+  .vital .spark path { filter: none; }
+  a { color: var(--ink); border: 0; }
+  .sec, .side, .vital, .sec-case .case { break-inside: avoid; }
+  h1 { font-size: 3.1rem; }
+}
+`;
 
 const html = `<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeHtml(title)} - Resume</title>
-  <meta name="description" content="Resume of ${escapeHtml(title)}, Product Engineer and engineering leader focused on healthcare technology, AI, cloud platforms, and end-to-end product delivery.">
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #ece7df;
-      --paper: #fffdf8;
-      --panel: #f7f2ea;
-      --ink: #1f211f;
-      --muted: #62635e;
-      --line: #d9d0c4;
-      --accent: #0f766e;
-      --accent-2: #9a5b44;
-      --accent-3: #536b45;
-      --tag: #ede7dd;
-      --shadow: 0 24px 80px rgba(30, 28, 23, 0.13);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background:
-        linear-gradient(90deg, rgba(83, 107, 69, 0.11) 0 1px, transparent 1px 100%),
-        linear-gradient(180deg, rgba(15, 118, 110, 0.1), transparent 320px),
-        var(--bg);
-      background-size: 48px 48px, auto, auto;
-      color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.55;
-    }
-
-    a {
-      color: inherit;
-      text-decoration-color: rgba(15, 118, 110, 0.48);
-      text-underline-offset: 0.18em;
-    }
-
-    .page-actions {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: rgba(236, 231, 223, 0.82);
-      border-bottom: 1px solid rgba(217, 208, 196, 0.75);
-      backdrop-filter: blur(14px);
-    }
-
-    .action-button {
-      min-height: 38px;
-      padding: 0 14px;
-      border: 1px solid rgba(31, 33, 31, 0.18);
-      border-radius: 999px;
-      background: var(--paper);
-      color: var(--ink);
-      font: inherit;
-      font-size: 0.92rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .copy-status {
-      align-self: center;
-      min-width: 84px;
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-
-    .resume {
-      width: min(1180px, calc(100% - 32px));
-      margin: 34px auto 56px;
-      background: var(--paper);
-      border: 1px solid rgba(217, 208, 196, 0.95);
-      box-shadow: var(--shadow);
-    }
-
-    header {
-      position: relative;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 380px;
-      gap: 40px;
-      padding: 56px 60px 42px;
-      overflow: hidden;
-      border-bottom: 1px solid var(--line);
-    }
-
-    header::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 9px;
-      background: linear-gradient(180deg, var(--accent), var(--accent-2) 54%, var(--accent-3));
-    }
-
-    header > * { position: relative; }
-
-    .eyebrow {
-      margin: 0 0 14px;
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 850;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      max-width: 760px;
-      margin: 0;
-      font-size: clamp(2.8rem, 5.4vw, 5.5rem);
-      line-height: 0.92;
-      letter-spacing: 0;
-    }
-
-    .headline {
-      max-width: 760px;
-      margin: 24px 0 0;
-      color: var(--muted);
-      font-size: clamp(1.05rem, 1.8vw, 1.32rem);
-    }
-
-    .hero-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 26px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .hero-tags li {
-      margin: 0;
-      padding: 7px 10px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(247, 242, 234, 0.78);
-      color: #3f403b;
-      font-size: 0.86rem;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .profile-panel {
-      display: grid;
-      grid-template-columns: 160px minmax(0, 1fr);
-      gap: 22px;
-      align-self: start;
-      align-items: start;
-    }
-
-    .portrait {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border: 1px solid rgba(31, 33, 31, 0.18);
-      filter: grayscale(1) contrast(1.05);
-    }
-
-    .contact {
-      display: grid;
-      gap: 10px;
-      margin-top: 0;
-      font-size: 0.92rem;
-      color: var(--muted);
-      font-style: normal;
-    }
-
-    .contact strong {
-      color: var(--ink);
-      font-weight: 780;
-    }
-
-    .contact a {
-      overflow-wrap: anywhere;
-    }
-
-    main {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 330px;
-      gap: 52px;
-      padding: 42px 60px 60px;
-    }
-
-    .section + .section { margin-top: 42px; }
-
-    h2 {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 0 0 18px;
-      color: var(--accent);
-      font-size: 0.8rem;
-      letter-spacing: 0.11em;
-      text-transform: uppercase;
-    }
-
-    h2::after {
-      content: "";
-      height: 1px;
-      flex: 1;
-      background: var(--line);
-    }
-
-    h3 {
-      margin: 24px 0 8px;
-      font-size: 1.18rem;
-      line-height: 1.25;
-    }
-
-    h3:first-child { margin-top: 0; }
-
-    .highlight {
-      padding: 20px 22px;
-      background:
-        linear-gradient(90deg, rgba(223, 238, 234, 0.95), rgba(223, 238, 234, 0.36)),
-        var(--panel);
-      border-left: 4px solid var(--accent);
-      color: #303531;
-    }
-
-    .case-study {
-      position: relative;
-      padding: 24px;
-      border: 1px solid rgba(15, 118, 110, 0.22);
-      background:
-        linear-gradient(135deg, rgba(15, 118, 110, 0.13), transparent 48%),
-        linear-gradient(180deg, #fffefb, #f4eee5);
-    }
-
-    .case-study::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 7px;
-      background: linear-gradient(180deg, var(--accent), var(--accent-3));
-    }
-
-    .case-label {
-      margin: 0 0 8px;
-      color: var(--accent);
-      font-size: 0.76rem;
-      font-weight: 850;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .case-study h3 {
-      max-width: 780px;
-      margin: 0;
-      font-size: 1.45rem;
-    }
-
-    .case-study p {
-      margin: 12px 0 0;
-      color: var(--muted);
-    }
-
-    .case-metrics {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 9px;
-      margin: 18px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .case-metrics li {
-      margin: 0;
-      padding: 10px;
-      background: rgba(255, 253, 248, 0.72);
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.78rem;
-      line-height: 1.25;
-    }
-
-    .case-metrics strong {
-      display: block;
-      margin-bottom: 4px;
-      color: var(--accent);
-      font-size: 1.12rem;
-      line-height: 1.05;
-    }
-
-    .project-list {
-      display: grid;
-      gap: 16px;
-    }
-
-    .project {
-      position: relative;
-      padding: 20px 22px 20px 24px;
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, #fffefb, #f8f3ec);
-    }
-
-    .project::before {
-      content: "";
-      position: absolute;
-      inset: -1px auto -1px -1px;
-      width: 5px;
-      background: var(--accent);
-    }
-
-    .project.secondary::before { background: var(--accent-2); }
-    .project.tertiary::before { background: var(--accent-3); }
-
-    .project-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: baseline;
-      margin-bottom: 8px;
-    }
-
-    .project h3 {
-      margin: 0;
-      font-size: 1.16rem;
-    }
-
-    .project-head a {
-      font-weight: 820;
-      text-decoration-thickness: 1px;
-    }
-
-    .project-meta {
-      flex: 0 0 auto;
-      color: #85827a;
-      font-size: 0.85rem;
-      font-weight: 750;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .project p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .project p + p {
-      margin-top: 12px;
-    }
-
-    .project-tech {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin: 12px 0 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .project-tech li {
-      margin: 0;
-      padding: 5px 8px;
-      background: #eee8de;
-      color: #46433d;
-      font-size: 0.8rem;
-      font-weight: 720;
-      line-height: 1.2;
-    }
-
-    .hashtag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .hashtag-list li {
-      margin: 0;
-      padding: 6px 9px;
-      border: 1px solid rgba(15, 118, 110, 0.22);
-      background: rgba(223, 238, 234, 0.58);
-      color: #24514d;
-      font-size: 0.78rem;
-      font-weight: 760;
-      line-height: 1.2;
-    }
-
-    .timeline {
-      position: relative;
-    }
-
-    .timeline::before {
-      content: "";
-      position: absolute;
-      top: 4px;
-      bottom: 0;
-      left: 6px;
-      width: 1px;
-      background: var(--line);
-    }
-
-    .role {
-      position: relative;
-      display: grid;
-      gap: 8px;
-      padding: 0 0 28px 30px;
-    }
-
-    .role::before {
-      content: "";
-      position: absolute;
-      top: 6px;
-      left: 0;
-      width: 13px;
-      height: 13px;
-      border: 2px solid var(--paper);
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent);
-    }
-
-    .role:nth-child(3n)::before {
-      background: var(--accent-2);
-      box-shadow: 0 0 0 1px var(--accent-2);
-    }
-
-    .role:nth-child(3n + 1)::before {
-      background: var(--accent-3);
-      box-shadow: 0 0 0 1px var(--accent-3);
-    }
-
-    .role:last-child {
-      padding-bottom: 0;
-    }
-
-    .role h3 {
-      margin: 0;
-      font-size: 1.16rem;
-      line-height: 1.25;
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 0.94rem;
-      font-weight: 620;
-    }
-
-    .role-summary {
-      display: grid;
-      gap: 8px;
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 0.94rem;
-    }
-
-    .role-summary p {
-      margin: 0;
-    }
-
-    .markdown p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .markdown p + p,
-    .highlight p + p,
-    .case-study p + p {
-      margin-top: 12px;
-    }
-
-    .markdown ul,
-    .case-study ul,
-    .highlight ul {
-      margin: 10px 0 0;
-      padding-left: 1.15rem;
-    }
-
-    .markdown li + li,
-    .case-study li + li,
-    .highlight li + li {
-      margin-top: 7px;
-    }
-
-    .section .markdown h3 {
-      padding-top: 22px;
-      border-top: 1px solid var(--line);
-    }
-
-    .section .markdown h3:first-child {
-      padding-top: 0;
-      border-top: 0;
-    }
-
-    .section:nth-of-type(3) .markdown h3,
-    .section:nth-of-type(4) .markdown h3 {
-      color: var(--accent-2);
-    }
-
-    aside {
-      padding-left: 24px;
-      border-left: 1px solid var(--line);
-    }
-
-    .side-block {
-      padding: 24px 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .side-block:first-child {
-      padding-top: 0;
-      border-top: 0;
-    }
-
-    .side-block p {
-      color: var(--muted);
-    }
-
-    .side-block ul {
-      margin-top: 0;
-    }
-
-    .side-block li {
-      color: var(--muted);
-    }
-
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .metric {
-      padding: 13px;
-      background: #f4eee4;
-      border: 1px solid var(--line);
-    }
-
-    .metric strong {
-      display: block;
-      color: var(--accent);
-      font-size: 1.28rem;
-      line-height: 1.1;
-    }
-
-    .metric:nth-child(3n) strong {
-      color: var(--accent-2);
-    }
-
-    .metric span {
-      display: block;
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 0.83rem;
-      line-height: 1.35;
-    }
-
-    .impact-list {
-      display: grid;
-      gap: 10px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .impact-list li {
-      position: relative;
-      margin: 0;
-      padding: 11px 12px 11px 18px;
-      background: #f4eee4;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.86rem;
-      line-height: 1.35;
-    }
-
-    .impact-list li::before {
-      content: "";
-      position: absolute;
-      inset: -1px auto -1px -1px;
-      width: 4px;
-      background: var(--accent);
-    }
-
-    .impact-list li:nth-child(3n)::before { background: var(--accent-2); }
-    .impact-list li:nth-child(3n + 1)::before { background: var(--accent-3); }
-
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .tag-list li {
-      margin: 0;
-      padding: 7px 10px;
-      background: var(--tag);
-      color: #393631;
-      font-size: 0.86rem;
-      font-weight: 650;
-      line-height: 1.2;
-    }
-
-    .expertise-group + .expertise-group {
-      margin-top: 17px;
-    }
-
-    .expertise-group h3 {
-      margin: 0 0 8px;
-      color: #343632;
-      font-size: 0.88rem;
-      line-height: 1.25;
-    }
-
-    @media (max-width: 900px) {
-      .resume {
-        width: 100%;
-        margin: 0;
-        border-left: 0;
-        border-right: 0;
-      }
-
-      header,
-      main {
-        grid-template-columns: 1fr;
-        padding-left: 24px;
-        padding-right: 24px;
-      }
-
-      header {
-        gap: 28px;
-        padding-top: 36px;
-      }
-
-      .profile-panel {
-        grid-template-columns: 142px minmax(0, 1fr);
-        gap: 18px;
-      }
-
-      main { gap: 34px; }
-
-      aside {
-        padding-left: 0;
-        border-left: 0;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .page-actions {
-        flex-wrap: wrap;
-        justify-content: flex-start;
-      }
-
-      .copy-status { width: 100%; }
-      .profile-panel { grid-template-columns: 112px minmax(0, 1fr); }
-      .project-head { display: block; }
-      .project-meta { display: block; margin-top: 4px; }
-      .case-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .metric-grid { grid-template-columns: 1fr; }
-    }
-
-    @page {
-      size: A4;
-      margin: 12mm 11mm;
-    }
-
-    @media print {
-      * {
-        print-color-adjust: exact;
-        -webkit-print-color-adjust: exact;
-      }
-
-      html {
-        font-size: 9.4pt;
-      }
-
-      body {
-        background: #fff;
-        line-height: 1.38;
-      }
-
-      .page-actions { display: none; }
-
-      .resume {
-        width: 100%;
-        margin: 0;
-        border: 0;
-        box-shadow: none;
-        background: #fff;
-      }
-
-      header,
-      main {
-        padding-left: 0;
-        padding-right: 0;
-      }
-
-      header {
-        grid-template-columns: minmax(0, 1fr) 210px;
-        gap: 14px;
-        padding: 0 0 8mm 5mm;
-        border-bottom: 1px solid #cfc8bd;
-        break-after: avoid;
-      }
-
-      header::before {
-        width: 2.5mm;
-      }
-
-      .eyebrow {
-        margin-bottom: 5px;
-        font-size: 7.8pt;
-        letter-spacing: 0.05em;
-      }
-
-      h1 {
-        max-width: none;
-        font-size: 28pt;
-        line-height: 1;
-      }
-
-      .headline {
-        margin-top: 8px;
-        font-size: 10pt;
-      }
-
-      .hero-tags {
-        display: none;
-      }
-
-      .profile-panel {
-        grid-template-columns: 58px minmax(0, 1fr);
-        gap: 8px;
-        align-items: start;
-      }
-
-      .portrait {
-        width: 58px;
-        max-width: 58px;
-      }
-
-      .contact {
-        gap: 4px;
-        font-size: 8.4pt;
-        line-height: 1.25;
-      }
-
-      .contact div {
-        break-inside: avoid;
-      }
-
-      main {
-        display: block;
-        padding-top: 7mm;
-      }
-
-      aside {
-        padding-left: 0;
-        border-left: 0;
-      }
-
-      .section + .section {
-        margin-top: 5mm;
-      }
-
-      .side-block {
-        padding: 5mm 0 0;
-        margin-top: 5mm;
-      }
-
-      h2 {
-        margin-bottom: 2.8mm;
-        font-size: 7.8pt;
-        letter-spacing: 0.08em;
-        break-after: avoid;
-      }
-
-      h3 {
-        break-after: avoid;
-      }
-
-      p,
-      li {
-        orphans: 3;
-        widows: 3;
-      }
-
-      .highlight {
-        padding: 10px 12px;
-        border-left-width: 3px;
-        background: #eef6f1;
-      }
-
-      .markdown p + p,
-      .highlight p + p,
-      .case-study p + p {
-        margin-top: 7px;
-      }
-
-      .case-study {
-        padding: 12px 14px;
-        background: #fbf7ef;
-        break-inside: avoid;
-      }
-
-      .case-study h3 {
-        font-size: 12pt;
-      }
-
-      .case-metrics {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 5px;
-        margin-top: 9px;
-      }
-
-      .case-metrics li {
-        padding: 6px;
-        font-size: 7.4pt;
-      }
-
-      .case-metrics strong {
-        font-size: 9.4pt;
-      }
-
-      .hashtag-list,
-      .project-tech,
-      .tag-list {
-        gap: 5px;
-      }
-
-      .hashtag-list li,
-      .project-tech li,
-      .tag-list li {
-        padding: 3px 6px;
-        font-size: 7.4pt;
-      }
-
-      .timeline::before {
-        left: 4px;
-      }
-
-      .role {
-        gap: 4px;
-        padding: 0 0 4.2mm 16px;
-        break-inside: auto;
-      }
-
-      .role::before {
-        top: 4px;
-        width: 9px;
-        height: 9px;
-        border-width: 1px;
-      }
-
-      .role h3 {
-        font-size: 10.6pt;
-      }
-
-      .meta,
-      .role-summary {
-        font-size: 8.8pt;
-      }
-
-      .role ul {
-        margin-top: 2px;
-        padding-left: 14px;
-      }
-
-      .role li + li,
-      .markdown li + li,
-      .case-study li + li,
-      .highlight li + li {
-        margin-top: 2px;
-      }
-
-      .project {
-        padding: 10px 12px 10px 14px;
-        background: #fbf7ef;
-        break-inside: avoid;
-      }
-
-      .project-list {
-        gap: 8px;
-      }
-
-      .project h3 {
-        font-size: 10.8pt;
-      }
-
-      .project-meta {
-        font-size: 7.4pt;
-      }
-
-      .impact-list {
-        gap: 6px;
-      }
-
-      .impact-list li {
-        padding: 7px 8px 7px 12px;
-        font-size: 8pt;
-        break-inside: avoid;
-      }
-
-      .expertise-group {
-        break-inside: avoid;
-      }
-
-      .expertise-group + .expertise-group {
-        margin-top: 10px;
-      }
-    }
-  </style>
+  <title>${escapeHtml(title)} — Resume</title>
+  <meta name="description" content="Resume of ${escapeHtml(title)} — Product Engineer, engineering leader, and founder building AI-native platforms, cloud systems, and developer tools across e-commerce, fintech, healthcare, and more.">
+  <link rel="icon" href="${favicon}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("cv-theme");
+        if (!t) t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", t);
+        var l = localStorage.getItem("cv-lang");
+        if (l !== "en" && l !== "pt") l = "en";
+        document.documentElement.setAttribute("data-lang", l);
+      } catch (e) {}
+    })();
+  </script>
+  <style>${css}</style>
   <script type="application/ld+json">
-    ${JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: title,
-      url: "https://cv.felipe.run",
-      sameAs: [
-        "https://www.linkedin.com/in/felipebroering/",
-        "https://github.com/feliperun",
-      ],
-      jobTitle: "Product Engineer",
-      worksFor: {
-        "@type": "Organization",
-        name: "Micromed",
-      },
-      address: {
-        "@type": "PostalAddress",
-        addressRegion: "Santa Catarina",
-        addressCountry: "Brazil",
-      },
-    }, null, 4)}
+${jsonLd}
   </script>
 </head>
 <body>
-  <!-- Generated from README.md. Do not edit index.html directly. -->
-  <div class="page-actions" aria-label="Resume actions">
-    <button class="action-button" type="button" data-action="download-pdf">Download PDF</button>
-    <button class="action-button" type="button" data-action="copy-markdown">Copy Markdown</button>
+  <!-- Generated from README.md + README.pt-BR.md. Do not edit index.html directly. -->
+  <nav class="toolbar" aria-label="Resume controls">
+    <span class="device"><span class="dot"></span><b>FRB</b> · cv.felipe.run</span>
+    <span class="spacer"></span>
+    <span class="seg" role="group" aria-label="Language">
+      <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang-btn="pt" aria-pressed="false">PT</button>
+    </span>
+    <button class="tbtn icon" type="button" data-action="theme" aria-label="Toggle theme" title="Toggle theme">
+      <span data-theme-icon>◐</span>
+    </button>
+    <button class="tbtn" type="button" data-action="download"><span class="lang en">Download PDF</span><span class="lang pt">Baixar PDF</span></button>
+    <button class="tbtn" type="button" data-action="copy"><span class="lang en">Copy Markdown</span><span class="lang pt">Copiar Markdown</span></button>
     <span class="copy-status" aria-live="polite"></span>
-  </div>
+  </nav>
 
   <article class="resume">
     <header>
-      <div>
-        <p class="eyebrow">${escapeHtml(subtitle)}</p>
-        <h1>${escapeHtml(title)}</h1>
-        <p class="headline">${escapeHtml(location)}</p>
-        <ul class="hero-tags" aria-label="Primary focus areas">
-          <li>Healthcare platforms</li>
-          <li>AI engineering harnesses</li>
-          <li>Rust CLIs</li>
-          <li>Cloud-native systems</li>
-          <li>Open Source</li>
-        </ul>
-      </div>
+      ${buildHeroCopyBlocks()}
       <div class="profile-panel">
-        <img class="portrait" src="felipe-avatar.jpg" alt="Black-and-white portrait of ${escapeHtml(title)}">
-        <address class="contact">
-          ${contactHtml(contact)}
-        </address>
+        <img class="portrait" src="felipe-avatar.jpg" alt="Portrait of ${escapeHtml(title)}">
+        <div class="contact-area">${buildContactBlocks()}</div>
       </div>
     </header>
 
+    ${renderTermBand()}
+
+    ${buildVitalsBlocks()}
+
     <main>
-      <div>${mainHtml}</div>
-      <aside>${sideHtml}</aside>
+      ${buildBodyBlocks()}
     </main>
+
+    <footer class="foot">
+      <span>Rendered from README · ${new Date().getUTCFullYear()}</span>
+      <span class="flat"></span>
+      <span>cv.felipe.run</span>
+    </footer>
   </article>
 
-  <script type="text/plain" id="resume-markdown">${escapeHtml(markdown)}</script>
+  <script type="text/plain" id="md-en">${escapeHtml(markdownRaw.en)}</script>
+  <script type="text/plain" id="md-pt">${escapeHtml(markdownRaw.pt)}</script>
   <script>
-    (() => {
-      const status = document.querySelector(".copy-status");
-      const markdownNode = document.getElementById("resume-markdown");
+    (function () {
+      var root = document.documentElement;
+      var status = document.querySelector(".copy-status");
+      var COPIED = { en: "Copied", pt: "Copiado" };
 
-      document.querySelector("[data-action='download-pdf']").addEventListener("click", () => {
+      function setLang(lang) {
+        root.setAttribute("data-lang", lang);
+        try { localStorage.setItem("cv-lang", lang); } catch (e) {}
+        var btns = document.querySelectorAll("[data-lang-btn]");
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].setAttribute("aria-pressed", btns[i].getAttribute("data-lang-btn") === lang ? "true" : "false");
+        }
+      }
+      function setTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        try { localStorage.setItem("cv-theme", theme); } catch (e) {}
+      }
+
+      var langBtns = document.querySelectorAll("[data-lang-btn]");
+      for (var i = 0; i < langBtns.length; i++) {
+        langBtns[i].addEventListener("click", function () {
+          setLang(this.getAttribute("data-lang-btn"));
+        });
+      }
+      setLang(root.getAttribute("data-lang") || "en");
+
+      document.querySelector("[data-action='theme']").addEventListener("click", function () {
+        setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+      });
+
+      document.querySelector("[data-action='download']").addEventListener("click", function () {
         window.print();
       });
 
-      document.querySelector("[data-action='copy-markdown']").addEventListener("click", async () => {
-        const textareaDecode = document.createElement("textarea");
-        textareaDecode.innerHTML = markdownNode.innerHTML;
-        const markdown = textareaDecode.value.trim() + "\\n";
-
-        try {
-          await navigator.clipboard.writeText(markdown);
-          status.textContent = "Copied";
-        } catch (error) {
-          const textarea = document.createElement("textarea");
-          textarea.value = markdown;
-          textarea.setAttribute("readonly", "");
-          textarea.style.position = "fixed";
-          textarea.style.left = "-9999px";
-          document.body.appendChild(textarea);
-          textarea.select();
-          document.execCommand("copy");
-          textarea.remove();
-          status.textContent = "Copied";
+      document.querySelector("[data-action='copy']").addEventListener("click", function () {
+        var lang = root.getAttribute("data-lang") || "en";
+        var node = document.getElementById("md-" + lang);
+        var decode = document.createElement("textarea");
+        decode.innerHTML = node.textContent;
+        var markdown = decode.value.trim() + "\\n";
+        function done() {
+          status.textContent = COPIED[lang];
+          window.setTimeout(function () { status.textContent = ""; }, 2000);
         }
-
-        window.setTimeout(() => {
-          status.textContent = "";
-        }, 2200);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(markdown).then(done, fallback);
+        } else {
+          fallback();
+        }
+        function fallback() {
+          var ta = document.createElement("textarea");
+          ta.value = markdown;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand("copy"); } catch (e) {}
+          ta.remove();
+          done();
+        }
       });
     })();
   </script>
@@ -1444,4 +1114,4 @@ const html = `<!doctype html>
 `;
 
 fs.writeFileSync(outputPath, html, "utf8");
-console.log(`Generated ${path.relative(ROOT, outputPath)} from ${path.relative(ROOT, readmePath)}`);
+console.log(`Generated ${path.relative(ROOT, outputPath)} from README.md + README.pt-BR.md`);
