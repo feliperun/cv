@@ -1,0 +1,16 @@
+{
+  "name": "cv",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Felipe R. Broering — resume site + LinkedIn profile sync",
+  "scripts": {
+    "build": "node scripts/generate-resume.js",
+    "linkedin:content": "node scripts/linkedin-content.js",
+    "linkedin:login": "node scripts/linkedin-login.mjs",
+    "linkedin:sync": "node scripts/linkedin-sync.mjs"
+  },
+  "dependencies": {
+    "cloakbrowser": "^0.4.9",
+    "playwright-core": "^1.49.0"
+  }
+}

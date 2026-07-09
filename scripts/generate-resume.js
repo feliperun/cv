@@ -14,6 +14,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { slugify, sectionize, parseIntro } = require("./lib/parse-resume");
 
 const ROOT = path.resolve(__dirname, "..");
 const outputPath = path.join(ROOT, "index.html");
@@ -100,15 +101,6 @@ function renderInline(value) {
   return html;
 }
 
-function slugify(value) {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
 function parseMarkdown(inputLines) {
   const html = [];
   let paragraph = [];
@@ -157,42 +149,6 @@ function parseMarkdown(inputLines) {
   flushParagraph();
   closeList();
   return html.join("\n");
-}
-
-function sectionize(markdown) {
-  const lines = markdown.split(/\r?\n/);
-  const titleIndex = lines.findIndex((line) => line.startsWith("# "));
-  const title = titleIndex >= 0 ? lines[titleIndex].slice(2).trim() : "Felipe R. Broering";
-  const bodyLines = titleIndex >= 0 ? lines.slice(titleIndex + 1) : lines;
-  const firstSection = bodyLines.findIndex((line) => line.startsWith("## "));
-  const introLines = firstSection >= 0 ? bodyLines.slice(0, firstSection) : bodyLines;
-  const sectionLines = firstSection >= 0 ? bodyLines.slice(firstSection) : [];
-  const sections = [];
-
-  for (let i = 0; i < sectionLines.length; i += 1) {
-    if (!sectionLines[i].startsWith("## ")) continue;
-    const sectionTitle = sectionLines[i].slice(3).trim();
-    const content = [];
-    i += 1;
-    while (i < sectionLines.length && !sectionLines[i].startsWith("## ")) {
-      content.push(sectionLines[i]);
-      i += 1;
-    }
-    i -= 1;
-    sections.push({ title: sectionTitle, content });
-  }
-  return { title, introLines, sections };
-}
-
-function parseIntro(introLines) {
-  const compact = introLines.filter((line) => line.trim());
-  const nonBullet = compact.filter((line) => !line.startsWith("- "));
-  const subtitle = nonBullet[0] || "";
-  const location = nonBullet[1] || "";
-  const contact = compact
-    .filter((line) => line.startsWith("- "))
-    .map((line) => line.slice(2).trim());
-  return { subtitle, location, contact };
 }
 
 // Role of a section, keyed on EN and PT slugs so ordering stays flexible.
