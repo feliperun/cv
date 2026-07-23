@@ -39,10 +39,11 @@ const PREVIEW_DIR = path.join(ROOT, ".linkedin", "preview");
 const SESSION_FILE = path.join(os.homedir(), ".config", "cv-linkedin", "session.json");
 
 const VANITY = process.env.LINKEDIN_VANITY || "felipebroering";
-// Primary profile = English; secondary = Portuguese (per user's LinkedIn setup).
+// Primary profile = English; secondary = Portuguese (created 2026-07-23).
+// Secondary locale uses the hyphenated form required by the ?locale= URL.
 const LANG_CONF = {
-  en: { primary: true, locale: "en_US" },
-  pt: { primary: false, locale: "pt_BR" },
+  en: { primary: true, locale: "en-US" },
+  pt: { primary: false, locale: "pt-BR" },
 };
 const FIELDS = ["headline", "about"]; // positions handled in a later phase
 
@@ -180,12 +181,9 @@ async function syncLang(page, lang, content, changed, opts) {
   await page.waitForTimeout(1500);
   await screenshot(page, `${lang}-profile`);
 
-  if (!conf.primary) {
-    // ⚠️ Secondary-language editing is best-effort: LinkedIn switches locale via
-    // the intro modal's language control, not a stable URL. Validate live.
-    log("  ! secondary-language (PT) editing needs live validation of the locale switch — screenshots only.");
-    if (!opts.apply) return changed.map((f) => ({ field: f, status: "dry-secondary" }));
-  }
+  // Secondary-language editing works through the `?locale=` profile view:
+  // its edit pencil links carry `language=xx&country=YY` and open the edit
+  // forms of that language version (validated live 2026-07-23).
 
   const results = [];
   for (const field of changed) {

@@ -12,9 +12,11 @@
 const BASE = "https://www.linkedin.com";
 
 export function profileUrl(vanity, lang) {
-  // The `?lang=` hint is best-effort; the reliable secondary-language switch is
-  // done through the edit UI (see openSecondaryLanguage). Kept for navigation.
-  const q = lang ? `?lang=${encodeURIComponent(lang)}` : "";
+  // Secondary-language versions are addressed with `?locale=xx-YY` (hyphen,
+  // not underscore — validated live 2026-07-23). On that view the edit pencil
+  // links carry `language=xx&country=YY`, so clicking them edits that
+  // language version. The primary needs no parameter.
+  const q = lang ? `?locale=${encodeURIComponent(lang)}` : "";
   return `${BASE}/in/${vanity}/${q}`;
 }
 
@@ -70,9 +72,19 @@ export async function setFieldValue(page, locatorFn, value) {
   await field.click();
   await page.keyboard.press("ControlOrMeta+A");
   await page.keyboard.press("Delete");
-  await page.keyboard.type(value, { delay: 12 });
-  const got = await field.evaluate((e) => (e.value ?? e.textContent ?? "").trim());
-  if (got !== value.trim()) {
+  // insertText (IME-style input) instead of per-key typing: survives unicode
+  // like "→"/"·" that keystroke simulation drops, and is instant. But it also
+  // swallows \n in contenteditable — send those as real Enter presses.
+  const lines = value.split("\n");
+  for (let i = 0; i < lines.length; i += 1) {
+    if (i) await page.keyboard.press("Enter");
+    if (lines[i]) await page.keyboard.insertText(lines[i]);
+  }
+  // Block boundaries come back as newlines in innerText (textContent drops
+  // them entirely), so read innerText and compare whitespace-insensitively.
+  const norm = (s) => s.replace(/\s+/g, " ").trim();
+  const got = await field.evaluate((e) => (e.value ?? e.innerText ?? e.textContent ?? "").trim());
+  if (norm(got) !== norm(value)) {
     throw new Error(`field verify failed: editor holds ${got.length} chars, expected ${value.trim().length}`);
   }
 }
