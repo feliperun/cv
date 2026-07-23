@@ -29,9 +29,13 @@ export const selectors = {
   // Top-card edit pencil: an <a> to /edit/intro/ (opens the intro modal).
   editIntroButton: (page) =>
     page.locator('a[href*="/edit/intro"], a[aria-label="Edit profile" i]').first(),
-  // Headline lives in a textarea whose id contains "headline".
+  // The headline editor is a contenteditable div[role=textbox] that only
+  // hydrates once scrolled into view — scroll to the anchor (its char counter,
+  // the only stable id in the modal) before locating it. Beware: an id probe
+  // like [id*="headline"] matches the COUNTER, not the field.
+  headlineAnchor: (page) => page.locator("#headlineCounterRefIntroForm").first(),
   headlineField: (page) =>
-    page.locator('[id*="headline" i]').or(page.getByLabel(/^headline/i)).first(),
+    page.locator('[role="textbox"][contenteditable="true"]').first(),
 
   // About edit pencil: an <a> to /edit/forms/summary/ (opens the About modal).
   editAboutButton: (page) =>
@@ -57,11 +61,18 @@ export const selectors = {
 };
 
 // Replace a field's value: focus, select-all, delete, type new (humanized).
+// Types through the keyboard (LinkedIn's custom editors ignore fill()) and
+// reads the value back — a mismatch throws instead of silently saving nothing.
 export async function setFieldValue(page, locatorFn, value) {
   const field = locatorFn(page);
+  await field.scrollIntoViewIfNeeded().catch(() => {});
   await field.waitFor({ state: "visible", timeout: 15000 });
   await field.click();
   await page.keyboard.press("ControlOrMeta+A");
   await page.keyboard.press("Delete");
-  await field.fill(value); // fill() is atomic; humanize still applies at browser level
+  await page.keyboard.type(value, { delay: 12 });
+  const got = await field.evaluate((e) => (e.value ?? e.textContent ?? "").trim());
+  if (got !== value.trim()) {
+    throw new Error(`field verify failed: editor holds ${got.length} chars, expected ${value.trim().length}`);
+  }
 }

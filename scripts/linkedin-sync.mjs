@@ -140,6 +140,12 @@ async function editField(page, lang, field, value, { apply }) {
     return { field, status: "selector-miss" };
   }
 
+  // The headline editor only hydrates after its area scrolls into view.
+  if (field === "headline") {
+    await selectors.headlineAnchor(page).scrollIntoViewIfNeeded().catch(() => {});
+    await page.waitForTimeout(600);
+  }
+
   // The modal content lazy-loads behind a spinner — wait for the field before
   // judging the selector or taking the preview screenshot.
   const seen = await fieldLoc(page)
@@ -157,6 +163,8 @@ async function editField(page, lang, field, value, { apply }) {
 
   await setFieldValue(page, fieldLoc, value);
   await selectors.saveButton(page).click({ timeout: 15000 });
+  // Confirm the modal actually closed — a validation error keeps it open.
+  await selectors.dialog(page).waitFor({ state: "hidden", timeout: 15000 }).catch(() => {});
   await page.waitForTimeout(2500);
   await screenshot(page, `${tag}-saved`);
   log(`  ✓ ${tag}: applied (${value.length} chars).`);
