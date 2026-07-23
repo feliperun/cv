@@ -1,6 +1,6 @@
 # Felipe R. Broering
 
-Lead Engineer · Engenharia de IA
+Lead Engineer · AI Engineering
 
 Santa Catarina, Brasil
 
