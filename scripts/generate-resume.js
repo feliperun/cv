@@ -37,8 +37,8 @@ const VITALS = [
 ];
 
 const FOCUS = {
-  en: ["AI engineering harnesses", "Cloud-native platforms", "0→1 products & teams", "Rust & developer tools", "Scale & reliability"],
-  pt: ["Harnesses de IA", "Plataformas cloud-native", "Produtos & times 0→1", "Rust & ferramentas de dev", "Escala & confiabilidade"],
+  en: ["AI engineering & agents", "Agentic delivery harnesses", "Cloud-native platforms", "0→1 products & teams", "Rust & developer tools"],
+  pt: ["Engenharia de IA & agentes", "Harnesses de entrega agêntica", "Plataformas cloud-native", "Produtos & times 0→1", "Rust & ferramentas de dev"],
 };
 
 // Hero console signature (domain-agnostic; reflects his terminal-first OSS).
@@ -49,8 +49,8 @@ const TERM = {
     { flag: "--from", value: "idea" },
     { flag: "--to", value: "production" },
   ],
-  en: "# 15+ years shipping across e-commerce, fintech, ERP, developer tools & healthcare",
-  pt: "# 15+ anos entregando em e-commerce, fintech, ERP, ferramentas de dev & saúde",
+  en: "# nearly two decades shipping across e-commerce, fintech, ERP, developer tools & healthcare",
+  pt: "# quase duas décadas entregando em e-commerce, fintech, ERP, ferramentas de dev & saúde",
 };
 
 const UI = {
@@ -979,7 +979,7 @@ const html = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)} — Resume</title>
-  <meta name="description" content="Resume of ${escapeHtml(title)} — Product Engineer, engineering leader, and founder building AI-native platforms, cloud systems, and developer tools across e-commerce, fintech, healthcare, and more.">
+  <meta name="description" content="Resume of ${escapeHtml(title)} — senior/lead engineer and engineering leader specializing in AI engineering: agentic delivery harnesses, LLM tooling, cloud-native platforms, and open-source developer tools.">
   <link rel="icon" href="${favicon}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -1,6 +1,6 @@
 # Felipe R. Broering
 
-Senior Product Engineer · Líder de Engenharia com foco em Produto
+Lead Engineer · Engenharia de IA
 
 Santa Catarina, Brasil
 
@@ -10,11 +10,24 @@ Santa Catarina, Brasil
 
 ## Perfil
 
-Senior Product Engineer e líder de engenharia com foco em produto, com mais de 15 anos construindo produtos digitais complexos de ponta a ponta — descoberta, modelagem de domínio, arquitetura, implementação e produção.
+Engenheiro e líder de engenharia com quase duas décadas construindo produtos digitais complexos de ponta a ponta — e, nos últimos anos, reconstruindo *como esse trabalho é feito* com IA. Desenho os harnesses, guardrails e workflows de agentes que permitem um time entregar com coding agents em qualidade de produção: rápido, revisável e com accountability — não uma pilha de código gerado por IA em que ninguém confia.
 
-Trabalho melhor onde produto e engenharia não se separam: fluxos complexos, sistemas operacionais, domínios regulados, plataformas cloud-native, ferramentas internas, integrações e automação que precisa se manter confiável em produção. Minha trajetória cobre engenharia full-stack, gestão de produto, nuvem, workflows aprimorados por IA e integração de hardware — como engenheiro de software, product manager, CTO/fundador, engineering manager, head of engineering e product engineer hands-on.
+Trabalho melhor onde produto e engenharia não se separam: fluxos complexos, sistemas operacionais, domínios regulados, plataformas cloud-native e automação que precisa se manter confiável em produção. Minha trajetória cobre engenharia full-stack, arquitetura de nuvem, gestão de produto e integração de hardware — como engenheiro de software, tech lead, CTO/fundador, engineering manager e head of engineering.
 
-Liderei plataformas usadas em operações críticas — incluindo o Coreum na Micromed, destacado pelo Google Cloud — e construo ferramentas open-source para desenvolvedores em torno de sistemas local-first, automação e engenharia aprimorada por IA.
+Liderei plataformas em operações críticas — incluindo o Coreum na Micromed, destacado pelo Google Cloud — e construo ferramentas open-source, terminal-first, de IA: agentes nos trilhos, sistemas local-first e os harnesses de engenharia que mantêm mudanças assistidas por agentes prontas para produção.
+
+## Engenharia de IA
+
+Eu não só uso ferramentas de IA — eu construo a engenharia em volta delas. O princípio por trás de tudo que entrego, e o que eu traria para liderar um time AI-native: **regras primeiro, IA depois.** Coloque o modelo nos trilhos para que a velocidade nunca custe arquitetura, correção ou accountability. Na prática, isso significa:
+
+- **Harness de entrega agêntica.** Playbooks `AGENTS.md` por repositório (com `CLAUDE.md` / `GEMINI.md` / `CURSOR.md` como symlinks), ADRs para cada decisão estrutural, TDD, quality gates estruturais e pre-commit + CI — para que os diffs escritos por agente fiquem pequenos, escopados, revisáveis e verdes. Nunca `--no-verify`: se um hook bloqueia, o problema de fundo é corrigido.
+- **Skills reutilizáveis como primitivas de engenharia.** Construí uma biblioteca de skills — Figma-to-code, code review, validação de release, investigação de produção, automação de Linear/PR, sync de docs, planejamento técnico, enforcement de TDD — para que o trabalho recorrente vire um comando repetível e inspecionável, em vez de um prompt ad-hoc novo toda vez.
+- **Loops autônomos de CI / merge.** Pipelines que abrem um PR, monitoram o CI, corrigem as falhas, aplicam sugestões dos bots de review e mergeiam no verde — para que humanos revisem *intenção e design*, não fiquem de babá de checklist.
+- **Orquestração multi-agente.** Workflows de fan-out/verificação e subagentes especializados para review, investigação e edições limitadas, com verificação adversarial antes de confiar em qualquer achado — porque uma resposta errada e confiante é o modo de falha caro.
+- **Model-neutral por design.** Ferramental agnóstico de LLM entre Claude, Gemini e modelos locais, conectado via servidores MCP, para que o workflow sobreviva a qualquer provedor único ou mudança de preço.
+- **Terminal-first, dentro do loop real.** Claude Code e Cursor CLI, prompts estruturados, harnesses locais e integrações MCP plugados direto no loop de dev e de feedback de produção — não uma janela de chat de lado.
+
+A prova é open source: três produtos onde a engenharia de IA *é* o ponto, não uma demo — abaixo.
 
 ## Estudo de Caso em Destaque
 
@@ -36,39 +49,44 @@ Encaro engenharia de produto como uma disciplina de ciclo completo. Meu loop pre
 
 **Problema → Modelo de domínio → Comportamento do produto → Arquitetura → Implementação → Produção → Observabilidade → Iteração.**
 
-Começo perto do problema real — usuários, fluxos, restrições de negócio, riscos operacionais, edge cases, critérios de sucesso — depois modelo o domínio, desenho o sistema, construo o produto, coloco no ar, observo como ele se comporta em produção e melhoro continuamente.
-
-IA faz parte do meu workflow, mas não é o ponto do trabalho. Uso coding agents, ferramentas terminal-first, prompts estruturados, skills reutilizáveis, harnesses locais, automação, testes, ADRs, code review e loops de validação para ir mais rápido sem perder arquitetura, manutenibilidade e accountability.
+Começo perto do problema real — usuários, fluxos, restrições de negócio, riscos operacionais, edge cases, critérios de sucesso — depois modelo o domínio, desenho o sistema, construo, coloco no ar, observo como ele se comporta em produção e realimento o que aprendo. A IA torna cada passada mais rápida; a disciplina é o que mantém tudo em nível de produção.
 
 ## Open Source
 
-Construo no aberto — ferramentas Rust terminal-first que colocam IA nos trilhos.
+Construo no aberto — ferramentas terminal-first que colocam IA nos trilhos.
 
-### phai-run/phai
+### phai — IA nos trilhos para finanças pessoais · Rust, local-first
 
-Fundador e mantenedor do phai, um produto open-source de finanças pessoais local-first, construído em Rust. Combina ingestão de dados bancários, armazenamento em SQLite/BigQuery, classificação por regras, auditabilidade, workflows de CLI, dashboards, integração MCP e um web app local embutido num binário único.
+Fundador e mantenedor do phai, um agente de finanças pessoais rules-first e LLM-neutral. As regras decidem; o modelo assiste — nunca o contrário. Ingere dados de open-finance (Pluggy), normaliza tudo em SQLite (local) ou BigQuery (produção) e transforma o extrato bancário em uma base de finanças consultável, scriptável e reportável, com integração MCP e um web app local embutido num binário Rust único.
 
-O projeto também é um harness de engenharia para desenvolvimento assistido por IA, com ADRs, TDD, CI, regras de privacidade, quality gates, automação de release e guardrails rígidos para manter mudanças assistidas por agentes revisáveis e prontas para produção.
+Também serve de harness de referência para engenharia de IA — ADRs, TDD, CI, guardrails de privacidade, quality gates, automação de release e guardrails rígidos que mantêm mudanças assistidas por agentes revisáveis e prontas para produção.
 
-Tecnologias: Rust, SQLite, BigQuery, Pluggy, React, LiveStore, MCP, harness de engenharia assistida por IA.
+Tecnologias: Rust, SQLite, BigQuery, Pluggy, MCP, React/LiveStore.
 
-Projeto: https://github.com/phai-run/phai
+Projeto: https://github.com/feliperun/phai
 
-### feliperun/eai
+### cueme — second brain local-first com copilot de conversa ao vivo · Swift nativo, macOS
 
-CLI open-source em Rust que transforma linguagem natural em comandos de shell seguros por um fluxo inspecionar-confirmar-executar. Suporta múltiplos provedores de LLM, contexto via pipe, explicação de comandos, geração de scripts, bookmarks, completions e integração com o shell.
+Um produto de conhecimento pessoal file-first para macOS: edição em blocos estilo Notion sobre arquivos Markdown puros. Cada nota é uma pasta normal no disco — SQLite, FTS5 e embeddings `sqlite-vec` são índices reconstruíveis, nunca a fonte da verdade. Notas escritas, journals, reuniões gravadas e áudio importado compartilham um único modelo de memória com busca híbrida local.
 
-Tecnologias: Rust, Ollama, Gemini, Groq, OpenAI, UX de shell.
+Sobre essa memória roda um copilot de conversa em tempo real para reuniões e conversas difíceis. Captura os dois lados de uma call de forma nativa (mic via `AVAudioEngine` + áudio do sistema via `ScreenCaptureKit`, então quem falou é sabido pela origem — sem diarização), transcreve e traduz on-device, e faz streaming de cards de orientação ao vivo e ata incremental a partir de um processo de agente aquecido em ~1–2s — ancorado nas suas próprias notas via retrieval semântico local. 100% Swift 6 nativo, sem webview, sem driver de áudio virtual; Swift Concurrency em toda parte — actors para estado compartilhado, fan-out via `AsyncStream`, cancelamento cooperativo — mais um watchdog de calls longas e failover automático de provedor. O "cérebro" chama o Claude Code CLI local: keyless por padrão, nada para configurar, nenhuma chave para vazar.
 
-Projeto: https://github.com/feliperun/eai
+Tecnologias: Swift 6, Claude Code CLI, ScreenCaptureKit, Deepgram / STT on-device da Apple, sqlite-vec.
 
-### feliperun/dsync
+Projeto: https://github.com/feliperun/cueme
 
-CLI open-source em Rust para manter o Markdown como fonte da verdade local enquanto sincroniza documentos com Google Docs e Linear Docs. Suporta criação e importação de documentos, links no frontmatter, cross-links e uma arquitetura de provedores extensível.
+### ford / create-openclaw-agent — agente autônomo, deploy com hardening · IaC + GCP
 
-Tecnologias: Rust, Markdown, Google Docs, Linear Docs, arquitetura de provedores.
+Um comando que provisiona um agente de IA self-hosted em nível de produção (OpenClaw) na nuvem: um gateway em Claude Sonnet com memória persistente Mem0 (vetores no Qdrant), um Chrome headless, transcrição de áudio e um canal de WhatsApp — sobre infra Terraform/OpenTofu com defense-in-depth: sem IP externo (acesso só por IAP), firewall de egress, segredos no Secret Manager buscados para a RAM (nunca em disco), containers read-only com hardening (`cap_drop: ALL`, imagens pinadas por digest), backups criptografados com age e scanning de CI com gitleaks/Trivy. A instância que rodo em produção é o Ford — meu próprio assistente de WhatsApp always-on.
 
-Projeto: https://github.com/feliperun/dsync
+Tecnologias: OpenTofu, Google Cloud, Docker, Mem0/Qdrant, Claude, Secret Manager.
+
+Projeto: https://github.com/feliperun/create-openclaw-agent
+
+### Também
+
+- **eai** — CLI em Rust que transforma linguagem natural em comandos de shell seguros por um fluxo inspecionar-confirmar-executar, multi-provedor (Ollama, Gemini, Groq, OpenAI). https://github.com/feliperun/eai
+- **dsync** — CLI em Rust que mantém o Markdown como fonte da verdade local enquanto sincroniza documentos com Google Docs e Linear Docs. https://github.com/feliperun/dsync
 
 ## Experiência
 
@@ -76,34 +94,28 @@ Projeto: https://github.com/feliperun/dsync
 
 Micromed Health - Florianópolis, Brasil - Jan 2026 até o presente
 
-Migrei para um foco hands-on em engenharia de produto, atuando em descoberta, modelagem de domínio, arquitetura, implementação, validação, release e operação em produção.
+Depois de três anos e meio liderando a engenharia, escolhi voltar ao trabalho profundamente hands-on — o jeito AI-native de construir que eu vinha dirigindo como líder é agora o que faço o dia inteiro. Construo o harness com que o time coda, enquanto entrego produto de ponta a ponta em descoberta, modelagem de domínio, arquitetura, implementação, validação, release e operação em produção.
 
-Trabalhando principalmente com React, Node.js, TypeScript, Python, Rust, Google Cloud e Vercel em aplicações web, serviços de processamento de sinais, integração nativa com hardware, infraestrutura de nuvem e fluxos de produção.
-
-- Liderando iniciativas de engenharia de produto ponta a ponta, do Figma e do design de produto à implementação, validação, release, observabilidade e iteração em produção.
-- Construindo experiências de produto web com React, Node.js e TypeScript, conectando frontend, backend, APIs, autenticação, fluxos de dados e ferramental operacional.
-- Usando Python para workflows de processamento de sinais de ECG e Rust como camada de integração nativa entre hardware médico, PCs locais e sistemas em nuvem.
-- Construindo sobre o Google Cloud como base de infraestrutura cloud-native e usando a Vercel para deploy de frontend, previews e entrega de aplicações web.
-- Desenhando um harness de engenharia aprimorado por IA com coding agents, prompts estruturados, skills reutilizáveis, ADRs, testes, loops de validação, code review e disciplina de release.
-- Criando skills de engenharia reutilizáveis para Figma-to-code, review de UX, modelagem de produto, planejamento técnico, code review, validação de release, investigação de produção, documentação e análise de dados.
-- Trabalhando com um workflow de IA terminal-first usando pi.dev, Claude CLI, Cursor CLI, ferramental local de dev e Superset para análise de dados e feedback loops de produção.
-- Aplicando uma abordagem de loop-engineering: modelar o problema, construir, validar, revisar, entregar, monitorar o comportamento em produção e realimentar os aprendizados no produto.
-- Atuando como builder sênior hands-on, trazendo experiência de liderança para decisões técnicas, trade-offs de produto, alinhamento de time e prontidão para produção.
+- Desenhando e operando o harness de engenharia de IA do time: coding agents nos trilhos com prompts estruturados, skills reutilizáveis, ADRs, TDD, quality gates, code review e loops autônomos de CI/merge — mantendo a entrega assistida por agentes rápida *e* em nível de produção.
+- Construindo skills de engenharia reutilizáveis — Figma-to-code, review de UX, modelagem de produto, planejamento técnico, code review, validação de release, investigação de produção, documentação e análise de dados — para que o trabalho recorrente rode como comandos repetíveis e inspecionáveis.
+- Liderando iniciativas de engenharia de produto do Figma e do design à implementação, validação, release, observabilidade e iteração em produção.
+- Construindo experiências web com React, Node.js e TypeScript entre frontend, backend, APIs, autenticação e fluxos de dados; Python para processamento de sinais de ECG; Rust como camada de integração nativa entre hardware médico, PCs locais e nuvem.
+- Rodando um workflow de IA terminal-first e model-neutral (pi.dev, Claude CLI, Cursor CLI, MCP, ferramental local) conectado ao Superset e a feedback loops de produção.
+- Trazendo experiência de liderança para direção técnica, trade-offs de produto, alinhamento de time e prontidão para produção — como builder sênior hands-on.
 
 ### Head of Engineering
 
-Micromed Health - Florianópolis, Brasil - Mai 2022 a Jul 2026
+Micromed Health - Florianópolis, Brasil - Mai 2022 a Dez 2025
 
 Liderei a engenharia do Coreum, a plataforma cloud-native da Micromed para diagnóstico cardiológico, fluxos de exame, análise assistida por IA, integração com ERP, dispositivos conectados e operação em produção.
 
 - Liderei o Coreum do desenvolvimento inicial até se tornar uma plataforma de estudo de caso do Google Cloud.
-- Contribuí para um programa de modernização que reduziu custos de infraestrutura em mais de 50%, melhorou o carregamento de exames de 2 segundos para 200 milissegundos, migrou 20TB de dados com apenas 3 horas de downtime e habilitou múltiplos releases diários com zero downtime.
+- Conduzi o programa de modernização por trás dos resultados do estudo de caso do Google Cloud acima — custo de infraestrutura, latência de carregamento de exames, a migração de 20TB e a virada para múltiplos releases diários com zero downtime.
 - Estruturei processo e cultura de engenharia para suportar o crescimento do time, novos projetos, entrega mais rápida e operação mais confiável.
 - Construí e evoluí práticas de engenharia em arquitetura, entrega, operação de nuvem, confiabilidade, segurança, desenvolvimento assistido por IA, disciplina de review e prontidão para produção.
 - Liderei e apoiei times multidisciplinares em backend, frontend, UX, nuvem, firmware, eletrônica, QA, integrações e entrega de produto.
-- Ajudei a consolidar sistemas críticos no Google Cloud, incluindo ERP e Coreum, melhorando confiabilidade, segurança, velocidade de integração e eficiência operacional.
+- Consolidei sistemas críticos no Google Cloud, incluindo ERP e Coreum, melhorando confiabilidade, segurança, velocidade de integração e eficiência operacional.
 - Avancei o roadmap da Micromed para cardiologia com IA, dispositivos médicos conectados, nuvem híbrida, edge computing e interoperabilidade com padrões como DICOM, HL7 e FHIR.
-- Conectei estratégia de produto, engenharia de software, fluxos clínicos, integração de hardware, arquitetura de nuvem e execução da entrega.
 
 ### Engineering Manager
 
@@ -111,9 +123,9 @@ Micromed Health - Florianópolis, Brasil - Nov 2020 a Jun 2022
 
 Entrei na Micromed para liderar a engenharia do zero de uma solução de monitoramento de pacientes internados, combinando aquisição de ECG, processamento em nuvem, algoritmos de machine learning e predição de risco cardíaco.
 
-- Montei e liderei um time interno de sete pessoas: seis engenheiros e um designer de UX responsáveis por core da plataforma, back ends, front ends, design system e infraestrutura de nuvem.
+- Montei e liderei um time interno de sete pessoas — seis engenheiros e um designer de UX — responsáveis por core da plataforma, back ends, front ends, design system e infraestrutura de nuvem.
 - Coordenei dez engenheiros terceiros entre microsserviços de IA, firmware e eletrônica, conectando data science, software embarcado, hardware e entrega de produto.
-- Fui dono do design de sistema e liderei o desenvolvimento ponta a ponta do projeto em software, nuvem, integração de machine learning, integração de hardware e execução de produto.
+- Fui dono do design de sistema e liderei o desenvolvimento ponta a ponta em software, nuvem, integração de machine learning, integração de hardware e execução de produto.
 - Conectei requisitos de produto, fluxos clínicos, decisões de arquitetura e planejamento de entrega em um modelo coerente de execução.
 
 ### Engineering Manager
@@ -186,16 +198,11 @@ Tigre S.A. - Joinville, Brasil - Jul 2006 a Jan 2007
 
 ## Especialidades
 
-Engenharia de Produto, Engenharia Full-Stack, Design de Sistemas, Arquitetura Cloud-Native, Engenharia Aprimorada por IA, Ferramentas de Dev & CLIs, Sistemas Local-First, Release Engineering, Deploys sem Downtime, Liderança de Engenharia, Google Cloud, AWS, Interoperabilidade (DICOM / HL7 / FHIR), Sistemas com LGPD.
+Engenharia de IA, Workflows Agênticos & Orquestração Multi-Agente, Ferramental de LLM & MCP, Design de Prompts & Skills, Engenharia de Produto, Engenharia Full-Stack, Design de Sistemas, Arquitetura Cloud-Native, Ferramentas de Dev & CLIs, Sistemas Local-First, Release Engineering, Deploys sem Downtime, Liderança de Engenharia, Google Cloud, AWS, Interoperabilidade (DICOM / HL7 / FHIR), Sistemas com LGPD.
 
 ## Formação
 
 Universidade do Vale do Itajaí — Bacharelado em Engenharia de Computação (engenharia de software, integração de hardware) — 2001 a 2005.
-
-## Certificações
-
-- Practical Product Management — Pragmatic Marketing — 2010
-- EMPRETEC — 2009
 
 ## Idiomas
 
@@ -205,4 +212,4 @@ Universidade do Vale do Itajaí — Bacharelado em Engenharia de Computação (e
 
 ## Hashtags
 
-#ProductEngineering #FullStackEngineering #EngineeringLeadership #ProductMindedEngineering #SoftwareArchitecture #CloudNative #AIEnhancedEngineering #OpenSource #DeveloperTools #HealthcareTechnology #Rust #TypeScript #React #NodeJS #GoogleCloud #Vercel
+#AIEngineering #AgenticWorkflows #LLMTooling #MCP #ProductEngineering #FullStackEngineering #EngineeringLeadership #SoftwareArchitecture #CloudNative #OpenSource #DeveloperTools #Rust #TypeScript #React #NodeJS #GoogleCloud
