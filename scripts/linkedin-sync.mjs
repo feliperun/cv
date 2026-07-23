@@ -140,11 +140,16 @@ async function editField(page, lang, field, value, { apply }) {
     return { field, status: "selector-miss" };
   }
 
+  // The modal content lazy-loads behind a spinner — wait for the field before
+  // judging the selector or taking the preview screenshot.
+  const seen = await fieldLoc(page)
+    .waitFor({ state: "visible", timeout: 20000 })
+    .then(() => true)
+    .catch(() => false);
   await screenshot(page, `${tag}-modal`);
 
   if (!apply) {
     // Read-only validation: confirm the field, then Escape without saving.
-    const seen = await fieldLoc(page).isVisible().catch(() => false);
     await page.keyboard.press("Escape").catch(() => {});
     log(`  · ${tag}: would set ${value.length} chars${seen ? "" : " (field selector needs validation)"}.`);
     return { field, status: seen ? "dry-ok" : "dry-selector-miss" };

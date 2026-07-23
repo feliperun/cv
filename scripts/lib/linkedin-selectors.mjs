@@ -19,20 +19,29 @@ export function profileUrl(vanity, lang) {
 }
 
 // Locators are returned as functions of `page` so they are lazy and reusable.
+// Validated live on 2026-07-23 (see .linkedin debug probes): the old
+// global-nav classes are gone and the edit pencils are <a> elements, not
+// <button>s — the hrefs are the stable hook.
 export const selectors = {
-  // Signal that we are logged in (global nav "Me" menu / feed identity).
-  loggedIn: (page) => page.locator('img.global-nav__me-photo, [data-control-name="identity_welcome_message"]').first(),
+  // Signal that we are logged in: the global-nav "Me" menu button.
+  loggedIn: (page) => page.getByRole("button", { name: /^me$/i }).first(),
 
-  // "Edit intro" pencil on the profile top card (opens headline modal).
-  editIntroButton: (page) => page.getByRole("button", { name: /edit intro/i }).first(),
-  headlineField: (page) => page.getByLabel(/^headline$/i).first(),
+  // Top-card edit pencil: an <a> to /edit/intro/ (opens the intro modal).
+  editIntroButton: (page) =>
+    page.locator('a[href*="/edit/intro"], a[aria-label="Edit profile" i]').first(),
+  // Headline lives in a textarea whose id contains "headline".
+  headlineField: (page) =>
+    page.locator('[id*="headline" i]').or(page.getByLabel(/^headline/i)).first(),
 
-  // "Edit about" pencil on the About section.
-  editAboutButton: (page) => page.getByRole("button", { name: /edit about/i }).first(),
-  // The About modal exposes a large rich-text/textarea; match by label then fallback.
+  // About edit pencil: an <a> to /edit/forms/summary/ (opens the About modal).
+  editAboutButton: (page) =>
+    page.locator('a[href*="edit/forms/summary"], a[aria-label="Edit about" i]').first(),
+  // The About modal's editor is a bare contenteditable DIV (no id, no
+  // aria-label — probed live). It's the only contenteditable on the page while
+  // the modal is open; textarea kept as a fallback.
   aboutField: (page) =>
     page
-      .getByLabel(/^about$/i)
+      .locator('[contenteditable="true"]')
       .or(page.locator('div[role="dialog"] textarea'))
       .first(),
 
