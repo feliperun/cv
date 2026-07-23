@@ -177,6 +177,10 @@ function roleOf(slug) {
 // (e.g. LinkedIn-style hashtags that would clutter the designed layout).
 const OMIT = new Set(["hashtags"]);
 
+// Sections rendered on screen but hidden in print — the PDF is a condensed
+// version that points to the full resume at cv.felipe.run.
+const PRINT_OMIT = new Set(["how-i-build", "como-eu-construo"]);
+
 // -- Signature geometry -----------------------------------------------------
 
 // A neutral rising data-trend sparkline (not a physiological signal) for tiles.
@@ -206,8 +210,12 @@ function renderTermBand() {
     .map((a) => `<span class="t-flag">${escapeHtml(a.flag)}</span> <span class="t-val">${escapeHtml(a.value)}</span>`)
     .join(" ");
   const ariaLabel = `${TERM.prompt}:~$ ${TERM.cmd} ${TERM.args.map((a) => a.flag + " " + a.value).join(" ")}`;
+  const printNote = {
+    en: "Condensed print version — full resume: https://cv.felipe.run",
+    pt: "Versão condensada para impressão — currículo completo: https://cv.felipe.run",
+  };
   const outs = ["en", "pt"]
-    .map((lang) => `<div class="lang ${lang}"><p class="term-out">${escapeHtml(TERM[lang])}</p></div>`)
+    .map((lang) => `<div class="lang ${lang}"><p class="term-out">${escapeHtml(TERM[lang])}</p><p class="print-note">${escapeHtml(printNote[lang])}</p></div>`)
     .join("\n");
   return `<div class="term-band">
     <div class="term" role="img" aria-label="${escapeHtml(ariaLabel)}"><span class="t-prompt">${escapeHtml(TERM.prompt)}</span><span class="t-sep">:~$</span> <span class="t-cmd">${escapeHtml(TERM.cmd)}</span> ${args}<span class="t-cursor" aria-hidden="true"></span></div>
@@ -239,16 +247,17 @@ function renderMainSection(section, lang) {
   const id = `${lang}-${slug}`;
   const role = roleOf(slug);
   const body = parseMarkdown(section.content);
+  const printHide = PRINT_OMIT.has(slug) ? " print-hide" : "";
   const head = `<h2 class="sec-h" id="${id}"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>${escapeHtml(section.title)}</span><span class="sec-rule"></span></h2>`;
 
   if (role === "profile") {
-    return `<section class="sec sec-profile" aria-labelledby="${id}">${head}<div class="lede">${body}</div></section>`;
+    return `<section class="sec sec-profile${printHide}" aria-labelledby="${id}">${head}<div class="lede">${body}</div></section>`;
   }
   if (role === "case") {
-    return `<section class="sec sec-case" aria-labelledby="${id}">${head}<div class="case">${body}</div></section>`;
+    return `<section class="sec sec-case${printHide}" aria-labelledby="${id}">${head}<div class="case">${body}</div></section>`;
   }
   const extra = slug === "experience" || slug === "experiencia" ? " sec-exp" : "";
-  return `<section class="sec${extra}" aria-labelledby="${id}">${head}<div class="prose">${body}</div></section>`;
+  return `<section class="sec${extra}${printHide}" aria-labelledby="${id}">${head}<div class="prose">${body}</div></section>`;
 }
 
 function renderSideSection(section, lang) {
@@ -913,8 +922,10 @@ aside { display: grid; gap: 26px; align-content: start; }
   .device .dot { animation: none; }
 }
 
-/* ---- print: clean light printout ---- */
-@page { margin: 0.5in; }
+.print-note { display: none; }
+
+/* ---- print: condensed one-glance printout (full version lives online) ---- */
+@page { margin: 0.45in; }
 @media print {
   :root, html[data-theme="dark"], html[data-theme="light"] {
     --bg: #fff; --bg-2: #fff; --panel: #fff; --raise: #fff;
@@ -924,31 +935,87 @@ aside { display: grid; gap: 26px; align-content: start; }
     --signal: #0b5c4c; --signal-ink: #0b5c4c; --signal-soft: rgba(11,92,76,0.06);
     --amber: #a05a13; --glow: none; --shadow: none;
   }
-  body { background: #fff; }
-  .toolbar, .foot .flat { display: none; }
+  body { background: #fff; font-size: 12px; line-height: 1.42; }
+  .toolbar, .foot .flat, .print-hide { display: none; }
+  .print-note { display: block; margin: 6px 0 0; font-family: var(--mono); font-size: 0.72rem; color: var(--signal-ink); }
   .resume { width: 100%; margin: 0; border: 0; box-shadow: none; }
   header, .term-band, .vitals-wrap, main, .foot { padding-left: 0; padding-right: 0; }
-  header { grid-template-columns: minmax(0,1fr) 230px; gap: 28px; padding-top: 8px; }
+
+  /* hero: one compact band */
+  header { grid-template-columns: minmax(0,1fr) 230px; gap: 24px; padding-top: 4px; padding-bottom: 14px; }
+  h1 { font-size: 2.1rem; line-height: 1; }
+  .eyebrow { margin-bottom: 8px; }
+  .loc { margin-top: 8px; font-size: 0.8rem; }
+  .focus { margin-top: 10px; gap: 5px; }
+  .focus li { padding: 3px 8px; font-size: 0.68rem; }
   .profile-panel {
     display: grid;
-    grid-template-columns: 92px minmax(0, 1fr);
-    gap: 12px;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 10px;
     align-items: start;
   }
-  .portrait { max-width: 92px; }
-  .operator-tag { margin-top: 0; }
-  .term-band { background: none; border-bottom-color: var(--line); }
+  .portrait { max-width: 64px; }
+  .operator-tag { display: none; }
+  .contact { gap: 4px; }
+  .contact-k { font-size: 0.6rem; }
+  .contact-v { font-size: 0.76rem; }
+
+  .term-band { background: none; border-bottom-color: var(--line); padding-top: 8px; padding-bottom: 10px; }
+  .term { font-size: 0.85rem; }
+  .term-out { margin-top: 3px; font-size: 0.7rem; }
   .t-cursor { display: none; }
-  .vitals { grid-template-columns: repeat(3, 1fr); }
-  .vital:nth-child(3) { border-right: 0; }
-  .vital:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
+
+  /* vitals: one slim row */
+  .vitals-wrap { padding-top: 10px; padding-bottom: 12px; }
+  .vitals-cap { margin-bottom: 8px; }
+  .vitals { grid-template-columns: repeat(6, 1fr); }
+  .vital { padding: 8px 10px 8px; border-bottom: 0 !important; border-right: 1px solid var(--line); }
+  .vital:last-child { border-right: 0; }
+  .vital-value { font-size: 1.15rem; }
+  .vital-label { font-size: 0.56rem; }
+  .vital-sub { font-size: 0.6rem; }
+  .vital .spark { display: none; }
   .vital .spark path { filter: none; }
+
+  /* content: single column; the aside drops to a compact 2-col block at the
+     end so the sidebar's whitespace doesn't bleed through every page */
+  main { display: block; padding-top: 16px; padding-bottom: 4px; }
+  aside {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 26px;
+    margin-top: 20px;
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
+  }
+  .side, .side:first-child { border-top: 0; padding-top: 0; }
+  .sec + .sec { margin-top: 18px; }
+  .sec-h { margin-bottom: 8px; font-size: 0.66rem; }
+  h3 { margin: 12px 0 2px; font-size: 0.95rem; }
+  .lede p { font-size: 0.92rem; }
+  .lede p + p { font-size: 0.85rem; }
+  .prose p + p, .lede p + p, .case p + p { margin-top: 5px; }
+  .prose ul, .lede ul, .case ul { margin-top: 4px; }
+  .prose li + li, .case li + li, .lede li + li { margin-top: 2px; }
+  .sec-case .case { padding: 12px 14px; }
+  .sec-exp .prose { padding-left: 16px; }
+  .sec-exp .prose h3::before { left: -16px; width: 6px; height: 6px; }
+  .sec-exp .prose h3 + p { font-size: 0.66rem; }
+  /* condensed: older roles (7th on — pre-2015) keep title+meta, drop bullets */
+  .sec-exp .prose ul:nth-of-type(n+7) { display: none; }
+  aside { gap: 14px; }
+  .side { padding-top: 12px; }
+  .side-h { margin-bottom: 6px; font-size: 0.62rem; }
+  .side .prose p, .side .prose li { font-size: 0.76rem; }
+  .side .prose li { margin-top: 3px; }
+  .tags li { font-size: 0.62rem; padding: 2px 6px; }
+  .foot { padding-top: 10px; padding-bottom: 6px; font-size: 0.64rem; }
+
   a { color: var(--ink); border: 0; }
   code { background: none; padding: 0; color: var(--ink); }
   .side, .vital, .sec-case .case { break-inside: avoid; }
   .sec-h, h3, h4 { break-after: avoid; }
   .sec-exp .prose h3 { break-inside: avoid; }
-  h1 { font-size: 3.1rem; }
 }
 `;
 
