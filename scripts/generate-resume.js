@@ -91,7 +91,9 @@ function escapeHtml(value) {
 
 function renderInline(value) {
   let html = escapeHtml(value);
+  html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
   html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  html = html.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>");
   html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2">$1</a>');
   html = html.replace(/(?<!["'=>])(https?:\/\/[^\s<]+)/g, (url) => {
     const clean = url.replace(/[.,;:!?]+$/, "");
@@ -434,6 +436,14 @@ a {
   word-break: break-word;
 }
 a:hover { border-color: var(--signal); }
+code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  color: var(--signal-ink);
+  background: var(--signal-soft);
+  padding: 0.08em 0.32em;
+  border-radius: 4px;
+}
 a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--signal);
@@ -918,13 +928,26 @@ aside { display: grid; gap: 26px; align-content: start; }
   .toolbar, .foot .flat { display: none; }
   .resume { width: 100%; margin: 0; border: 0; box-shadow: none; }
   header, .term-band, .vitals-wrap, main, .foot { padding-left: 0; padding-right: 0; }
-  header { grid-template-columns: minmax(0,1fr) 180px; padding-top: 8px; }
-  .portrait { max-width: 180px; }
+  header { grid-template-columns: minmax(0,1fr) 230px; gap: 28px; padding-top: 8px; }
+  .profile-panel {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+  .portrait { max-width: 92px; }
+  .operator-tag { margin-top: 0; }
   .term-band { background: none; border-bottom-color: var(--line); }
   .t-cursor { display: none; }
+  .vitals { grid-template-columns: repeat(3, 1fr); }
+  .vital:nth-child(3) { border-right: 0; }
+  .vital:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
   .vital .spark path { filter: none; }
   a { color: var(--ink); border: 0; }
-  .sec, .side, .vital, .sec-case .case { break-inside: avoid; }
+  code { background: none; padding: 0; color: var(--ink); }
+  .side, .vital, .sec-case .case { break-inside: avoid; }
+  .sec-h, h3, h4 { break-after: avoid; }
+  .sec-exp .prose h3 { break-inside: avoid; }
   h1 { font-size: 3.1rem; }
 }
 `;

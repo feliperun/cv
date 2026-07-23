@@ -39,7 +39,9 @@ const PRESENT = /^(present|current|até o presente|ate o presente|o presente)$/i
 // Strip inline Markdown to plain text: **bold** -> bold, [t](url) -> t.
 function stripInline(value) {
   return value
+    .replace(/`([^`]+)`/g, "$1")
     .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1$2")
     .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, "$1")
     .trim();
 }

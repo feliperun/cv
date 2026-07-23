@@ -93,6 +93,14 @@ a {
   word-break: break-word;
 }
 a:hover { border-color: var(--signal); }
+code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  color: var(--signal-ink);
+  background: var(--signal-soft);
+  padding: 0.08em 0.32em;
+  border-radius: 4px;
+}
 a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--signal);
@@ -577,13 +585,26 @@ aside { display: grid; gap: 26px; align-content: start; }
   .toolbar, .foot .flat { display: none; }
   .resume { width: 100%; margin: 0; border: 0; box-shadow: none; }
   header, .term-band, .vitals-wrap, main, .foot { padding-left: 0; padding-right: 0; }
-  header { grid-template-columns: minmax(0,1fr) 180px; padding-top: 8px; }
-  .portrait { max-width: 180px; }
+  header { grid-template-columns: minmax(0,1fr) 230px; gap: 28px; padding-top: 8px; }
+  .profile-panel {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+  .portrait { max-width: 92px; }
+  .operator-tag { margin-top: 0; }
   .term-band { background: none; border-bottom-color: var(--line); }
   .t-cursor { display: none; }
+  .vitals { grid-template-columns: repeat(3, 1fr); }
+  .vital:nth-child(3) { border-right: 0; }
+  .vital:nth-child(-n+3) { border-bottom: 1px solid var(--line); }
   .vital .spark path { filter: none; }
   a { color: var(--ink); border: 0; }
-  .sec, .side, .vital, .sec-case .case { break-inside: avoid; }
+  code { background: none; padding: 0; color: var(--ink); }
+  .side, .vital, .sec-case .case { break-inside: avoid; }
+  .sec-h, h3, h4 { break-after: avoid; }
+  .sec-exp .prose h3 { break-inside: avoid; }
   h1 { font-size: 3.1rem; }
 }
 </style>
@@ -740,19 +761,19 @@ aside { display: grid; gap: 26px; align-content: start; }
   </section></div>
 
     <main>
-      <div class="lang en" data-lang-block="en"><div class="content"><section class="sec sec-profile" aria-labelledby="en-profile"><h2 class="sec-h" id="en-profile"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Profile</span><span class="sec-rule"></span></h2><div class="lede"><p>Engineer and engineering leader with nearly two decades building complex digital products end to end — and, over the last few years, rebuilding *how that work gets done* with AI. I design the harnesses, guardrails, and agent workflows that let a team ship with coding agents at production quality: fast, reviewable, and accountable — not a pile of AI-generated code nobody trusts.</p>
+      <div class="lang en" data-lang-block="en"><div class="content"><section class="sec sec-profile" aria-labelledby="en-profile"><h2 class="sec-h" id="en-profile"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Profile</span><span class="sec-rule"></span></h2><div class="lede"><p>Engineer and engineering leader with nearly two decades building complex digital products end to end — and, over the last few years, rebuilding <em>how that work gets done</em> with AI. I design the harnesses, guardrails, and agent workflows that let a team ship with coding agents at production quality: fast, reviewable, and accountable — not a pile of AI-generated code nobody trusts.</p>
 <p>I work best where product and engineering can't be separated: complex workflows, operational systems, regulated domains, cloud-native platforms, and automation that has to stay reliable in production. My background spans full-stack engineering, cloud architecture, product management, and hardware integration — as software engineer, tech lead, CTO/founder, engineering manager, and head of engineering.</p>
 <p>I've led platforms in critical operations — including Coreum at Micromed, featured by Google Cloud — and I build open-source, terminal-first AI tooling: agents on rails, local-first systems, and the engineering harnesses that keep agent-assisted changes production-ready.</p></div></section>
 <section class="sec" aria-labelledby="en-ai-engineering"><h2 class="sec-h" id="en-ai-engineering"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>AI Engineering</span><span class="sec-rule"></span></h2><div class="prose"><p>I don't just use AI tools — I engineer the system around them. The principle behind everything I ship, and what I'd bring to leading an AI-native team: <strong>rules first, AI second.</strong> Put the model on rails so velocity never costs you architecture, correctness, or accountability. Concretely, that means:</p>
 <ul>
-<li><strong>Agentic delivery harness.</strong> Per-repo `AGENTS.md` playbooks (with `CLAUDE.md` / `GEMINI.md` / `CURSOR.md` as symlinks), ADRs for every structural decision, TDD, structural quality gates, and pre-commit + CI — so agent-written diffs stay small, scoped, reviewable, and green. Never `--no-verify`: if a hook blocks, the underlying issue gets fixed.</li>
+<li><strong>Agentic delivery harness.</strong> Per-repo <code>AGENTS.md</code> playbooks (with <code>CLAUDE.md</code> / <code>GEMINI.md</code> / <code>CURSOR.md</code> as symlinks), ADRs for every structural decision, TDD, structural quality gates, and pre-commit + CI — so agent-written diffs stay small, scoped, reviewable, and green. Never <code>--no-verify</code>: if a hook blocks, the underlying issue gets fixed.</li>
 <li><strong>Reusable skills as engineering primitives.</strong> I've built a library of skills — Figma-to-code, code review, release validation, production investigation, Linear/PR automation, doc sync, technical planning, TDD enforcement — so recurring work becomes one repeatable, inspectable command instead of a fresh ad-hoc prompt every time.</li>
-<li><strong>Autonomous CI / merge loops.</strong> Pipelines that open a PR, watch CI, fix the failures, apply review-bot suggestions, and merge on green — so humans review *intent and design*, not babysit a checklist.</li>
+<li><strong>Autonomous CI / merge loops.</strong> Pipelines that open a PR, watch CI, fix the failures, apply review-bot suggestions, and merge on green — so humans review <em>intent and design</em>, not babysit a checklist.</li>
 <li><strong>Multi-agent orchestration.</strong> Fan-out/verify workflows and specialized subagents for review, investigation, and bounded edits, with adversarial verification before any finding is trusted — because a confident wrong answer is the expensive failure mode.</li>
 <li><strong>Model-neutral by design.</strong> LLM-agnostic tooling across Claude, Gemini, and local models, wired through MCP servers, so the workflow outlives any single provider or price change.</li>
 <li><strong>Terminal-first, in the real loop.</strong> Claude Code and Cursor CLI, structured prompts, local harnesses, and MCP integrations plugged straight into the dev and production feedback loop — not a chat window off to the side.</li>
 </ul>
-<p>The proof is open source: three products where the AI engineering *is* the point, not a demo — below.</p></div></section>
+<p>The proof is open source: three products where the AI engineering <em>is</em> the point, not a demo — below.</p></div></section>
 <section class="sec sec-case" aria-labelledby="en-featured-case-study"><h2 class="sec-h" id="en-featured-case-study"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Featured Case Study</span><span class="sec-rule"></span></h2><div class="case"><h3>Coreum on Google Cloud: scaling a cloud-native platform</h3>
 <p>Published by Google Cloud: <a href="https://cloud.google.com/customers/micromed">https://cloud.google.com/customers/micromed</a></p>
 <p>Led Coreum from zero into Micromed's cloud-native platform — scalable workflows, AI features, ERP integration, and a production foundation built for fast, safe releases (it powers cardiology diagnostics). The Google Cloud case study reports:</p>
@@ -773,12 +794,12 @@ aside { display: grid; gap: 26px; align-content: start; }
 <p>Technologies: Rust, SQLite, BigQuery, Pluggy, MCP, React/LiveStore.</p>
 <p>Project: <a href="https://github.com/feliperun/phai">https://github.com/feliperun/phai</a></p>
 <h3>cueme — local-first second brain with a live conversation copilot · native Swift, macOS</h3>
-<p>A file-first personal knowledge product for macOS: Notion-style block editing over plain Markdown files. Every note is a normal folder on disk — SQLite, FTS5, and `sqlite-vec` embeddings are rebuildable indexes, never the source of truth. Written notes, journals, recorded meetings, and imported audio share one memory model with local hybrid search.</p>
-<p>On top of that memory sits a real-time conversation copilot for meetings and hard conversations. It captures both sides of a call natively (mic via `AVAudioEngine` + system audio via `ScreenCaptureKit`, so who spoke is known by origin — no diarization), transcribes and translates on-device, and streams live guidance cards and incremental meeting minutes from a warm agent process in ~1–2s — grounded in your own notes via local semantic retrieval. 100% native Swift 6, no webview, no virtual audio driver; Swift Concurrency throughout — actors for shared state, `AsyncStream` fan-out, cooperative cancellation — plus a long-call watchdog and automatic provider failover. The &quot;brain&quot; shells out to the local Claude Code CLI: keyless by default, nothing to configure, no key to leak.</p>
+<p>A file-first personal knowledge product for macOS: Notion-style block editing over plain Markdown files. Every note is a normal folder on disk — SQLite, FTS5, and <code>sqlite-vec</code> embeddings are rebuildable indexes, never the source of truth. Written notes, journals, recorded meetings, and imported audio share one memory model with local hybrid search.</p>
+<p>On top of that memory sits a real-time conversation copilot for meetings and hard conversations. It captures both sides of a call natively (mic via <code>AVAudioEngine</code> + system audio via <code>ScreenCaptureKit</code>, so who spoke is known by origin — no diarization), transcribes and translates on-device, and streams live guidance cards and incremental meeting minutes from a warm agent process in ~1–2s — grounded in your own notes via local semantic retrieval. 100% native Swift 6, no webview, no virtual audio driver; Swift Concurrency throughout — actors for shared state, <code>AsyncStream</code> fan-out, cooperative cancellation — plus a long-call watchdog and automatic provider failover. The &quot;brain&quot; shells out to the local Claude Code CLI: keyless by default, nothing to configure, no key to leak.</p>
 <p>Technologies: Swift 6, Claude Code CLI, ScreenCaptureKit, Deepgram / Apple on-device STT, sqlite-vec.</p>
 <p>Project: <a href="https://github.com/feliperun/cueme">https://github.com/feliperun/cueme</a></p>
 <h3>ford / create-openclaw-agent — autonomous agent, hardened cloud deploy · IaC + GCP</h3>
-<p>One command that provisions a production-grade, self-hosted AI agent (OpenClaw) to the cloud: a gateway on Claude Sonnet with Mem0 persistent memory (Qdrant vectors), a headless Chrome browser, audio transcription, and a WhatsApp channel — on Terraform/OpenTofu infrastructure with defense-in-depth: no external IP (IAP-only access), egress firewall, secrets in Secret Manager fetched into RAM (never on disk), read-only hardened containers (`cap_drop: ALL`, images pinned by digest), age-encrypted backups, and gitleaks/Trivy CI scanning. The instance I run in production is Ford — my own always-on WhatsApp assistant.</p>
+<p>One command that provisions a production-grade, self-hosted AI agent (OpenClaw) to the cloud: a gateway on Claude Sonnet with Mem0 persistent memory (Qdrant vectors), a headless Chrome browser, audio transcription, and a WhatsApp channel — on Terraform/OpenTofu infrastructure with defense-in-depth: no external IP (IAP-only access), egress firewall, secrets in Secret Manager fetched into RAM (never on disk), read-only hardened containers (<code>cap_drop: ALL</code>, images pinned by digest), age-encrypted backups, and gitleaks/Trivy CI scanning. The instance I run in production is Ford — my own always-on WhatsApp assistant.</p>
 <p>Technologies: OpenTofu, Google Cloud, Docker, Mem0/Qdrant, Claude, Secret Manager.</p>
 <p>Project: <a href="https://github.com/feliperun/create-openclaw-agent">https://github.com/feliperun/create-openclaw-agent</a></p>
 <h3>Also</h3>
@@ -790,7 +811,7 @@ aside { display: grid; gap: 26px; align-content: start; }
 <p>Micromed Health - Florianopolis, Brazil - Jan 2026 to Present</p>
 <p>After three and a half years leading engineering, I chose to return to deep hands-on work — the AI-native way of building I'd been driving as a leader is now what I do all day. I build the harness the team codes with, while shipping product end to end across discovery, domain modeling, architecture, implementation, validation, release, and production operations.</p>
 <ul>
-<li>Designing and operating the team's AI engineering harness: coding agents on rails with structured prompts, reusable skills, ADRs, TDD, quality gates, code review, and autonomous CI/merge loops — keeping agent-assisted delivery fast *and* production-grade.</li>
+<li>Designing and operating the team's AI engineering harness: coding agents on rails with structured prompts, reusable skills, ADRs, TDD, quality gates, code review, and autonomous CI/merge loops — keeping agent-assisted delivery fast <em>and</em> production-grade.</li>
 <li>Building reusable engineering skills — Figma-to-code, UX review, product modeling, technical planning, code review, release validation, production investigation, documentation, and data analysis — so recurring work runs as repeatable, inspectable commands.</li>
 <li>Leading product engineering initiatives from Figma and product design through implementation, validation, release, observability, and production iteration.</li>
 <li>Building web experiences with React, Node.js, and TypeScript across frontend, backend, APIs, authentication, and data workflows; Python for ECG signal-processing; Rust as the native integration layer between medical hardware, local PCs, and cloud.</li>
@@ -893,19 +914,19 @@ aside { display: grid; gap: 26px; align-content: start; }
 <li>Spanish — Basic to intermediate proficiency</li>
 </ul></div>
   </section></aside></div>
-<div class="lang pt" data-lang-block="pt"><div class="content"><section class="sec sec-profile" aria-labelledby="pt-perfil"><h2 class="sec-h" id="pt-perfil"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Perfil</span><span class="sec-rule"></span></h2><div class="lede"><p>Engenheiro e líder de engenharia com quase duas décadas construindo produtos digitais complexos de ponta a ponta — e, nos últimos anos, reconstruindo *como esse trabalho é feito* com IA. Desenho os harnesses, guardrails e workflows de agentes que permitem um time entregar com coding agents em qualidade de produção: rápido, revisável e com accountability — não uma pilha de código gerado por IA em que ninguém confia.</p>
+<div class="lang pt" data-lang-block="pt"><div class="content"><section class="sec sec-profile" aria-labelledby="pt-perfil"><h2 class="sec-h" id="pt-perfil"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Perfil</span><span class="sec-rule"></span></h2><div class="lede"><p>Engenheiro e líder de engenharia com quase duas décadas construindo produtos digitais complexos de ponta a ponta — e, nos últimos anos, reconstruindo <em>como esse trabalho é feito</em> com IA. Desenho os harnesses, guardrails e workflows de agentes que permitem um time entregar com coding agents em qualidade de produção: rápido, revisável e com accountability — não uma pilha de código gerado por IA em que ninguém confia.</p>
 <p>Trabalho melhor onde produto e engenharia não se separam: fluxos complexos, sistemas operacionais, domínios regulados, plataformas cloud-native e automação que precisa se manter confiável em produção. Minha trajetória cobre engenharia full-stack, arquitetura de nuvem, gestão de produto e integração de hardware — como engenheiro de software, tech lead, CTO/fundador, engineering manager e head of engineering.</p>
 <p>Liderei plataformas em operações críticas — incluindo o Coreum na Micromed, destacado pelo Google Cloud — e construo ferramentas open-source, terminal-first, de IA: agentes nos trilhos, sistemas local-first e os harnesses de engenharia que mantêm mudanças assistidas por agentes prontas para produção.</p></div></section>
 <section class="sec" aria-labelledby="pt-engenharia-de-ia"><h2 class="sec-h" id="pt-engenharia-de-ia"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Engenharia de IA</span><span class="sec-rule"></span></h2><div class="prose"><p>Eu não só uso ferramentas de IA — eu construo a engenharia em volta delas. O princípio por trás de tudo que entrego, e o que eu traria para liderar um time AI-native: <strong>regras primeiro, IA depois.</strong> Coloque o modelo nos trilhos para que a velocidade nunca custe arquitetura, correção ou accountability. Na prática, isso significa:</p>
 <ul>
-<li><strong>Harness de entrega agêntica.</strong> Playbooks `AGENTS.md` por repositório (com `CLAUDE.md` / `GEMINI.md` / `CURSOR.md` como symlinks), ADRs para cada decisão estrutural, TDD, quality gates estruturais e pre-commit + CI — para que os diffs escritos por agente fiquem pequenos, escopados, revisáveis e verdes. Nunca `--no-verify`: se um hook bloqueia, o problema de fundo é corrigido.</li>
+<li><strong>Harness de entrega agêntica.</strong> Playbooks <code>AGENTS.md</code> por repositório (com <code>CLAUDE.md</code> / <code>GEMINI.md</code> / <code>CURSOR.md</code> como symlinks), ADRs para cada decisão estrutural, TDD, quality gates estruturais e pre-commit + CI — para que os diffs escritos por agente fiquem pequenos, escopados, revisáveis e verdes. Nunca <code>--no-verify</code>: se um hook bloqueia, o problema de fundo é corrigido.</li>
 <li><strong>Skills reutilizáveis como primitivas de engenharia.</strong> Construí uma biblioteca de skills — Figma-to-code, code review, validação de release, investigação de produção, automação de Linear/PR, sync de docs, planejamento técnico, enforcement de TDD — para que o trabalho recorrente vire um comando repetível e inspecionável, em vez de um prompt ad-hoc novo toda vez.</li>
-<li><strong>Loops autônomos de CI / merge.</strong> Pipelines que abrem um PR, monitoram o CI, corrigem as falhas, aplicam sugestões dos bots de review e mergeiam no verde — para que humanos revisem *intenção e design*, não fiquem de babá de checklist.</li>
+<li><strong>Loops autônomos de CI / merge.</strong> Pipelines que abrem um PR, monitoram o CI, corrigem as falhas, aplicam sugestões dos bots de review e mergeiam no verde — para que humanos revisem <em>intenção e design</em>, não fiquem de babá de checklist.</li>
 <li><strong>Orquestração multi-agente.</strong> Workflows de fan-out/verificação e subagentes especializados para review, investigação e edições limitadas, com verificação adversarial antes de confiar em qualquer achado — porque uma resposta errada e confiante é o modo de falha caro.</li>
 <li><strong>Model-neutral por design.</strong> Ferramental agnóstico de LLM entre Claude, Gemini e modelos locais, conectado via servidores MCP, para que o workflow sobreviva a qualquer provedor único ou mudança de preço.</li>
 <li><strong>Terminal-first, dentro do loop real.</strong> Claude Code e Cursor CLI, prompts estruturados, harnesses locais e integrações MCP plugados direto no loop de dev e de feedback de produção — não uma janela de chat de lado.</li>
 </ul>
-<p>A prova é open source: três produtos onde a engenharia de IA *é* o ponto, não uma demo — abaixo.</p></div></section>
+<p>A prova é open source: três produtos onde a engenharia de IA <em>é</em> o ponto, não uma demo — abaixo.</p></div></section>
 <section class="sec sec-case" aria-labelledby="pt-estudo-de-caso-em-destaque"><h2 class="sec-h" id="pt-estudo-de-caso-em-destaque"><span class="sec-glyph" aria-hidden="true">&#9656;</span><span>Estudo de Caso em Destaque</span><span class="sec-rule"></span></h2><div class="case"><h3>Coreum no Google Cloud: escalando uma plataforma cloud-native</h3>
 <p>Publicado pelo Google Cloud: <a href="https://cloud.google.com/customers/micromed">https://cloud.google.com/customers/micromed</a></p>
 <p>Liderei o Coreum do zero até se tornar a plataforma cloud-native da Micromed — fluxos escaláveis, recursos de IA, integração com ERP e uma base de produção feita para releases rápidos e seguros (ela sustenta o diagnóstico cardiológico). O estudo de caso do Google Cloud reporta:</p>
@@ -926,12 +947,12 @@ aside { display: grid; gap: 26px; align-content: start; }
 <p>Tecnologias: Rust, SQLite, BigQuery, Pluggy, MCP, React/LiveStore.</p>
 <p>Projeto: <a href="https://github.com/feliperun/phai">https://github.com/feliperun/phai</a></p>
 <h3>cueme — second brain local-first com copilot de conversa ao vivo · Swift nativo, macOS</h3>
-<p>Um produto de conhecimento pessoal file-first para macOS: edição em blocos estilo Notion sobre arquivos Markdown puros. Cada nota é uma pasta normal no disco — SQLite, FTS5 e embeddings `sqlite-vec` são índices reconstruíveis, nunca a fonte da verdade. Notas escritas, journals, reuniões gravadas e áudio importado compartilham um único modelo de memória com busca híbrida local.</p>
-<p>Sobre essa memória roda um copilot de conversa em tempo real para reuniões e conversas difíceis. Captura os dois lados de uma call de forma nativa (mic via `AVAudioEngine` + áudio do sistema via `ScreenCaptureKit`, então quem falou é sabido pela origem — sem diarização), transcreve e traduz on-device, e faz streaming de cards de orientação ao vivo e ata incremental a partir de um processo de agente aquecido em ~1–2s — ancorado nas suas próprias notas via retrieval semântico local. 100% Swift 6 nativo, sem webview, sem driver de áudio virtual; Swift Concurrency em toda parte — actors para estado compartilhado, fan-out via `AsyncStream`, cancelamento cooperativo — mais um watchdog de calls longas e failover automático de provedor. O &quot;cérebro&quot; chama o Claude Code CLI local: keyless por padrão, nada para configurar, nenhuma chave para vazar.</p>
+<p>Um produto de conhecimento pessoal file-first para macOS: edição em blocos estilo Notion sobre arquivos Markdown puros. Cada nota é uma pasta normal no disco — SQLite, FTS5 e embeddings <code>sqlite-vec</code> são índices reconstruíveis, nunca a fonte da verdade. Notas escritas, journals, reuniões gravadas e áudio importado compartilham um único modelo de memória com busca híbrida local.</p>
+<p>Sobre essa memória roda um copilot de conversa em tempo real para reuniões e conversas difíceis. Captura os dois lados de uma call de forma nativa (mic via <code>AVAudioEngine</code> + áudio do sistema via <code>ScreenCaptureKit</code>, então quem falou é sabido pela origem — sem diarização), transcreve e traduz on-device, e faz streaming de cards de orientação ao vivo e ata incremental a partir de um processo de agente aquecido em ~1–2s — ancorado nas suas próprias notas via retrieval semântico local. 100% Swift 6 nativo, sem webview, sem driver de áudio virtual; Swift Concurrency em toda parte — actors para estado compartilhado, fan-out via <code>AsyncStream</code>, cancelamento cooperativo — mais um watchdog de calls longas e failover automático de provedor. O &quot;cérebro&quot; chama o Claude Code CLI local: keyless por padrão, nada para configurar, nenhuma chave para vazar.</p>
 <p>Tecnologias: Swift 6, Claude Code CLI, ScreenCaptureKit, Deepgram / STT on-device da Apple, sqlite-vec.</p>
 <p>Projeto: <a href="https://github.com/feliperun/cueme">https://github.com/feliperun/cueme</a></p>
 <h3>ford / create-openclaw-agent — agente autônomo, deploy com hardening · IaC + GCP</h3>
-<p>Um comando que provisiona um agente de IA self-hosted em nível de produção (OpenClaw) na nuvem: um gateway em Claude Sonnet com memória persistente Mem0 (vetores no Qdrant), um Chrome headless, transcrição de áudio e um canal de WhatsApp — sobre infra Terraform/OpenTofu com defense-in-depth: sem IP externo (acesso só por IAP), firewall de egress, segredos no Secret Manager buscados para a RAM (nunca em disco), containers read-only com hardening (`cap_drop: ALL`, imagens pinadas por digest), backups criptografados com age e scanning de CI com gitleaks/Trivy. A instância que rodo em produção é o Ford — meu próprio assistente de WhatsApp always-on.</p>
+<p>Um comando que provisiona um agente de IA self-hosted em nível de produção (OpenClaw) na nuvem: um gateway em Claude Sonnet com memória persistente Mem0 (vetores no Qdrant), um Chrome headless, transcrição de áudio e um canal de WhatsApp — sobre infra Terraform/OpenTofu com defense-in-depth: sem IP externo (acesso só por IAP), firewall de egress, segredos no Secret Manager buscados para a RAM (nunca em disco), containers read-only com hardening (<code>cap_drop: ALL</code>, imagens pinadas por digest), backups criptografados com age e scanning de CI com gitleaks/Trivy. A instância que rodo em produção é o Ford — meu próprio assistente de WhatsApp always-on.</p>
 <p>Tecnologias: OpenTofu, Google Cloud, Docker, Mem0/Qdrant, Claude, Secret Manager.</p>
 <p>Projeto: <a href="https://github.com/feliperun/create-openclaw-agent">https://github.com/feliperun/create-openclaw-agent</a></p>
 <h3>Também</h3>
@@ -943,7 +964,7 @@ aside { display: grid; gap: 26px; align-content: start; }
 <p>Micromed Health - Florianópolis, Brasil - Jan 2026 até o presente</p>
 <p>Depois de três anos e meio liderando a engenharia, escolhi voltar ao trabalho profundamente hands-on — o jeito AI-native de construir que eu vinha dirigindo como líder é agora o que faço o dia inteiro. Construo o harness com que o time coda, enquanto entrego produto de ponta a ponta em descoberta, modelagem de domínio, arquitetura, implementação, validação, release e operação em produção.</p>
 <ul>
-<li>Desenhando e operando o harness de engenharia de IA do time: coding agents nos trilhos com prompts estruturados, skills reutilizáveis, ADRs, TDD, quality gates, code review e loops autônomos de CI/merge — mantendo a entrega assistida por agentes rápida *e* em nível de produção.</li>
+<li>Desenhando e operando o harness de engenharia de IA do time: coding agents nos trilhos com prompts estruturados, skills reutilizáveis, ADRs, TDD, quality gates, code review e loops autônomos de CI/merge — mantendo a entrega assistida por agentes rápida <em>e</em> em nível de produção.</li>
 <li>Construindo skills de engenharia reutilizáveis — Figma-to-code, review de UX, modelagem de produto, planejamento técnico, code review, validação de release, investigação de produção, documentação e análise de dados — para que o trabalho recorrente rode como comandos repetíveis e inspecionáveis.</li>
 <li>Liderando iniciativas de engenharia de produto do Figma e do design à implementação, validação, release, observabilidade e iteração em produção.</li>
 <li>Construindo experiências web com React, Node.js e TypeScript entre frontend, backend, APIs, autenticação e fluxos de dados; Python para processamento de sinais de ECG; Rust como camada de integração nativa entre hardware médico, PCs locais e nuvem.</li>
