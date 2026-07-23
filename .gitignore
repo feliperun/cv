@@ -1,0 +1,8 @@
+node_modules/
+
+# LinkedIn sync — local session + run artifacts (never commit secrets)
+.linkedin/session.json
+.linkedin/preview/
+.linkedin/log/
+.env
+.env.*
