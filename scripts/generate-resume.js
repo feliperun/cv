@@ -211,8 +211,8 @@ function renderTermBand() {
     .join(" ");
   const ariaLabel = `${TERM.prompt}:~$ ${TERM.cmd} ${TERM.args.map((a) => a.flag + " " + a.value).join(" ")}`;
   const printNote = {
-    en: "Condensed print version — full resume: https://cv.felipe.run",
-    pt: "Versão condensada para impressão — currículo completo: https://cv.felipe.run",
+    en: "Condensed print version. Full resume: https://cv.felipe.run",
+    pt: "Versão condensada para impressão. Currículo completo: https://cv.felipe.run",
   };
   const outs = ["en", "pt"]
     .map((lang) => `<div class="lang ${lang}"><p class="term-out">${escapeHtml(TERM[lang])}</p><p class="print-note">${escapeHtml(printNote[lang])}</p></div>`)
@@ -1024,8 +1024,8 @@ const html = `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${escapeHtml(title)} — Resume</title>
-  <meta name="description" content="Resume of ${escapeHtml(title)} — senior/lead engineer and engineering leader specializing in AI engineering: agentic delivery harnesses, LLM tooling, cloud-native platforms, and open-source developer tools.">
+  <title>${escapeHtml(title)} · Resume</title>
+  <meta name="description" content="Resume of ${escapeHtml(title)}: senior/lead engineer and engineering leader specializing in AI engineering: agentic delivery harnesses, LLM tooling, cloud-native platforms, and open-source developer tools.">
   <link rel="icon" href="${favicon}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
