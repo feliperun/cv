@@ -1,11 +1,14 @@
 <!doctype html>
-<html lang="en" data-theme="dark" data-lang="en">
+<html lang="en" data-theme="dark" data-lang="en" data-view="rendered">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Felipe R. Broering · Resume</title>
   <meta name="description" content="Resume of Felipe R. Broering: senior/lead engineer and engineering leader specializing in AI engineering: agentic delivery harnesses, LLM tooling, cloud-native platforms, and open-source developer tools.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230d0f12%22%2F%3E%3Cpath%20d%3D%22M9%2011%20L15%2016%20L9%2021%22%20fill%3D%22none%22%20stroke%3D%22%236ea8fe%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M17%2021%20H23%22%20fill%3D%22none%22%20stroke%3D%22%236ea8fe%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+  <link rel="canonical" href="https://cv.felipe.run/">
+  <link rel="alternate" type="text/markdown" hreflang="en" href="https://cv.felipe.run/en.md" title="Resume as Markdown (English)">
+  <link rel="alternate" type="text/markdown" hreflang="pt-BR" href="https://cv.felipe.run/pt.md" title="Currículo em Markdown (Português)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -18,6 +21,8 @@
         var l = localStorage.getItem("cv-lang");
         if (l !== "en" && l !== "pt") l = "en";
         document.documentElement.setAttribute("data-lang", l);
+        var v = location.hash === "#markdown" ? "raw" : localStorage.getItem("cv-view");
+        document.documentElement.setAttribute("data-view", v === "raw" ? "raw" : "rendered");
       } catch (e) {}
     })();
   </script>
@@ -173,7 +178,51 @@ html[data-lang="pt"] .lang.pt { display: contents; }
 }
 .tbtn:hover { border-color: var(--signal); }
 .tbtn.icon { padding: 6px 10px; }
+.tbtn[aria-pressed="true"] {
+  background: var(--signal-soft);
+  border-color: var(--signal);
+  color: var(--signal-ink);
+}
 .copy-status { color: var(--signal-ink); min-width: 58px; }
+
+/* ---- raw markdown view (same source the copy button hands out) ---- */
+.raw-wrap {
+  display: none;
+  width: min(1120px, 100% - 36px);
+  margin: 30px auto 60px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+html[data-view="raw"] .raw-wrap { display: block; }
+html[data-view="raw"] .resume { display: none; }
+.raw-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.raw-head b { color: var(--signal-ink); font-weight: 600; }
+.raw-md {
+  margin: 0;
+  padding: 26px 28px 34px;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.62;
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  tab-size: 2;
+}
+.view-off { display: none; }
+html[data-view="raw"] .view-on { display: none; }
+html[data-view="raw"] .view-off { display: inline; }
 
 /* ---- shell ---- */
 .resume {
@@ -577,6 +626,9 @@ aside { display: grid; gap: 26px; align-content: start; }
   }
   body { background: #fff; font-size: 12px; line-height: 1.42; }
   .toolbar, .foot .flat, .print-hide { display: none; }
+  /* printing always yields the typeset resume, never the raw source */
+  .raw-wrap { display: none !important; }
+  html[data-view="raw"] .resume { display: block; }
   .print-note { display: block; margin: 6px 0 0; font-family: var(--mono); font-size: 0.72rem; color: var(--signal-ink); }
   .resume { width: 100%; margin: 0; border: 0; box-shadow: none; }
   header, .term-band, .vitals-wrap, main, .foot { padding-left: 0; padding-right: 0; }
@@ -694,6 +746,7 @@ aside { display: grid; gap: 26px; align-content: start; }
       <span data-theme-icon>◐</span>
     </button>
     <button class="tbtn" type="button" data-action="download"><span class="lang en">Download PDF</span><span class="lang pt">Baixar PDF</span></button>
+    <button class="tbtn" type="button" data-action="view" aria-pressed="false"><span class="lang en"><span class="view-on">View Markdown</span><span class="view-off">View resume</span></span><span class="lang pt"><span class="view-on">Ver Markdown</span><span class="view-off">Ver currículo</span></span></button>
     <button class="tbtn" type="button" data-action="copy"><span class="lang en">Copy Markdown</span><span class="lang pt">Copiar Markdown</span></button>
     <span class="copy-status" aria-live="polite"></span>
   </nav>
@@ -1125,6 +1178,14 @@ aside { display: grid; gap: 26px; align-content: start; }
       <span>cv.felipe.run</span>
     </footer>
   </article>
+
+  <section class="raw-wrap" aria-label="Markdown source">
+    <div class="raw-head">
+      <span class="lang en">source · <b>README.md</b></span>
+      <span class="lang pt">fonte · <b>README.pt-BR.md</b></span>
+    </div>
+    <pre class="raw-md" id="raw-out" tabindex="0"></pre>
+  </section>
 
   <script type="text/plain" id="md-en"># Felipe R. Broering
 
@@ -1560,7 +1621,16 @@ Universidade do Vale do Itajaí: Bacharelado em Engenharia de Computação (enge
     (function () {
       var root = document.documentElement;
       var status = document.querySelector(".copy-status");
+      var viewBtn = document.querySelector("[data-action='view']");
+      var rawOut = document.getElementById("raw-out");
       var COPIED = { en: "Copied", pt: "Copiado" };
+
+      function markdownFor(lang) {
+        var node = document.getElementById("md-" + lang);
+        var decode = document.createElement("textarea");
+        decode.innerHTML = node.textContent;
+        return decode.value.trim() + "\n";
+      }
 
       function setLang(lang) {
         root.setAttribute("data-lang", lang);
@@ -1569,6 +1639,16 @@ Universidade do Vale do Itajaí: Bacharelado em Engenharia de Computação (enge
         for (var i = 0; i < btns.length; i++) {
           btns[i].setAttribute("aria-pressed", btns[i].getAttribute("data-lang-btn") === lang ? "true" : "false");
         }
+        if (root.getAttribute("data-view") === "raw") renderRaw();
+      }
+      function renderRaw() {
+        rawOut.textContent = markdownFor(root.getAttribute("data-lang") || "en");
+      }
+      function setView(view) {
+        root.setAttribute("data-view", view);
+        try { localStorage.setItem("cv-view", view); } catch (e) {}
+        viewBtn.setAttribute("aria-pressed", view === "raw" ? "true" : "false");
+        if (view === "raw") renderRaw();
       }
       function setTheme(theme) {
         root.setAttribute("data-theme", theme);
@@ -1582,6 +1662,11 @@ Universidade do Vale do Itajaí: Bacharelado em Engenharia de Computação (enge
         });
       }
       setLang(root.getAttribute("data-lang") || "en");
+      setView(root.getAttribute("data-view") === "raw" ? "raw" : "rendered");
+
+      viewBtn.addEventListener("click", function () {
+        setView(root.getAttribute("data-view") === "raw" ? "rendered" : "raw");
+      });
 
       document.querySelector("[data-action='theme']").addEventListener("click", function () {
         setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
@@ -1593,10 +1678,7 @@ Universidade do Vale do Itajaí: Bacharelado em Engenharia de Computação (enge
 
       document.querySelector("[data-action='copy']").addEventListener("click", function () {
         var lang = root.getAttribute("data-lang") || "en";
-        var node = document.getElementById("md-" + lang);
-        var decode = document.createElement("textarea");
-        decode.innerHTML = node.textContent;
-        var markdown = decode.value.trim() + "\n";
+        var markdown = markdownFor(lang);
         function done() {
           status.textContent = COPIED[lang];
           window.setTimeout(function () { status.textContent = ""; }, 2000);

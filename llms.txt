@@ -1,0 +1,20 @@
+# Felipe R. Broering
+
+> Lead engineer and engineering leader specializing in AI engineering: agentic
+> delivery harnesses, LLM tooling, cloud-native platforms, and open-source
+> developer tools. Based in Florianópolis, SC, Brazil.
+
+The rendered page at https://cv.felipe.run/ carries both languages in one document plus
+inline styling; these files are the same resume as plain Markdown, one language
+each.
+
+## Resume
+
+- [Resume (English)](https://cv.felipe.run/en.md): full resume in Markdown.
+- [Currículo (Português do Brasil)](https://cv.felipe.run/pt.md): same resume, pt-BR.
+
+## Contact
+
+- Email: hi@felipe.run
+- LinkedIn: https://www.linkedin.com/in/felipebroering
+- GitHub: https://github.com/feliperun

@@ -19,6 +19,15 @@ const { slugify, sectionize, parseIntro } = require("./lib/parse-resume");
 const ROOT = path.resolve(__dirname, "..");
 const outputPath = path.join(ROOT, "index.html");
 
+const SITE = "https://cv.felipe.run";
+
+// Plain-Markdown mirrors of the two sources, published at stable short URLs.
+// GitHub Pages serves .md as `text/markdown; charset=utf-8`, which browsers
+// show inline as source and which agents can read without stripping a 100KB
+// page of inline CSS, both languages, and the embedded copy-to-clipboard blocks.
+// (Pages is static: there is no Accept-header negotiation to hang this off.)
+const MIRRORS = { en: "en.md", pt: "pt.md" };
+
 const SOURCES = {
   en: path.join(ROOT, "README.md"),
   pt: path.join(ROOT, "README.pt-BR.md"),
@@ -525,7 +534,51 @@ html[data-lang="pt"] .lang.pt { display: contents; }
 }
 .tbtn:hover { border-color: var(--signal); }
 .tbtn.icon { padding: 6px 10px; }
+.tbtn[aria-pressed="true"] {
+  background: var(--signal-soft);
+  border-color: var(--signal);
+  color: var(--signal-ink);
+}
 .copy-status { color: var(--signal-ink); min-width: 58px; }
+
+/* ---- raw markdown view (same source the copy button hands out) ---- */
+.raw-wrap {
+  display: none;
+  width: min(1120px, 100% - 36px);
+  margin: 30px auto 60px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+html[data-view="raw"] .raw-wrap { display: block; }
+html[data-view="raw"] .resume { display: none; }
+.raw-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.raw-head b { color: var(--signal-ink); font-weight: 600; }
+.raw-md {
+  margin: 0;
+  padding: 26px 28px 34px;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.62;
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  tab-size: 2;
+}
+.view-off { display: none; }
+html[data-view="raw"] .view-on { display: none; }
+html[data-view="raw"] .view-off { display: inline; }
 
 /* ---- shell ---- */
 .resume {
@@ -929,6 +982,9 @@ aside { display: grid; gap: 26px; align-content: start; }
   }
   body { background: #fff; font-size: 12px; line-height: 1.42; }
   .toolbar, .foot .flat, .print-hide { display: none; }
+  /* printing always yields the typeset resume, never the raw source */
+  .raw-wrap { display: none !important; }
+  html[data-view="raw"] .resume { display: block; }
   .print-note { display: block; margin: 6px 0 0; font-family: var(--mono); font-size: 0.72rem; color: var(--signal-ink); }
   .resume { width: 100%; margin: 0; border: 0; box-shadow: none; }
   header, .term-band, .vitals-wrap, main, .foot { padding-left: 0; padding-right: 0; }
@@ -1012,13 +1068,16 @@ aside { display: grid; gap: 26px; align-content: start; }
 `;
 
 const html = `<!doctype html>
-<html lang="en" data-theme="dark" data-lang="en">
+<html lang="en" data-theme="dark" data-lang="en" data-view="rendered">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)} · Resume</title>
   <meta name="description" content="Resume of ${escapeHtml(title)}: senior/lead engineer and engineering leader specializing in AI engineering: agentic delivery harnesses, LLM tooling, cloud-native platforms, and open-source developer tools.">
   <link rel="icon" href="${favicon}">
+  <link rel="canonical" href="${SITE}/">
+  <link rel="alternate" type="text/markdown" hreflang="en" href="${SITE}/en.md" title="Resume as Markdown (English)">
+  <link rel="alternate" type="text/markdown" hreflang="pt-BR" href="${SITE}/pt.md" title="Currículo em Markdown (Português)">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -1031,6 +1090,8 @@ const html = `<!doctype html>
         var l = localStorage.getItem("cv-lang");
         if (l !== "en" && l !== "pt") l = "en";
         document.documentElement.setAttribute("data-lang", l);
+        var v = location.hash === "#markdown" ? "raw" : localStorage.getItem("cv-view");
+        document.documentElement.setAttribute("data-view", v === "raw" ? "raw" : "rendered");
       } catch (e) {}
     })();
   </script>
@@ -1052,6 +1113,7 @@ ${jsonLd}
       <span data-theme-icon>◐</span>
     </button>
     <button class="tbtn" type="button" data-action="download"><span class="lang en">Download PDF</span><span class="lang pt">Baixar PDF</span></button>
+    <button class="tbtn" type="button" data-action="view" aria-pressed="false"><span class="lang en"><span class="view-on">View Markdown</span><span class="view-off">View resume</span></span><span class="lang pt"><span class="view-on">Ver Markdown</span><span class="view-off">Ver currículo</span></span></button>
     <button class="tbtn" type="button" data-action="copy"><span class="lang en">Copy Markdown</span><span class="lang pt">Copiar Markdown</span></button>
     <span class="copy-status" aria-live="polite"></span>
   </nav>
@@ -1080,13 +1142,30 @@ ${jsonLd}
     </footer>
   </article>
 
+  <section class="raw-wrap" aria-label="Markdown source">
+    <div class="raw-head">
+      <span class="lang en">source · <b>README.md</b></span>
+      <span class="lang pt">fonte · <b>README.pt-BR.md</b></span>
+    </div>
+    <pre class="raw-md" id="raw-out" tabindex="0"></pre>
+  </section>
+
   <script type="text/plain" id="md-en">${escapeHtml(markdownRaw.en)}</script>
   <script type="text/plain" id="md-pt">${escapeHtml(markdownRaw.pt)}</script>
   <script>
     (function () {
       var root = document.documentElement;
       var status = document.querySelector(".copy-status");
+      var viewBtn = document.querySelector("[data-action='view']");
+      var rawOut = document.getElementById("raw-out");
       var COPIED = { en: "Copied", pt: "Copiado" };
+
+      function markdownFor(lang) {
+        var node = document.getElementById("md-" + lang);
+        var decode = document.createElement("textarea");
+        decode.innerHTML = node.textContent;
+        return decode.value.trim() + "\\n";
+      }
 
       function setLang(lang) {
         root.setAttribute("data-lang", lang);
@@ -1095,6 +1174,16 @@ ${jsonLd}
         for (var i = 0; i < btns.length; i++) {
           btns[i].setAttribute("aria-pressed", btns[i].getAttribute("data-lang-btn") === lang ? "true" : "false");
         }
+        if (root.getAttribute("data-view") === "raw") renderRaw();
+      }
+      function renderRaw() {
+        rawOut.textContent = markdownFor(root.getAttribute("data-lang") || "en");
+      }
+      function setView(view) {
+        root.setAttribute("data-view", view);
+        try { localStorage.setItem("cv-view", view); } catch (e) {}
+        viewBtn.setAttribute("aria-pressed", view === "raw" ? "true" : "false");
+        if (view === "raw") renderRaw();
       }
       function setTheme(theme) {
         root.setAttribute("data-theme", theme);
@@ -1108,6 +1197,11 @@ ${jsonLd}
         });
       }
       setLang(root.getAttribute("data-lang") || "en");
+      setView(root.getAttribute("data-view") === "raw" ? "raw" : "rendered");
+
+      viewBtn.addEventListener("click", function () {
+        setView(root.getAttribute("data-view") === "raw" ? "rendered" : "raw");
+      });
 
       document.querySelector("[data-action='theme']").addEventListener("click", function () {
         setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
@@ -1119,10 +1213,7 @@ ${jsonLd}
 
       document.querySelector("[data-action='copy']").addEventListener("click", function () {
         var lang = root.getAttribute("data-lang") || "en";
-        var node = document.getElementById("md-" + lang);
-        var decode = document.createElement("textarea");
-        decode.innerHTML = node.textContent;
-        var markdown = decode.value.trim() + "\\n";
+        var markdown = markdownFor(lang);
         function done() {
           status.textContent = COPIED[lang];
           window.setTimeout(function () { status.textContent = ""; }, 2000);
@@ -1152,4 +1243,42 @@ ${jsonLd}
 `;
 
 fs.writeFileSync(outputPath, html, "utf8");
-console.log(`Generated ${path.relative(ROOT, outputPath)} from README.md + README.pt-BR.md`);
+
+// Markdown mirrors + an llms.txt index pointing at them. llms.txt is a
+// community convention, not a standard, and nothing guarantees a crawler
+// reads it — it costs one small file, so it is here as a cheap bet.
+const written = [outputPath];
+for (const lang of ["en", "pt"]) {
+  const mirrorPath = path.join(ROOT, MIRRORS[lang]);
+  fs.writeFileSync(mirrorPath, markdownRaw[lang] + "\n", "utf8");
+  written.push(mirrorPath);
+}
+
+const llms = `# ${title}
+
+> Lead engineer and engineering leader specializing in AI engineering: agentic
+> delivery harnesses, LLM tooling, cloud-native platforms, and open-source
+> developer tools. Based in Florianópolis, SC, Brazil.
+
+The rendered page at ${SITE}/ carries both languages in one document plus
+inline styling; these files are the same resume as plain Markdown, one language
+each.
+
+## Resume
+
+- [Resume (English)](${SITE}/${MIRRORS.en}): full resume in Markdown.
+- [Currículo (Português do Brasil)](${SITE}/${MIRRORS.pt}): same resume, pt-BR.
+
+## Contact
+
+- Email: hi@felipe.run
+- LinkedIn: https://www.linkedin.com/in/felipebroering
+- GitHub: https://github.com/feliperun
+`;
+const llmsPath = path.join(ROOT, "llms.txt");
+fs.writeFileSync(llmsPath, llms, "utf8");
+written.push(llmsPath);
+
+console.log(
+  `Generated ${written.map((p) => path.relative(ROOT, p)).join(", ")} from README.md + README.pt-BR.md`
+);

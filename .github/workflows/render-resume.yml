@@ -37,15 +37,17 @@ jobs:
       - name: Generate HTML from README
         run: node scripts/generate-resume.js
 
-      - name: Commit regenerated HTML
+      - name: Commit regenerated output
         run: |
-          if git diff --quiet -- index.html; then
-            echo "index.html is already up to date"
+          artifacts="index.html en.md pt.md llms.txt"
+
+          if git diff --quiet -- $artifacts; then
+            echo "generated output is already up to date"
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git commit -m "chore: regenerate resume html [skip ci]"
+          git add $artifacts
+          git commit -m "chore: regenerate resume output [skip ci]"
           git push
