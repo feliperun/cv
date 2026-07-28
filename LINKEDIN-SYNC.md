@@ -33,8 +33,19 @@ can't be forked by outsiders, so that vector is gone.
 | `scripts/linkedin-login.mjs` | One-time local session capture (`li_at` + `JSESSIONID`). |
 | `scripts/lib/linkedin-selectors.mjs` | LinkedIn edit-UI selectors (isolated — **needs live validation**). |
 | `scripts/linkedin-sync.mjs` | Orchestrator: `--detect` / dry-run / `--apply`; diff vs snapshot → edit changed fields. |
+| `scripts/generate-banner.mjs` | Renders the cover image (`assets/linkedin-banner.svg` + `.png`, 3168x792) from the same palette as the resume site. |
 
 Snapshot (`last-synced.{en,pt}.json`) and the workflow live in the private repo.
+
+### Cover image
+
+`npm run banner` regenerates `assets/linkedin-banner.png`. **Upload is manual** —
+the sync script only touches text fields. Profile → camera icon on the cover →
+*Change photo* → pick `assets/linkedin-banner.png` → keep the default crop.
+
+The composition assumes LinkedIn's desktop layout: the avatar sits over the
+lower-left quadrant and narrow viewports crop the outer edges, so the geometry
+is weighted centre-right and every edge fades to background.
 
 ## Setup (once)
 

@@ -201,7 +201,7 @@ const sparkSvg = `<svg class="spark" viewBox="0 0 58 24" preserveAspectRatio="no
 const favicon =
   "data:image/svg+xml," +
   encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#0a0e0d"/><path d="M9 11 L15 16 L9 21" fill="none" stroke="#2fe6b0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 21 H23" fill="none" stroke="#2fe6b0" stroke-width="2.4" stroke-linecap="round"/></svg>`
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#0d0f12"/><path d="M9 11 L15 16 L9 21" fill="none" stroke="#6ea8fe" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 21 H23" fill="none" stroke="#6ea8fe" stroke-width="2.4" stroke-linecap="round"/></svg>`
   );
 
 // Hero console band: shared command, per-language comment line.
@@ -375,47 +375,44 @@ const jsonLd = JSON.stringify(
 
 const css = `
 :root {
-  --bg: #0a0e0d;
-  --bg-2: #0d1211;
-  --panel: #0f1615;
-  --raise: #121a18;
-  --ink: #e9f2ec;
-  --muted: #8ba39a;
-  --faint: #56685f;
-  --line: rgba(120, 210, 180, 0.16);
-  --line-2: rgba(120, 210, 180, 0.08);
-  --grid: rgba(60, 220, 170, 0.045);
-  --grid-strong: rgba(60, 220, 170, 0.07);
-  --signal: #2fe6b0;
-  --signal-ink: #2fe6b0;
-  --signal-soft: rgba(47, 230, 176, 0.13);
-  --amber: #ffb44d;
-  --glow: 0 0 22px rgba(47, 230, 176, 0.28);
-  --shadow: 0 40px 120px rgba(0, 0, 0, 0.55);
-  --grid-size: 26px;
+  --bg: #0d0f12;
+  --bg-2: #101318;
+  --panel: #14171c;
+  --raise: #181c22;
+  --ink: #e6e9ee;
+  --muted: #9aa3af;
+  --faint: #7a838f;
+  --line: rgba(150, 170, 200, 0.15);
+  --line-2: rgba(150, 170, 200, 0.07);
+  --signal: #6ea8fe;
+  --signal-ink: #8ab4ff;
+  --signal-soft: rgba(110, 168, 254, 0.12);
+  --amber: #e0b070;
+  --glow: 0 0 18px rgba(110, 168, 254, 0.24);
+  --shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
+  --wash: radial-gradient(1100px 520px at 50% -8%, rgba(110, 168, 254, 0.07), transparent 62%);
   --serif: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 html[data-theme="light"] {
-  --bg: #f5efe9;
-  --bg-2: #fdfaf6;
-  --panel: #fffbf6;
-  --raise: #fffaf4;
-  --ink: #16211d;
-  --muted: #5c675f;
-  --faint: #9aa39a;
-  --line: rgba(20, 40, 32, 0.14);
-  --line-2: rgba(20, 40, 32, 0.08);
-  --grid: rgba(214, 116, 84, 0.09);
-  --grid-strong: rgba(214, 116, 84, 0.16);
-  --signal: #0e7c66;
-  --signal-ink: #0b5c4c;
-  --signal-soft: rgba(14, 124, 102, 0.1);
-  --amber: #b5651a;
+  --bg: #f4f5f7;
+  --bg-2: #ffffff;
+  --panel: #fafbfc;
+  --raise: #ffffff;
+  --ink: #14171c;
+  --muted: #545c66;
+  --faint: #6e7682;
+  --line: rgba(20, 25, 35, 0.12);
+  --line-2: rgba(20, 25, 35, 0.06);
+  --signal: #2563c9;
+  --signal-ink: #1d55b3;
+  --signal-soft: rgba(37, 99, 201, 0.08);
+  --amber: #8a5a12;
   --glow: none;
-  --shadow: 0 30px 90px rgba(70, 50, 30, 0.14);
+  --shadow: 0 24px 70px rgba(15, 25, 45, 0.1);
+  --wash: radial-gradient(1100px 520px at 50% -8%, rgba(37, 99, 201, 0.05), transparent 62%);
 }
 
 * { box-sizing: border-box; }
@@ -428,12 +425,7 @@ body {
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.6;
-  background:
-    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / var(--grid-size) var(--grid-size),
-    linear-gradient(var(--grid-strong) 1px, transparent 1px) 0 0 / calc(var(--grid-size) * 5) calc(var(--grid-size) * 5),
-    linear-gradient(90deg, var(--grid-strong) 1px, transparent 1px) 0 0 / calc(var(--grid-size) * 5) calc(var(--grid-size) * 5),
-    var(--bg);
+  background: var(--wash) no-repeat, var(--bg);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -929,11 +921,11 @@ aside { display: grid; gap: 26px; align-content: start; }
 @media print {
   :root, html[data-theme="dark"], html[data-theme="light"] {
     --bg: #fff; --bg-2: #fff; --panel: #fff; --raise: #fff;
-    --ink: #14201c; --muted: #333; --faint: #666;
-    --line: #d7d0c6; --line-2: #e2ddd4;
-    --grid: transparent; --grid-strong: transparent;
-    --signal: #0b5c4c; --signal-ink: #0b5c4c; --signal-soft: rgba(11,92,76,0.06);
-    --amber: #a05a13; --glow: none; --shadow: none;
+    --ink: #14171c; --muted: #333; --faint: #666;
+    --line: #ccd0d6; --line-2: #e2e5e9;
+    --wash: none;
+    --signal: #17458f; --signal-ink: #17458f; --signal-soft: rgba(23,69,143,0.06);
+    --amber: #7a4f0f; --glow: none; --shadow: none;
   }
   body { background: #fff; font-size: 12px; line-height: 1.42; }
   .toolbar, .foot .flat, .print-hide { display: none; }

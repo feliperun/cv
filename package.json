@@ -5,6 +5,7 @@
   "description": "Felipe R. Broering — resume site + LinkedIn profile sync",
   "scripts": {
     "build": "node scripts/generate-resume.js",
+    "banner": "node scripts/generate-banner.mjs",
     "linkedin:content": "node scripts/linkedin-content.js",
     "linkedin:login": "node scripts/linkedin-login.mjs",
     "linkedin:sync": "node scripts/linkedin-sync.mjs"
