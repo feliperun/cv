@@ -923,6 +923,9 @@ aside { display: grid; gap: 26px; align-content: start; }
   color: var(--faint);
 }
 .foot .flat { flex: 1; height: 1px; background: repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 12px); }
+/* the raw view is client-side only; this is the shareable URL for it */
+.foot-md { white-space: nowrap; }
+.foot-md a { border-bottom-color: var(--line-2); }
 
 /* ---- responsive ---- */
 @media (max-width: 900px) {
@@ -951,6 +954,9 @@ aside { display: grid; gap: 26px; align-content: start; }
     padding-left: 16px; padding-right: 16px;
   }
   .profile-panel { grid-template-columns: 104px minmax(0, 1fr); }
+  /* the hairline rule has no room left; let the three labels stack instead */
+  .foot { flex-wrap: wrap; gap: 4px 14px; }
+  .foot .flat { display: none; }
   .vitals { grid-template-columns: repeat(2, 1fr); }
   .vital { border-right: 1px solid var(--line); }
   .vital:nth-child(2n) { border-right: 0; }
@@ -1138,6 +1144,10 @@ ${jsonLd}
     <footer class="foot">
       <span>Rendered from README · ${new Date().getUTCFullYear()}</span>
       <span class="flat"></span>
+      <span class="foot-md print-hide">
+        <span class="lang en">Markdown: <a href="/${MIRRORS.en}">/${MIRRORS.en}</a></span>
+        <span class="lang pt">Markdown: <a href="/${MIRRORS.pt}">/${MIRRORS.pt}</a></span>
+      </span>
       <span>cv.felipe.run</span>
     </footer>
   </article>
