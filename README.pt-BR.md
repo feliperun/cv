@@ -1,6 +1,6 @@
 # Felipe R. Broering
 
-Lead Engineer · AI & Product Engineering
+Senior Product Engineer · Applied AI
 
 Florianópolis, SC, Brasil
 
@@ -10,11 +10,23 @@ Florianópolis, SC, Brasil
 
 ## Perfil
 
-Engenheiro e líder de engenharia com quase 20 anos construindo produtos da descoberta à produção. Combino desenvolvimento hands-on com experiência como fundador, CTO e Head of Engineering. Meu foco atual é engenharia de IA: orquestrar coding agents, verificar suas entregas e criar ferramentas que tornam o desenvolvimento repetível entre modelos e provedores.
+Engenheiro sênior com quase 20 anos levando produtos da descoberta à produção, a maioria em saúde, onde software precisa ser confiável e auditável. Hoje construo agentes com LLMs que rodam em produção, incluindo um assistente interno usado por 43 pessoas de seis áreas. Na prova de conceito de um dispositivo médico classe II, meus coding agents consultam os 170 requisitos regulatórios do produto antes de cada mudança e param em qualquer conflito, sem abrir mão de nenhum. Em 2026, mergeei 565 pull requests em 35 repositórios em Rust, TypeScript e Python, a maior parte escrita por agentes, sob testes e CI.
 
-Liderei o Coreum na Micromed, destaque em um [case do Google Cloud](https://cloud.google.com/customers/micromed): redução de mais de 50% no custo de infraestrutura, carregamento de exames de 2 s para 200 ms e migração de 20 TB com 3 horas de indisponibilidade.
+Antes de voltar ao trabalho hands-on, fui fundador, CTO e Head of Engineering. Liderei o Coreum na Micromed, destaque em um [case do Google Cloud](https://cloud.google.com/customers/micromed): redução de mais de 50% no custo de infraestrutura, carregamento de exames de 2 s para 200 ms e migração de 20 TB com 3 horas de indisponibilidade.
 
 ## Open Source em Destaque
+
+### expert-agent · Agentes especialistas com base documental, como API
+
+Criei um framework de agentes especialistas declarativos: prompt, corpus de documentos e schema YAML viram uma API no Cloud Run com respostas fundamentadas, citações e memória. Usa o contexto longo do Gemini com Context Cache e tem uma CLI em Python para scaffolding, validação, sync e testes E2E. Foi a base dos quatro primeiros especialistas da Micromed, antes de virarem RAG local na Maia.
+
+**Python · FastAPI · Gemini · Cloud Run** · [github.com/feliperun/expert-agent](https://github.com/feliperun/expert-agent)
+
+### Bone Age · Inferência de imagem médica no navegador
+
+Construí um app bilíngue que executa um modelo existente de idade óssea no navegador, com suporte a DICOM, preparo da imagem e relatórios PDF locais. Adaptei o ensemble de três modelos de ianpan de PyTorch para ONNX, com verificação de paridade numérica; as imagens permanecem no dispositivo. Projeto experimental de engenharia, sem validação clínica.
+
+**TypeScript · Python · ONNX Runtime Web · WebAssembly** · [bone-age.app](https://bone-age.app) · [Código](https://github.com/feliperun/bone-age)
 
 ### Faberun · Entrega verificada com coding agents
 
@@ -28,19 +40,7 @@ Construí um daemon nativo para macOS que conecta um teclado HID programável, t
 
 **Zig · APIs do macOS · Deepgram · tmux** · [github.com/feliperun/agent-belt](https://github.com/feliperun/agent-belt)
 
-### md.html · Documentos portáteis com fonte recuperável
-
-Projetei um formato de documento e uma CLI em Rust que empacotam Markdown, fontes, imagens e runtime em um único HTML. Os documentos abrem offline com navegação e temas e preservam o Markdown original byte a byte. Inclui especificação do formato, validação de portabilidade e testes automatizados no navegador.
-
-**Rust · JavaScript · HTML/CSS** · [github.com/feliperun/md.html](https://github.com/feliperun/md.html)
-
-### Bone Age · Inferência de imagem médica no navegador
-
-Construí um app bilíngue que executa um modelo existente de idade óssea no navegador, com suporte a DICOM, preparo da imagem e relatórios PDF locais. Adaptei o ensemble de três modelos de ianpan de PyTorch para ONNX, com verificação de paridade numérica; as imagens permanecem no dispositivo. Projeto experimental de engenharia, sem validação clínica.
-
-**TypeScript · Python · ONNX Runtime Web · WebAssembly** · [bone-age.app](https://bone-age.app) · [Código](https://github.com/feliperun/bone-age)
-
-Outros projetos: [phai](https://github.com/feliperun/phai), agente de finanças pessoais em Rust; [cueme](https://github.com/feliperun/cueme), copilot de conversas em Swift nativo; [create-openclaw-agent](https://github.com/feliperun/create-openclaw-agent), deploy em nuvem de um assistente self-hosted.
+Outros projetos: [md.html](https://github.com/feliperun/md.html), documentos Markdown portáteis e auto-contidos em Rust; [phai](https://github.com/feliperun/phai), agente de finanças pessoais em Rust; [cueme](https://github.com/feliperun/cueme), copilot de conversas em Swift nativo; [create-openclaw-agent](https://github.com/feliperun/create-openclaw-agent), deploy em nuvem de um assistente self-hosted. Todos criados em 2026, a maioria como aprendizado prático; ainda em estágio inicial e em evolução.
 
 ## Experiência
 
@@ -48,21 +48,21 @@ Outros projetos: [phai](https://github.com/feliperun/phai), agente de finanças 
 
 Micromed Health - Florianópolis, Brasil - Jan 2026 até o presente
 
-- Retornei à engenharia de produto hands-on após liderar o departamento; atuo da descoberta e arquitetura ao release e à operação em produção.
-- Construo workflows de agentes com skills reutilizáveis, TDD, revisão de código e automação de CI/merge. Desenvolvo em React, TypeScript e Node.js, Python para processamento de ECG e Rust para integração com dispositivos médicos.
+- Construí e opero a Maia, agente de LLM interno no Slack (TypeScript, Mastra, Gemini, Cloud Run): tool calling sobre APIs de billing e ERP, RAG em quatro bases de conhecimento curadas (~420 documentos, pgvector) e aprovação humana para ações sensíveis. Troquei quatro microsserviços sempre ligados por RAG local para reduzir custo. Em 16 semanas, 43 pessoas de seis áreas fizeram mais de 1.100 perguntas; 70% voltaram em outra semana.
+- Principal contribuidor do runtime de borda do Coreum (Rust) e do agente de interoperabilidade DICOM/HL7/FHIR, que ligam dispositivos médicos e apps legados das clínicas à nuvem.
+- IA clínica: conduzi o postmortem e a correção de reprocessamento no classificador de ECG por IA (redelivery do Pub/Sub, ~2x de custo) e implementei o critério de Peguero-Lo Presti para HVE no serviço de inferência de ECG.
 
 ### Head of Engineering
 
 Micromed Health - Florianópolis, Brasil - Mai 2022 a Dez 2025
 
-- Liderei o Coreum e times multidisciplinares de software, UX, nuvem, firmware, eletrônica e QA.
-- Conduzi a modernização documentada pelo Google Cloud; consolidei a infraestrutura do Coreum e do ERP e viabilizei múltiplos releases diários sem downtime. As plataformas da Micromed processam mais de 10 mil exames por dia.
+Liderei o Coreum e times de software, UX, nuvem, firmware, eletrônica e QA na modernização documentada pelo Google Cloud: múltiplos releases diários sem downtime, mais de 10 mil exames por dia.
 
 ### Engineering Manager
 
-Micromed Health - Florianópolis, Brasil - Nov 2020 a Jun 2022
+Micromed Health - Florianópolis, Brasil - Nov 2020 a Abr 2022
 
-Montei um time de sete pessoas e coordenei dez engenheiros externos no desenvolvimento de uma plataforma de monitoramento hospitalar com ECG, nuvem, machine learning e hardware conectado.
+Montei um time de sete pessoas e coordenei dez engenheiros externos numa plataforma de monitoramento hospitalar de ECG.
 
 ### Engineering Manager
 
@@ -74,25 +74,25 @@ Montei o time e liderei o S.I.M., SaaS de medicina diagnóstica, da descoberta e
 
 Softplan - Florianópolis, Brasil - Mar 2018 a Mai 2019
 
-Liderei a descoberta de uma nova unidade de saúde e atuei em um produto de BI com ML para operadoras; antes, fui responsável pelo roadmap de CRM e módulos comerciais do Sienge.
+Liderei a descoberta de uma nova unidade de saúde e de um BI com ML para operadoras; antes, cuidei do roadmap de CRM do Sienge.
 
 ### CTO & Fundador
 
 Healfies - Florianópolis, Brasil - Jan 2015 a Mar 2018
 
-Construí a plataforma e um time de sete pessoas. Ajudei a captar R$2,2M, conectar 23 centros diagnósticos e entregar 2M de registros a 10 mil usuários. Responsável por arquitetura, nuvem e integrações clínicas.
+Construí a plataforma e um time de sete pessoas; ajudei a captar R$2,2M e conectar 23 centros diagnósticos, entregando 2M de registros a 10 mil usuários.
 
 ### Tech Lead
 
 Chaordic - Florianópolis, Brasil - Jan 2014 a Mai 2015
 
-Liderei oito engenheiros em personalização de e-commerce para clientes como Walmart e Saraiva; reduzi o tempo de integração em 50% com melhorias de processo e gestão técnica de contas.
+Liderei oito engenheiros em personalização de e-commerce para clientes como Walmart e Saraiva; reduzi o tempo de integração em 50%.
 
 ### Product Manager
 
 Pixeon Medical Systems - Brasil - Out 2010 a Jan 2014
 
-Gerenciei o portfólio LIS/RIS/PACS e lancei seis produtos, da descoberta ao registro na ANVISA e go-to-market; apoiei a integração dos portfólios durante a fusão.
+Gerenciei o portfólio LIS/RIS/PACS e lancei seis produtos, da descoberta ao registro na ANVISA e go-to-market.
 
 ### Full-stack Engineer
 
@@ -102,7 +102,7 @@ Desenvolvi um visualizador DICOM desktop para TC, RM e ultrassom com C++, Qt e J
 
 ## Especialidades
 
-Orquestração de agentes de IA, Design de sistemas, Engenharia de produto, Liderança de engenharia, TypeScript / React / Node.js, Rust / Python / Zig, Google Cloud / AWS, CI/CD, DICOM / HL7 / FHIR
+Agentes com LLM e tool calling, RAG / pgvector, Workflows com coding agents, TypeScript / React / Node.js, Rust, Python, Design de sistemas, Engenharia de produto, Google Cloud / AWS, CI/CD, DICOM / HL7 / FHIR, Liderança técnica
 
 ## Formação
 
