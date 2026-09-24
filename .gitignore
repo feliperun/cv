@@ -7,3 +7,7 @@ node_modules/
 .env
 .env.*
 .linkedin/
+
+# Generated PDF exports and visual review files
+output/
+tmp/

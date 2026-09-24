@@ -8,7 +8,8 @@
     "banner": "node scripts/generate-banner.mjs",
     "linkedin:content": "node scripts/linkedin-content.js",
     "linkedin:login": "node scripts/linkedin-login.mjs",
-    "linkedin:sync": "node scripts/linkedin-sync.mjs"
+    "linkedin:sync": "node scripts/linkedin-sync.mjs",
+    "pdf": "npm run build && node scripts/export-pdf.mjs"
   },
   "dependencies": {
     "cloakbrowser": "^0.4.9",
