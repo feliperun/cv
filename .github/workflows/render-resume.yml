@@ -10,6 +10,7 @@ on:
       - scripts/generate-resume.js
       - .github/workflows/render-resume.yml
       - felipe-avatar.jpg
+      - assets/github-activity.json
   workflow_dispatch:
 
 permissions:

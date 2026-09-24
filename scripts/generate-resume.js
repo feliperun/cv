@@ -31,6 +31,11 @@ const SOURCES = {
   pt: path.join(ROOT, "README.pt-BR.md"),
 };
 
+// GitHub contribution calendar, snapshotted by scripts/fetch-github-activity.mjs
+// (`npm run activity`) so this build and its CI job stay offline.
+const ACTIVITY_PATH = path.join(ROOT, "assets", "github-activity.json");
+const activity = fs.existsSync(ACTIVITY_PATH) ? JSON.parse(fs.readFileSync(ACTIVITY_PATH, "utf8")) : null;
+
 // -- Language-independent configuration -------------------------------------
 
 // -- Markdown helpers -------------------------------------------------------
@@ -182,6 +187,59 @@ function renderMainSection(section, lang, extras = "") {
   return `<section class="sec sec-profile" aria-labelledby="${id}">${head}<div class="lede">${body}</div></section>`;
 }
 
+const ACTIVITY_COPY = {
+  en: {
+    title: "GitHub activity",
+    months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    locale: "en-US",
+    month: (m, y) => `${m} ${y}`,
+    caption: (total, from, to, share) =>
+      `<strong>${total} contributions</strong> from ${from} to ${to}; ${share}% in private repositories.`,
+  },
+  pt: {
+    title: "Atividade no GitHub",
+    months: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"],
+    locale: "pt-BR",
+    month: (m, y) => `${m}/${y}`,
+    caption: (total, from, to, share) =>
+      `<strong>${total} contribuições</strong> de ${from} a ${to}; ${share}% em repositórios privados.`,
+  },
+};
+
+// Contribution heatmap: one column per week (Sunday on top), five levels.
+// Screen only; the two-page print layout has no room for it.
+function renderActivity(lang) {
+  if (!activity) return "";
+  const copy = ACTIVITY_COPY[lang];
+  const id = `${lang}-github-activity`;
+  const start = new Date(`${activity.from}T00:00:00Z`);
+  const weekStart = i => new Date(start.getTime() + (i * 7 - start.getUTCDay()) * 86400000);
+
+  // A month is labelled on the first week that starts in it, unless the next
+  // label is too close (the partial first month would collide with it).
+  const labels = [];
+  activity.weeks.forEach((_, i) => {
+    const month = weekStart(i).getUTCMonth();
+    if (i === 0 || month !== weekStart(i - 1).getUTCMonth()) labels.push({ col: i + 1, month });
+  });
+  const months = labels
+    .filter((label, i) => !labels[i + 1] || labels[i + 1].col - label.col >= 3)
+    .map(({ col, month }) => `<span style="grid-column:${col} / span 3">${copy.months[month]}</span>`)
+    .join("");
+
+  const pad = 7 - activity.weeks[0].length;
+  const cells = '<i class="pad"></i>'.repeat(pad) +
+    activity.weeks.flat().map(([, level]) => `<i class="l${level}"></i>`).join("");
+
+  const fmt = new Intl.NumberFormat(copy.locale);
+  const date = iso => { const d = new Date(`${iso}T00:00:00Z`); return copy.month(copy.months[d.getUTCMonth()], d.getUTCFullYear()); };
+  const caption = copy.caption(fmt.format(activity.total), date(activity.from), date(activity.to),
+    Math.round((activity.private / activity.total) * 100));
+  const link = `<a href="https://github.com/${activity.login}">github.com/${activity.login}</a>`;
+
+  return `<section class="sec sec-activity" aria-labelledby="${id}"><h2 class="sec-h" id="${id}">${copy.title}</h2><div class="gh-cal" style="--weeks:${activity.weeks.length}"><div class="gh-months" aria-hidden="true">${months}</div><div class="gh-grid" role="img" aria-label="${escapeHtml(caption.replace(/<[^>]+>/g, ""))}">${cells}</div></div><p class="gh-caption">${caption} ${link}</p></section>`;
+}
+
 function renderSideSection(section, lang) {
   const slug = slugify(section.title);
   const id = `${lang}-${slug}`;
@@ -242,7 +300,7 @@ function buildBodyBlocks() {
     const career = visible.filter(s => ["experience", "experiencia"].includes(slugify(s.title)));
     const side = visible.filter(s => roleOf(slugify(s.title)) === "side");
     const overview = visible.filter(s => !career.includes(s) && !side.includes(s));
-    return langBlock(lang, `<div class="overview">${overview.map(s => renderMainSection(s, lang)).join("\n")}<div class="page-end"><span>cv.felipe.run · ${lang === "pt" ? "Perfil e projetos" : "Profile & projects"}</span><span>01 / 02</span></div></div>${career.map(s => renderMainSection(s, lang, `<aside class="credentials">${side.map(item => renderSideSection(item, lang)).join("\n")}</aside>`)).join("\n")}`);
+    return langBlock(lang, `<div class="overview">${overview.map(s => renderMainSection(s, lang) + (roleOf(slugify(s.title)) === "profile" ? renderActivity(lang) : "")).join("\n")}<div class="page-end"><span>cv.felipe.run · ${lang === "pt" ? "Perfil e projetos" : "Profile & projects"}</span><span>01 / 02</span></div></div>${career.map(s => renderMainSection(s, lang, `<aside class="credentials">${side.map(item => renderSideSection(item, lang)).join("\n")}</aside>`)).join("\n")}`);
   }).join("\n");
 }
 
@@ -327,6 +385,19 @@ h3 { font-size: 18px; line-height: 1.3; margin: 0; font-weight: 600; letter-spac
 .project-meta strong { font-weight: 500; color: var(--ink); }
 .project-links { display: block; }
 .other-projects { font-size: 13px; color: var(--muted); margin-top: 22px; }
+.gh-cal { display: grid; gap: 6px; }
+.gh-months, .gh-grid { display: grid; grid-template-columns: repeat(var(--weeks), minmax(0,1fr)); column-gap: 3px; }
+.gh-months { font-size: 11px; line-height: 1; color: var(--muted); }
+.gh-months span { white-space: nowrap; }
+.gh-grid { grid-template-rows: repeat(7, auto); grid-auto-flow: column; row-gap: 3px; }
+.gh-grid i { aspect-ratio: 1; border-radius: 2px; background: color-mix(in srgb, var(--accent) 9%, var(--paper)); }
+.gh-grid .pad { visibility: hidden; }
+.gh-grid .l1 { background: color-mix(in srgb, var(--accent) 32%, var(--paper)); }
+.gh-grid .l2 { background: color-mix(in srgb, var(--accent) 56%, var(--paper)); }
+.gh-grid .l3 { background: color-mix(in srgb, var(--accent) 78%, var(--paper)); }
+.gh-grid .l4 { background: var(--accent); }
+.gh-caption { font-size: 13px; color: var(--muted); margin-top: 12px; }
+.gh-caption strong { color: var(--ink); font-weight: 500; }
 .credentials { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 36px; margin-top: 28px; padding: 22px 0; border-top: 1px solid var(--line); }
 .side-expertise, .side-especialidades { grid-column: 1 / -1; }
 .side-h { margin-bottom: 8px; font-size: 10px; }
@@ -384,6 +455,10 @@ html[data-view="raw"] .view-off { display: inline; }
   .job-date { font-size: 11px; }
   .career { gap: 24px; }
   .foot { flex-wrap: wrap; }
+  .gh-months, .gh-grid { column-gap: 2px; }
+  .gh-grid { row-gap: 2px; }
+  .gh-grid i { border-radius: 1px; }
+  .gh-months { font-size: 10px; }
 }
 /* Keep the safe area inside the document. Chrome's "Margins: None"
    overrides @page margins; element padding survives that print setting. */
@@ -391,7 +466,7 @@ html[data-view="raw"] .view-off { display: inline; }
 @media print {
   :root, html[data-theme="dark"] { color-scheme: light; --paper: #fff; --ink: #222b33; --muted: #505b63; --line: #cdd6da; --accent: #315d72; }
   body { background: #fff; font: 10pt/1.4 Arial, Helvetica, sans-serif; }
-  .toolbar, .foot, .portrait, .raw-wrap { display: none !important; }
+  .toolbar, .foot, .portrait, .raw-wrap, .sec-activity { display: none !important; }
   .resume, html[data-view="raw"] .resume { display: block; width: auto; margin: 0; padding: 0; border: 0; }
   header { position: relative; display: block; padding: 13mm 15mm 5mm; border: 0; }
   header::after { content: ""; position: absolute; left: 15mm; right: 15mm; bottom: 0; border-bottom: 1px solid var(--line); }
